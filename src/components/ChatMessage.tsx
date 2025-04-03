@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Bot, User } from 'lucide-react';
+import { Bot, User, FileText } from 'lucide-react';
 import { Message } from '../types';
 
 interface ChatMessageProps {
@@ -16,6 +16,12 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
         {isUser ? <User className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-white" />}
       </div>
       <div className={`flex-1 px-4 py-2 rounded-lg ${isUser ? 'bg-blue-100' : 'bg-gray-100'}`}>
+        {message.file && (
+          <div className="flex items-center gap-2 mb-2 p-2 bg-white rounded border border-gray-200">
+            <FileText className="w-5 h-5 text-gray-500" />
+            <span className="text-sm text-gray-600">{message.file.name}</span>
+          </div>
+        )}
         {message.image && (
           <img src={message.image} alt="Technical Drawing" className="max-w-sm rounded-lg mb-2" />
         )}

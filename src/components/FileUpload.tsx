@@ -16,7 +16,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.png', '.jpg', '.jpeg']
+      'image/*': ['.png', '.jpg', '.jpeg'],
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx']
     },
     maxFiles: 1
   });
@@ -29,10 +31,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
       <input {...getInputProps()} />
       <Upload className="w-8 h-8 mx-auto mb-2 text-gray-400" />
       {isDragActive ? (
-        <p>Drop the technical drawing here...</p>
+        <p>Drop your file here...</p>
       ) : (
-        <p>Drag & drop a technical drawing, or click to select one</p>
+        <p>Drag & drop a technical drawing, PDF, or Word document, or click to select one</p>
       )}
+      <p className="text-sm text-gray-500 mt-2">
+        Supported formats: PNG, JPG, PDF, DOCX
+      </p>
     </div>
   );
 };

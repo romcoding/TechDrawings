@@ -13,25 +13,34 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 app.post('/api/analyze', async (req, res) => {
   try {
-    const { image, message } = req.body;
+    const { file, message } = req.body;
+
+    if (!file || !file.data) {
+      return res.status(400).json({ error: 'No file data provided' });
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4-vision-preview",
       messages: [
         {
           role: "system",
-          content: "You are an expert in analyzing technical drawings and building plans. Focus on identifying and explaining technical components like valves, pipes, electrical systems, HVAC components, and other technical elements. Provide detailed, professional analysis."
+          content: "You are an expert in analyzing technical drawings, PDFs, and documents. Focus on identifying and explaining technical components, specifications, and important details from the provided files. Provide detailed, professional analysis."
         },
         {
           role: "user",
           content: [
-            { type: "text", text: message || "Please analyze this technical drawing." },
+            { type: "text", text: message || "Please analyze this file." },
             {
               type: "image_url",
               image_url: {
-                url: image,
+                url: file.data,
               }
             }
           ]
@@ -42,8 +51,11 @@ app.post('/api/analyze', async (req, res) => {
 
     res.json({ response: response.choices[0].message.content });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to analyze image' });
+    console.error('Error in /api/analyze:', error);
+    res.status(500).json({ 
+      error: 'Failed to analyze file',
+      details: error.message 
+    });
   }
 });
 
@@ -51,10 +63,14 @@ app.post('/api/chat', async (req, res) => {
   try {
     const { message, context } = req.body;
 
+    if (!message) {
+      return res.status(400).json({ error: 'No message provided' });
+    }
+
     const messages = [
       {
         role: "system",
-        content: "You are an expert in technical drawings and building plans. Help users understand technical components and answer their questions about building systems, components, and technical specifications."
+        content: "You are an expert in technical drawings and documents. Help users understand technical components and answer their questions about specifications, systems, and technical details."
       },
       ...context,
       { role: "user", content: message }
@@ -68,8 +84,11 @@ app.post('/api/chat', async (req, res) => {
 
     res.json({ response: response.choices[0].message.content });
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ error: 'Failed to process message' });
+    console.error('Error in /api/chat:', error);
+    res.status(500).json({ 
+      error: 'Failed to process message',
+      details: error.message 
+    });
   }
 });
 

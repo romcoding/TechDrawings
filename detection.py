@@ -146,7 +146,7 @@ def openai_detect_components(file_path):
         "1. Only list components that you are highly confident about\n"
         "2. Convert all measurements to standard units (e.g., '2 meters of pipe' → '2')\n"
         "3. Group similar components (e.g., 'Gate Valve 1' and 'Gate Valve 2' → 'Gate Valve: 2')\n"
-        "4. Include any relevant specifications (e.g., '1" Ball Valve')\n"
+        "4. Include any relevant specifications (e.g., '1\" Ball Valve')\n"
         "5. If a component has multiple instances, sum them up\n"
         "6. If you're unsure about a component, do not include it\n\n"
         

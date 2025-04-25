@@ -103,27 +103,68 @@ def openai_detect_components(file_path):
         print("[ERROR] No text could be extracted from the file")
         return {}
 
-    # Construct a more specific prompt
+    # Enhanced prompt for better component identification
     prompt_text = (
-        "You are an expert in technical drawing analysis. Please analyze the following technical document "
-        "and extract its Bill of Materials (BOM). Focus on identifying technical components such as:\n"
-        "- Valves (ball valves, gate valves, check valves, etc.)\n"
-        "- Pumps and motors\n"
-        "- Pipes and fittings\n"
-        "- Instruments and sensors\n"
-        "- Electrical components\n"
-        "- Mechanical parts\n\n"
+        "You are an expert in technical drawing analysis and Bill of Materials (BOM) extraction. "
+        "Your task is to analyze the following technical document and extract its components with high precision.\n\n"
+        
+        "Focus on identifying these specific technical components:\n"
+        "1. Valves:\n"
+        "   - Ball valves\n"
+        "   - Gate valves\n"
+        "   - Check valves\n"
+        "   - Control valves\n"
+        "   - Safety valves\n"
+        "2. Pumps and Motors:\n"
+        "   - Centrifugal pumps\n"
+        "   - Gear pumps\n"
+        "   - Electric motors\n"
+        "   - Hydraulic pumps\n"
+        "3. Pipes and Fittings:\n"
+        "   - Straight pipes\n"
+        "   - Elbows\n"
+        "   - Tees\n"
+        "   - Reducers\n"
+        "   - Flanges\n"
+        "4. Instruments and Sensors:\n"
+        "   - Pressure gauges\n"
+        "   - Temperature sensors\n"
+        "   - Flow meters\n"
+        "   - Level indicators\n"
+        "5. Electrical Components:\n"
+        "   - Switches\n"
+        "   - Relays\n"
+        "   - Circuit breakers\n"
+        "   - Transformers\n"
+        "6. Mechanical Parts:\n"
+        "   - Bearings\n"
+        "   - Gears\n"
+        "   - Shafts\n"
+        "   - Couplings\n\n"
+        
+        "Important Guidelines:\n"
+        "1. Only list components that you are highly confident about\n"
+        "2. Convert all measurements to standard units (e.g., '2 meters of pipe' → '2')\n"
+        "3. Group similar components (e.g., 'Gate Valve 1' and 'Gate Valve 2' → 'Gate Valve: 2')\n"
+        "4. Include any relevant specifications (e.g., '1" Ball Valve')\n"
+        "5. If a component has multiple instances, sum them up\n"
+        "6. If you're unsure about a component, do not include it\n\n"
+        
         "Your output must be in CSV format with exactly two columns: 'Component' and 'Quantity'.\n"
-        "Only list components that you are confident about, and ensure quantities are numeric.\n"
-        "If you find any components with units (e.g., '2 meters of pipe'), convert them to whole numbers.\n"
-        "If you're unsure about a component, do not include it.\n\n"
         "Start your response with 'Component,Quantity' on the first line, followed by one component per line.\n"
         "Do not include any other text or explanations in your response.\n\n"
+        
         "Document content:\n" + text[:4000]  # Limit text length to avoid token limits
     )
 
     messages = [
-        {"role": "system", "content": "You are an expert in technical drawing analysis and BOM extraction. Your task is to identify and quantify technical components from engineering drawings. Respond only with the CSV data, starting with the header 'Component,Quantity'."},
+        {"role": "system", "content": (
+            "You are an expert in technical drawing analysis and BOM extraction. "
+            "Your task is to identify and quantify technical components from engineering drawings. "
+            "You have extensive knowledge of mechanical, electrical, and industrial components. "
+            "You are precise, accurate, and only include components you are confident about. "
+            "Respond only with the CSV data, starting with the header 'Component,Quantity'."
+        )},
         {"role": "user", "content": prompt_text}
     ]
 
@@ -132,7 +173,9 @@ def openai_detect_components(file_path):
             model="gpt-4",  # Using GPT-4 for better accuracy
             messages=messages,
             max_tokens=1000,
-            temperature=0.1  # Lower temperature for more consistent results
+            temperature=0.1,  # Lower temperature for more consistent results
+            presence_penalty=0.1,  # Slight penalty for repeating components
+            frequency_penalty=0.1  # Slight penalty for repeating patterns
         )
     except Exception as e:
         print("[ERROR] OpenAI API request failed:", e)

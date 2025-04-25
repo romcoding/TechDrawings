@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'pdf', 'png', 'jpg', 'jpeg', 'doc', 'docx'}
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB limit
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')  # Change this in production
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')
 
 # Create uploads directory if it doesn't exist
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -47,7 +47,6 @@ def login():
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
-        # In production, use proper password hashing and environment variables
         if username == os.getenv('APP_USERNAME', 'admin') and password == os.getenv('APP_PASSWORD', 'admin'):
             session['logged_in'] = True
             return redirect(url_for('index'))
@@ -62,112 +61,342 @@ def logout():
 @app.route('/', methods=['GET'])
 @login_required
 def index():
-    # Clean up old files before showing the interface
     cleanup_old_files()
     
-    # Updated HTML interface with loading spinner and better styling
     html = """
-    <!doctype html>
+    <!DOCTYPE html>
     <html lang="en">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Technical Drawing Analysis</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <style>
-        .loading {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(255, 255, 255, 0.8);
-          z-index: 1000;
-        }
-        .spinner {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-        .preview-container {
-          margin-top: 20px;
-          display: none;
-        }
-        .preview-image {
-          max-width: 100%;
-          max-height: 300px;
-        }
-        .navbar {
-          margin-bottom: 20px;
-        }
-      </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Technical Drawing Analysis</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            :root {
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --background-color: #f8f9fa;
+                --text-color: #2c3e50;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+            
+            .navbar {
+                background-color: var(--primary-color);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .navbar-brand {
+                font-weight: 600;
+                color: white !important;
+            }
+            
+            .nav-link {
+                color: rgba(255,255,255,0.8) !important;
+                transition: color 0.3s ease;
+            }
+            
+            .nav-link:hover {
+                color: white !important;
+            }
+            
+            .main-container {
+                max-width: 1200px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }
+            
+            .upload-card {
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }
+            
+            .upload-area {
+                border: 2px dashed var(--secondary-color);
+                border-radius: 8px;
+                padding: 2rem;
+                text-align: center;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .upload-area:hover {
+                background-color: rgba(52, 152, 219, 0.1);
+            }
+            
+            .upload-icon {
+                font-size: 3rem;
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }
+            
+            .btn-primary {
+                background-color: var(--secondary-color);
+                border-color: var(--secondary-color);
+                padding: 0.5rem 1.5rem;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }
+            
+            .btn-primary:hover {
+                background-color: #2980b9;
+                border-color: #2980b9;
+                transform: translateY(-1px);
+            }
+            
+            .loading {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.9);
+                z-index: 1000;
+                backdrop-filter: blur(5px);
+            }
+            
+            .spinner {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                text-align: center;
+            }
+            
+            .preview-container {
+                margin-top: 2rem;
+                display: none;
+            }
+            
+            .preview-image {
+                max-width: 100%;
+                max-height: 400px;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .method-selector {
+                margin: 1.5rem 0;
+            }
+            
+            .method-card {
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 1rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            
+            .method-card:hover {
+                border-color: var(--secondary-color);
+                background-color: rgba(52, 152, 219, 0.05);
+            }
+            
+            .method-card.selected {
+                border-color: var(--secondary-color);
+                background-color: rgba(52, 152, 219, 0.1);
+            }
+            
+            .method-icon {
+                font-size: 2rem;
+                color: var(--secondary-color);
+                margin-bottom: 0.5rem;
+            }
+            
+            .method-title {
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+            
+            .method-description {
+                color: #6c757d;
+                font-size: 0.9rem;
+            }
+        </style>
     </head>
     <body>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Technical Drawing Analysis</a>
-        <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link" href="/logout">Logout</a>
-        </div>
-      </nav>
-
-      <div class="container mt-5">
-        <h1 class="mb-4">Upload a Technical Document</h1>
-        <p class="lead">Upload a file in PNG, JPG, PDF, or DOC/DOCX format.</p>
-        <form method="post" action="/upload" enctype="multipart/form-data" id="uploadForm">
-          <div class="form-group">
-            <label for="file">Select File:</label>
-            <input type="file" name="file" id="file" class="form-control-file" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" required>
-          </div>
-          <div class="form-group">
-            <label for="method">Analysis Method:</label><br>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="analysis_method" id="yolov5" value="yolov5" checked>
-              <label class="form-check-label" for="yolov5">YOLOv5</label>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-drafting-compass me-2"></i>
+                    Technical Drawing Analysis
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt me-1"></i>
+                        Logout
+                    </a>
+                </div>
             </div>
-            <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" name="analysis_method" id="openai" value="openai">
-              <label class="form-check-label" for="openai">OpenAI API</label>
+        </nav>
+
+        <div class="main-container">
+            <div class="upload-card">
+                <h2 class="mb-4">Upload Technical Drawing</h2>
+                <p class="lead mb-4">Upload a technical drawing in PNG, JPG, PDF, or DOC/DOCX format for analysis.</p>
+                
+                <form method="post" action="/upload" enctype="multipart/form-data" id="uploadForm">
+                    <div class="upload-area" id="dropZone">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h4>Drag & Drop your file here</h4>
+                        <p class="text-muted">or</p>
+                        <input type="file" name="file" id="file" class="d-none" accept=".png,.jpg,.jpeg,.pdf,.doc,.docx" required>
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('file').click()">
+                            <i class="fas fa-folder-open me-2"></i>
+                            Browse Files
+                        </button>
+                        <p class="mt-2 text-muted" id="fileInfo"></p>
+                    </div>
+
+                    <div class="method-selector">
+                        <h4 class="mb-3">Select Analysis Method</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="method-card" onclick="selectMethod('yolov5')">
+                                    <div class="text-center">
+                                        <i class="fas fa-robot method-icon"></i>
+                                        <h5 class="method-title">YOLOv5 Detection</h5>
+                                        <p class="method-description">Advanced computer vision for precise component detection</p>
+                                    </div>
+                                    <div class="form-check text-center">
+                                        <input class="form-check-input" type="radio" name="analysis_method" id="yolov5" value="yolov5" checked>
+                                        <label class="form-check-label" for="yolov5">Select</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="method-card" onclick="selectMethod('openai')">
+                                    <div class="text-center">
+                                        <i class="fas fa-brain method-icon"></i>
+                                        <h5 class="method-title">OpenAI Analysis</h5>
+                                        <p class="method-description">AI-powered text analysis for detailed component identification</p>
+                                    </div>
+                                    <div class="form-check text-center">
+                                        <input class="form-check-input" type="radio" name="analysis_method" id="openai" value="openai">
+                                        <label class="form-check-label" for="openai">Select</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-magic me-2"></i>
+                            Analyze Drawing
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="preview-container" id="previewContainer">
+                    <h4 class="mb-3">Preview</h4>
+                    <img id="previewImage" class="preview-image" src="" alt="Preview">
+                </div>
             </div>
-          </div>
-          <button type="submit" class="btn btn-primary">Upload and Process</button>
-        </form>
-        
-        <div class="preview-container" id="previewContainer">
-          <h3>Preview</h3>
-          <img id="previewImage" class="preview-image" src="" alt="Preview">
         </div>
-      </div>
 
-      <div class="loading" id="loading">
-        <div class="spinner">
-          <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-          <p class="mt-2">Processing your file...</p>
+        <div class="loading" id="loading">
+            <div class="spinner">
+                <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4 class="mt-3">Analyzing your drawing...</h4>
+                <p class="text-muted">This may take a few moments</p>
+            </div>
         </div>
-      </div>
 
-      <script>
-        document.getElementById('file').addEventListener('change', function(e) {
-          const file = e.target.files[0];
-          if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-              const preview = document.getElementById('previewImage');
-              const container = document.getElementById('previewContainer');
-              preview.src = e.target.result;
-              container.style.display = 'block';
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            function selectMethod(method) {
+                document.querySelectorAll('.method-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.querySelector(`.method-card:has(#${method})`).classList.add('selected');
+                document.getElementById(method).checked = true;
             }
-            reader.readAsDataURL(file);
-          }
-        });
 
-        document.getElementById('uploadForm').addEventListener('submit', function() {
-          document.getElementById('loading').style.display = 'block';
-        });
-      </script>
+            // Initialize the first method as selected
+            selectMethod('yolov5');
+
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('file');
+            const fileInfo = document.getElementById('fileInfo');
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropZone.classList.add('bg-light');
+            }
+
+            function unhighlight(e) {
+                dropZone.classList.remove('bg-light');
+            }
+
+            dropZone.addEventListener('drop', handleDrop, false);
+
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                fileInput.files = files;
+                updateFileInfo(files[0]);
+            }
+
+            fileInput.addEventListener('change', function(e) {
+                updateFileInfo(this.files[0]);
+            });
+
+            function updateFileInfo(file) {
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('previewImage');
+                        const container = document.getElementById('previewContainer');
+                        preview.src = e.target.result;
+                        container.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                    
+                    fileInfo.textContent = `Selected file: ${file.name} (${formatFileSize(file.size)})`;
+                }
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            document.getElementById('uploadForm').addEventListener('submit', function() {
+                document.getElementById('loading').style.display = 'block';
+            });
+        </script>
     </body>
     </html>
     """
@@ -212,7 +441,6 @@ def upload_file():
         else:
             return render_template_string(error_template("Unsupported file type.")), 400
 
-        # Choose the detection method based on user selection
         if analysis_method == 'yolov5':
             detection_results = detect_components(image_path)
         elif analysis_method == 'openai':
@@ -220,7 +448,6 @@ def upload_file():
         else:
             detection_results = {}
 
-        # Create BOM CSV using pandas
         bom_list = []
         if detection_results:
             for component, count in detection_results.items():
@@ -233,58 +460,154 @@ def upload_file():
         csv_path = os.path.join(app.config['UPLOAD_FOLDER'], csv_filename)
         bom_df.to_csv(csv_path, index=False)
 
-        # Clean up temporary files
         if image_path and image_path != file_path:
             try:
                 os.remove(image_path)
             except:
                 pass
 
-        # Render result page with a download button and preview
         result_html = f"""
-        <!doctype html>
+        <!DOCTYPE html>
         <html lang="en">
         <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>BOM Generated</title>
-          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <title>Analysis Results</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+            <style>
+                :root {{
+                    --primary-color: #2c3e50;
+                    --secondary-color: #3498db;
+                    --accent-color: #e74c3c;
+                    --background-color: #f8f9fa;
+                    --text-color: #2c3e50;
+                }}
+                
+                body {{
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    background-color: var(--background-color);
+                    color: var(--text-color);
+                }}
+                
+                .navbar {{
+                    background-color: var(--primary-color);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                }}
+                
+                .navbar-brand {{
+                    font-weight: 600;
+                    color: white !important;
+                }}
+                
+                .nav-link {{
+                    color: rgba(255,255,255,0.8) !important;
+                    transition: color 0.3s ease;
+                }}
+                
+                .nav-link:hover {{
+                    color: white !important;
+                }}
+                
+                .main-container {{
+                    max-width: 1200px;
+                    margin: 2rem auto;
+                    padding: 0 1rem;
+                }}
+                
+                .result-card {{
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                    padding: 2rem;
+                    margin-bottom: 2rem;
+                }}
+                
+                .table {{
+                    margin-top: 1rem;
+                }}
+                
+                .table th {{
+                    background-color: var(--primary-color);
+                    color: white;
+                }}
+                
+                .btn-success {{
+                    background-color: #27ae60;
+                    border-color: #27ae60;
+                    padding: 0.5rem 1.5rem;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }}
+                
+                .btn-success:hover {{
+                    background-color: #219a52;
+                    border-color: #219a52;
+                    transform: translateY(-1px);
+                }}
+                
+                .btn-secondary {{
+                    background-color: #95a5a6;
+                    border-color: #95a5a6;
+                    padding: 0.5rem 1.5rem;
+                    font-weight: 500;
+                    transition: all 0.3s ease;
+                }}
+                
+                .btn-secondary:hover {{
+                    background-color: #7f8c8d;
+                    border-color: #7f8c8d;
+                    transform: translateY(-1px);
+                }}
+            </style>
         </head>
         <body>
-          <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">Technical Drawing Analysis</a>
-            <div class="navbar-nav ml-auto">
-              <a class="nav-item nav-link" href="/logout">Logout</a>
-            </div>
-          </nav>
+            <nav class="navbar navbar-expand-lg navbar-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="/">
+                        <i class="fas fa-drafting-compass me-2"></i>
+                        Technical Drawing Analysis
+                    </a>
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="/logout">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </nav>
 
-          <div class="container mt-5">
-            <h1 class="mb-4">Bill of Material Generated</h1>
-            <p class="lead">Your technical component extraction is complete. Download your BOM below.</p>
-            
-            <div class="card mb-4">
-              <div class="card-header">
-                <h5 class="mb-0">Detected Components</h5>
-              </div>
-              <div class="card-body">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Component</th>
-                      <th>Quantity</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {''.join(f'<tr><td>{row["Component"]}</td><td>{row["Quantity"]}</td></tr>' for row in bom_list)}
-                  </tbody>
-                </table>
-              </div>
+            <div class="main-container">
+                <div class="result-card">
+                    <h2 class="mb-4">Analysis Results</h2>
+                    <p class="lead">Your technical drawing has been analyzed successfully. Here are the detected components:</p>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Quantity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {''.join(f'<tr><td>{row["Component"]}</td><td>{row["Quantity"]}</td></tr>' for row in bom_list)}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="{url_for('download_file', filename=csv_filename)}" class="btn btn-success btn-lg me-2">
+                            <i class="fas fa-download me-2"></i>
+                            Download CSV
+                        </a>
+                        <a href="/" class="btn btn-secondary btn-lg">
+                            <i class="fas fa-upload me-2"></i>
+                            Upload Another File
+                        </a>
+                    </div>
+                </div>
             </div>
-            
-            <a href="{url_for('download_file', filename=csv_filename)}" class="btn btn-success btn-lg">Download CSV</a>
-            <br><br>
-            <a href="/" class="btn btn-secondary">Upload Another File</a>
-          </div>
         </body>
         </html>
         """
@@ -300,69 +623,244 @@ def download_file(filename):
 
 def error_template(message):
     return f"""
-    <!doctype html>
+    <!DOCTYPE html>
     <html lang="en">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Error</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Error</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            :root {{
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --background-color: #f8f9fa;
+                --text-color: #2c3e50;
+            }}
+            
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }}
+            
+            .navbar {{
+                background-color: var(--primary-color);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }}
+            
+            .navbar-brand {{
+                font-weight: 600;
+                color: white !important;
+            }}
+            
+            .nav-link {{
+                color: rgba(255,255,255,0.8) !important;
+                transition: color 0.3s ease;
+            }}
+            
+            .nav-link:hover {{
+                color: white !important;
+            }}
+            
+            .main-container {{
+                max-width: 1200px;
+                margin: 2rem auto;
+                padding: 0 1rem;
+            }}
+            
+            .error-card {{
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 2rem;
+                margin-bottom: 2rem;
+            }}
+            
+            .alert-danger {{
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+                color: #721c24;
+                padding: 1rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+            }}
+            
+            .btn-primary {{
+                background-color: var(--secondary-color);
+                border-color: var(--secondary-color);
+                padding: 0.5rem 1.5rem;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            }}
+            
+            .btn-primary:hover {{
+                background-color: #2980b9;
+                border-color: #2980b9;
+                transform: translateY(-1px);
+            }}
+        </style>
     </head>
     <body>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">Technical Drawing Analysis</a>
-        <div class="navbar-nav ml-auto">
-          <a class="nav-item nav-link" href="/logout">Logout</a>
-        </div>
-      </nav>
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    <i class="fas fa-drafting-compass me-2"></i>
+                    Technical Drawing Analysis
+                </a>
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link" href="/logout">
+                        <i class="fas fa-sign-out-alt me-1"></i>
+                        Logout
+                    </a>
+                </div>
+            </div>
+        </nav>
 
-      <div class="container mt-5">
-        <div class="alert alert-danger" role="alert">
-          <h4 class="alert-heading">Error!</h4>
-          <p>{message}</p>
+        <div class="main-container">
+            <div class="error-card">
+                <div class="alert alert-danger">
+                    <h4 class="alert-heading">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Error!
+                    </h4>
+                    <p>{message}</p>
+                </div>
+                <div class="text-center">
+                    <a href="/" class="btn btn-primary">
+                        <i class="fas fa-home me-2"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
         </div>
-        <a href="/" class="btn btn-primary">Back to Home</a>
-      </div>
     </body>
     </html>
     """
 
 def login_template(error_message=None):
     return f"""
-    <!doctype html>
+    <!DOCTYPE html>
     <html lang="en">
     <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Login - Technical Drawing Analysis</title>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Login - Technical Drawing Analysis</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+        <style>
+            :root {{
+                --primary-color: #2c3e50;
+                --secondary-color: #3498db;
+                --accent-color: #e74c3c;
+                --background-color: #f8f9fa;
+                --text-color: #2c3e50;
+            }}
+            
+            body {{
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: var(--background-color);
+                color: var(--text-color);
+                height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }}
+            
+            .login-card {{
+                background: white;
+                border-radius: 10px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                padding: 2rem;
+                width: 100%;
+                max-width: 400px;
+            }}
+            
+            .login-header {{
+                text-align: center;
+                margin-bottom: 2rem;
+            }}
+            
+            .login-icon {{
+                font-size: 3rem;
+                color: var(--secondary-color);
+                margin-bottom: 1rem;
+            }}
+            
+            .form-control {{
+                padding: 0.75rem;
+                border-radius: 8px;
+                border: 1px solid #ced4da;
+                transition: all 0.3s ease;
+            }}
+            
+            .form-control:focus {{
+                border-color: var(--secondary-color);
+                box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            }}
+            
+            .btn-primary {{
+                background-color: var(--secondary-color);
+                border-color: var(--secondary-color);
+                padding: 0.75rem;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                width: 100%;
+            }}
+            
+            .btn-primary:hover {{
+                background-color: #2980b9;
+                border-color: #2980b9;
+                transform: translateY(-1px);
+            }}
+            
+            .alert-danger {{
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+                color: #721c24;
+                padding: 1rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+            }}
+        </style>
     </head>
     <body>
-      <div class="container mt-5">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center">Login</h3>
-              </div>
-              <div class="card-body">
-                {f'<div class="alert alert-danger">{error_message}</div>' if error_message else ''}
-                <form method="post">
-                  <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control" id="username" name="username" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-block">Login</button>
-                </form>
-              </div>
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-drafting-compass login-icon"></i>
+                <h3>Technical Drawing Analysis</h3>
+                <p class="text-muted">Please login to continue</p>
             </div>
-          </div>
+            
+            {f'<div class="alert alert-danger">{error_message}</div>' if error_message else ''}
+            
+            <form method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-user"></i>
+                        </span>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Login
+                </button>
+            </form>
         </div>
-      </div>
     </body>
     </html>
     """

@@ -315,6 +315,36 @@ def index():
             </div>
         </div>
 
+        <div class="analysis-results" id="analysisResults" style="display: none;">
+            <h3 class="mb-4">Analysis Results</h3>
+            <p>Your technical drawing has been analyzed successfully. Here are the detected components:</p>
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Component</th>
+                            <th>Quantity</th>
+                            <th>Size</th>
+                            <th>Type</th>
+                            <th>Signal</th>
+                            <th>Rating</th>
+                            <th>Material</th>
+                            <th>Reference</th>
+                            <th>Location</th>
+                            <th>Specifications</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultsTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+                <a href="#" id="downloadExcel" class="btn btn-success">
+                    <i class="fas fa-file-excel me-2"></i>Download as Excel
+                </a>
+            </div>
+        </div>
+
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
             function selectMethod(method) {
@@ -393,9 +423,77 @@ def index():
                 return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
             }
 
-            document.getElementById('uploadForm').addEventListener('submit', function() {
+            document.getElementById('uploadForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevent default form submission
                 document.getElementById('loading').style.display = 'block';
+                
+                const formData = new FormData(this);
+                
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    // Check the content type of the response
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json().then(data => {
+                            if (data.error) {
+                                throw new Error(data.error);
+                            }
+                            return data;
+                        });
+                    } else {
+                        // If it's HTML, replace the entire page content
+                        return response.text().then(html => {
+                            document.documentElement.innerHTML = html;
+                            return null;
+                        });
+                    }
+                })
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none';
+                    if (data) { // If we got JSON data
+                        displayResults(data.results);
+                        document.getElementById('analysisResults').style.display = 'block';
+                        document.getElementById('downloadExcel').href = `/download/${data.filename}`;
+                    }
+                    // If we got HTML, the page has already been replaced
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    alert('An error occurred during upload: ' + error);
+                });
             });
+
+            function displayResults(results) {
+                const tableBody = document.getElementById('resultsTableBody');
+                tableBody.innerHTML = '';
+                
+                for (const [component, details] of Object.entries(results)) {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${component}</td>
+                        <td>${details.quantity || 1}</td>
+                        <td>${details.size || '-'}</td>
+                        <td>${details.type || '-'}</td>
+                        <td>${details.signal || '-'}</td>
+                        <td>${details.rating || '-'}</td>
+                        <td>${details.material || '-'}</td>
+                        <td>${details.reference || '-'}</td>
+                        <td>${details.location || '-'}</td>
+                        <td>${details.specifications || '-'}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+                
+                // Show the results container
+                const resultsContainer = document.getElementById('analysisResults');
+                resultsContainer.style.display = 'block';
+                
+                // Scroll to results
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            }
         </script>
     </body>
     </html>
@@ -405,67 +503,31 @@ def index():
 @app.route('/upload', methods=['POST'])
 @login_required
 def upload_file():
-    if 'file' not in request.files:
-        return render_template_string(error_template("No file part in the request")), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return render_template_string(error_template("No selected file")), 400
-
-    if not allowed_file(file.filename):
-        return render_template_string(error_template("File type not allowed")), 400
-
     try:
-        filename = secure_filename(file.filename)
-        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        file.save(file_path)
-
-        ext = filename.rsplit('.', 1)[1].lower()
-        analysis_method = request.form.get('analysis_method', 'yolov5')
-        image_path = None
-
-        if ext == 'pdf':
-            try:
-                images = convert_from_path(file_path)
-                image_path = os.path.join(app.config['UPLOAD_FOLDER'], 'converted_page.jpg')
-                images[0].save(image_path, 'JPEG')
-            except Exception as e:
-                message = ("PDF conversion failed: " + str(e) + "<br>"
-                          "Ensure Poppler is installed and in your system PATH.<br>"
-                          "For macOS: <code>brew install poppler</code><br>"
-                          "For Ubuntu: <code>sudo apt-get install poppler-utils</code><br>"
-                          "For Windows: Download from <a href='http://blog.alivate.com.au/poppler-windows/'>Poppler for Windows</a>.")
-                return render_template_string(error_template(message)), 500
-        elif ext in ['png', 'jpg', 'jpeg']:
-            image_path = file_path
-        else:
-            return render_template_string(error_template("Unsupported file type.")), 400
-
-        if analysis_method == 'yolov5':
-            detection_results = detect_components(image_path)
-        elif analysis_method == 'openai':
-            detection_results = openai_detect_components(file_path)
-        else:
-            detection_results = {}
-
-        bom_list = []
-        if detection_results:
-            for component, count in detection_results.items():
-                bom_list.append({'Component': component, 'Quantity': count})
-        else:
-            bom_list.append({'Component': 'No detections', 'Quantity': 0})
+        if 'file' not in request.files:
+            return render_template_string(error_template("No file uploaded"))
         
-        bom_df = pd.DataFrame(bom_list)
+        file = request.files['file']
+        if file.filename == '':
+            return render_template_string(error_template("No file selected"))
+        
+        if not allowed_file(file.filename):
+            return render_template_string(error_template("File type not allowed"))
+        
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        
+        # Analyze the drawing
+        results = openai_detect_components(filepath)
+        
+        # Store results in session for CSV download
+        session['last_results'] = results
+        
+        # Generate CSV filename
         csv_filename = f'bom_{datetime.now().strftime("%Y%m%d_%H%M%S")}.csv'
-        csv_path = os.path.join(app.config['UPLOAD_FOLDER'], csv_filename)
-        bom_df.to_csv(csv_path, index=False)
-
-        if image_path and image_path != file_path:
-            try:
-                os.remove(image_path)
-            except:
-                pass
-
+        
+        # Create results page HTML
         result_html = f"""
         <!DOCTYPE html>
         <html lang="en">
@@ -479,7 +541,6 @@ def upload_file():
                 :root {{
                     --primary-color: #2c3e50;
                     --secondary-color: #3498db;
-                    --accent-color: #e74c3c;
                     --background-color: #f8f9fa;
                     --text-color: #2c3e50;
                 }}
@@ -502,15 +563,10 @@ def upload_file():
                 
                 .nav-link {{
                     color: rgba(255,255,255,0.8) !important;
-                    transition: color 0.3s ease;
-                }}
-                
-                .nav-link:hover {{
-                    color: white !important;
                 }}
                 
                 .main-container {{
-                    max-width: 1200px;
+                    max-width: 1400px;
                     margin: 2rem auto;
                     padding: 0 1rem;
                 }}
@@ -532,32 +588,24 @@ def upload_file():
                     color: white;
                 }}
                 
-                .btn-success {{
-                    background-color: #27ae60;
-                    border-color: #27ae60;
+                .btn {{
                     padding: 0.5rem 1.5rem;
                     font-weight: 500;
                     transition: all 0.3s ease;
+                }}
+                
+                .btn:hover {{
+                    transform: translateY(-1px);
+                }}
+                
+                .btn-success {{
+                    background-color: #27ae60;
+                    border-color: #27ae60;
                 }}
                 
                 .btn-success:hover {{
                     background-color: #219a52;
                     border-color: #219a52;
-                    transform: translateY(-1px);
-                }}
-                
-                .btn-secondary {{
-                    background-color: #95a5a6;
-                    border-color: #95a5a6;
-                    padding: 0.5rem 1.5rem;
-                    font-weight: 500;
-                    transition: all 0.3s ease;
-                }}
-                
-                .btn-secondary:hover {{
-                    background-color: #7f8c8d;
-                    border-color: #7f8c8d;
-                    transform: translateY(-1px);
                 }}
             </style>
         </head>
@@ -583,15 +631,37 @@ def upload_file():
                     <p class="lead">Your technical drawing has been analyzed successfully. Here are the detected components:</p>
                     
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table table-striped table-hover">
                             <thead>
                                 <tr>
                                     <th>Component</th>
                                     <th>Quantity</th>
+                                    <th>Size</th>
+                                    <th>Type</th>
+                                    <th>Signal</th>
+                                    <th>Rating</th>
+                                    <th>Material</th>
+                                    <th>Reference</th>
+                                    <th>Location</th>
+                                    <th>Specifications</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {''.join(f'<tr><td>{row["Component"]}</td><td>{row["Quantity"]}</td></tr>' for row in bom_list)}
+                                {''.join(
+                                    f'''<tr>
+                                        <td>{comp}</td>
+                                        <td>{details.get('quantity', 1)}</td>
+                                        <td>{details.get('size', '-')}</td>
+                                        <td>{details.get('type', '-')}</td>
+                                        <td>{details.get('signal', '-')}</td>
+                                        <td>{details.get('rating', '-')}</td>
+                                        <td>{details.get('material', '-')}</td>
+                                        <td>{details.get('reference', '-')}</td>
+                                        <td>{details.get('location', '-')}</td>
+                                        <td>{details.get('specifications', '-')}</td>
+                                    </tr>''' 
+                                    for comp, details in results.items()
+                                )}
                             </tbody>
                         </table>
                     </div>
@@ -612,14 +682,49 @@ def upload_file():
         </html>
         """
         return render_template_string(result_html)
-
+        
     except Exception as e:
-        return render_template_string(error_template(f"An error occurred: {str(e)}")), 500
+        print(f"[ERROR] Upload failed: {e}")
+        return render_template_string(error_template(f"An error occurred: {str(e)}"))
 
 @app.route('/download/<filename>', methods=['GET'])
 @login_required
 def download_file(filename):
-    return send_file(os.path.join(app.config['UPLOAD_FOLDER'], filename), as_attachment=True)
+    try:
+        # Get the results from the session
+        results = session.get('last_results', {})
+        
+        # Create a DataFrame with all columns
+        data = []
+        for component, details in results.items():
+            data.append({
+                'Component': component,
+                'Quantity': details.get('quantity', 1),
+                'Size': details.get('size', ''),
+                'Type': details.get('type', ''),
+                'Signal': details.get('signal', ''),
+                'Rating': details.get('rating', ''),
+                'Material': details.get('material', ''),
+                'Reference': details.get('reference', ''),
+                'Location': details.get('location', ''),
+                'Specifications': details.get('specifications', '')
+            })
+        
+        df = pd.DataFrame(data)
+        
+        # Create CSV file
+        csv_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        df.to_csv(csv_path, index=False, encoding='utf-8')
+        
+        return send_file(
+            csv_path,
+            mimetype='text/csv',
+            as_attachment=True,
+            download_name='technical_drawing_analysis.csv'
+        )
+    except Exception as e:
+        print(f"[ERROR] Failed to generate CSV file: {e}")
+        return jsonify({'error': 'Failed to generate CSV file'}), 500
 
 def error_template(message):
     return f"""

@@ -4,6 +4,10 @@ from openai import OpenAI
 import base64
 import PyPDF2
 from dotenv import load_dotenv
+from pdf2image import convert_from_path
+import tempfile
+from PIL import Image
+import io
 
 # Load environment variables from .env file
 load_dotenv()
@@ -65,11 +69,49 @@ def extract_text_from_pdf(file_path):
     print("[DEBUG] Total extracted text length:", len(text))
     return text
 
+def convert_pdf_to_image(pdf_path):
+    """
+    Convert the first page of a PDF to a JPEG image
+    """
+    try:
+        # Convert PDF to image
+        images = convert_from_path(pdf_path, first_page=1, last_page=1)
+        if not images:
+            print("[ERROR] No images extracted from PDF")
+            return None
+        
+        # Convert PIL Image to bytes
+        img_byte_arr = io.BytesIO()
+        images[0].save(img_byte_arr, format='JPEG', quality=95)
+        img_byte_arr = img_byte_arr.getvalue()
+        
+        # Save temporary file
+        temp_dir = tempfile.gettempdir()
+        temp_image_path = os.path.join(temp_dir, 'temp_drawing.jpg')
+        with open(temp_image_path, 'wb') as f:
+            f.write(img_byte_arr)
+        
+        return temp_image_path
+    except Exception as e:
+        print(f"[ERROR] Failed to convert PDF to image: {e}")
+        return None
+
+def encode_image_to_base64(image_path):
+    """
+    Encode image to base64 string for OpenAI Vision API
+    """
+    try:
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+    except Exception as e:
+        print(f"[ERROR] Failed to encode image: {e}")
+        return None
+
 def openai_detect_components(file_path):
     client = OpenAI()
     """
-    Uses the OpenAI API to analyze a technical drawing document.
-    Returns a dictionary of the extracted BOM.
+    Uses the OpenAI Vision API to analyze a technical drawing document.
+    Returns a dictionary of the extracted BOM with detailed information in separate columns.
     """
     print("[DEBUG] Reading file for OpenAI detection:", file_path)
     
@@ -82,100 +124,85 @@ def openai_detect_components(file_path):
     except Exception as e:
         print("[ERROR] Failed to check file size:", e)
         return {}
-    
-    # First try to extract text from the file
-    text = ""
-    if file_path.lower().endswith('.pdf'):
-        text = extract_text_from_pdf(file_path)
-    else:
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                text = f.read()
-        except:
-            try:
-                with open(file_path, 'r', encoding='latin-1') as f:
-                    text = f.read()
-            except Exception as e:
-                print("[ERROR] Failed to read file:", e)
-                return {}
 
-    if not text:
-        print("[ERROR] No text could be extracted from the file")
+    # Convert PDF to image if necessary
+    image_path = file_path
+    if file_path.lower().endswith('.pdf'):
+        print("[DEBUG] Converting PDF to image")
+        image_path = convert_pdf_to_image(file_path)
+        if not image_path:
+            return {}
+
+    # Prepare the image for GPT-4 Vision API
+    base64_image = encode_image_to_base64(image_path)
+    if not base64_image:
         return {}
 
-    # Enhanced prompt for better component identification
-    prompt_text = (
-        "You are an expert in technical drawing analysis and Bill of Materials (BOM) extraction. "
-        "Your task is to analyze the following technical document and extract its components with high precision.\n\n"
-        
-        "Focus on identifying these specific technical components:\n"
-        "1. Valves:\n"
-        "   - Ball valves\n"
-        "   - Gate valves\n"
-        "   - Check valves\n"
-        "   - Control valves\n"
-        "   - Safety valves\n"
-        "2. Pumps and Motors:\n"
-        "   - Centrifugal pumps\n"
-        "   - Gear pumps\n"
-        "   - Electric motors\n"
-        "   - Hydraulic pumps\n"
-        "3. Pipes and Fittings:\n"
-        "   - Straight pipes\n"
-        "   - Elbows\n"
-        "   - Tees\n"
-        "   - Reducers\n"
-        "   - Flanges\n"
-        "4. Instruments and Sensors:\n"
-        "   - Pressure gauges\n"
-        "   - Temperature sensors\n"
-        "   - Flow meters\n"
-        "   - Level indicators\n"
-        "5. Electrical Components:\n"
-        "   - Switches\n"
-        "   - Relays\n"
-        "   - Circuit breakers\n"
-        "   - Transformers\n"
-        "6. Mechanical Parts:\n"
-        "   - Bearings\n"
-        "   - Gears\n"
-        "   - Shafts\n"
-        "   - Couplings\n\n"
-        
-        "Important Guidelines:\n"
-        "1. Only list components that you are highly confident about\n"
-        "2. Convert all measurements to standard units (e.g., '2 meters of pipe' → '2')\n"
-        "3. Group similar components (e.g., 'Gate Valve 1' and 'Gate Valve 2' → 'Gate Valve: 2')\n"
-        "4. Include any relevant specifications (e.g., '1\" Ball Valve')\n"
-        "5. If a component has multiple instances, sum them up\n"
-        "6. If you're unsure about a component, do not include it\n\n"
-        
-        "Your output must be in CSV format with exactly two columns: 'Component' and 'Quantity'.\n"
-        "Start your response with 'Component,Quantity' on the first line, followed by one component per line.\n"
-        "Do not include any other text or explanations in your response.\n\n"
-        
-        "Document content:\n" + text[:4000]  # Limit text length to avoid token limits
-    )
+    # Clean up temporary image if it was created
+    if image_path != file_path:
+        try:
+            os.remove(image_path)
+        except:
+            pass
 
-    messages = [
-        {"role": "system", "content": (
-            "You are an expert in technical drawing analysis and BOM extraction. "
-            "Your task is to identify and quantify technical components from engineering drawings. "
-            "You have extensive knowledge of mechanical, electrical, and industrial components. "
-            "You are precise, accurate, and only include components you are confident about. "
-            "Respond only with the CSV data, starting with the header 'Component,Quantity'."
-        )},
-        {"role": "user", "content": prompt_text}
-    ]
+    # Enhanced prompt with technical standards and detailed BOM structure
+    prompt_text = """Analyze this technical drawing according to VDI 3814, ISO 16484, and ISO 14617 standards.
+    Extract all components and their details in a structured format.
+
+    For each component, identify:
+    1. Component Name with its identifier (e.g., "Pump P1", "Valve V1")
+    2. Quantity (count of identical components)
+    3. Size/Dimensions (in metric units, e.g., DN32, 1000 L)
+    4. Type (according to ISO standards)
+    5. Signal Type (for control components)
+    6. Rating/Capacity (power, pressure, flow rate)
+    7. Material
+    8. Reference Code (according to DIN EN 81346)
+    9. Location/System
+    10. Additional Specifications
+
+    Pay special attention to:
+    - Valves (Ball, Gate, Check, Control, Safety)
+    - Pumps and Motors
+    - Sensors and Instruments
+    - Control System Components
+    - Pipes and Fittings
+    - Electrical Components
+
+    Format the response in a structured table with these exact columns (separated by semicolons):
+    Component;Quantity;Size;Type;Signal;Rating;Material;Reference;Location;Specifications
+
+    Use standard technical abbreviations where appropriate.
+    Include all visible components. Use semicolons to separate fields for better parsing.
+    If multiple identical components exist, list them as one entry with the appropriate quantity."""
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4",  # Using GPT-4 for better accuracy
-            messages=messages,
-            max_tokens=1000,
-            temperature=0.1,  # Lower temperature for more consistent results
-            presence_penalty=0.1,  # Slight penalty for repeating components
-            frequency_penalty=0.1  # Slight penalty for repeating patterns
+            model="o4-mini-2025-04-16",  # Using the latest model
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        "You are an expert in technical drawing analysis specializing in building automation "
+                        "and control systems (BACS). You understand VDI 3814, ISO 16484, ISO 14617, and IEC 60617 standards. "
+                        "Analyze the image and provide detailed component information in a structured table format. "
+                        "Use semicolons as separators and ensure proper counting of identical components."
+                    )
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt_text},
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{base64_image}"
+                            }
+                        }
+                    ]
+                }
+            ],
+            max_completion_tokens=4096
         )
     except Exception as e:
         print("[ERROR] OpenAI API request failed:", e)
@@ -186,7 +213,7 @@ def openai_detect_components(file_path):
         response_text = response.choices[0].message.content.strip()
         print("[DEBUG] OpenAI API returned response:", response_text)
         
-        # Parse CSV text
+        # Parse semicolon-separated text
         lines = response_text.splitlines()
         bom = {}
         
@@ -195,15 +222,21 @@ def openai_detect_components(file_path):
             if not line.strip():
                 continue
             try:
-                parts = [p.strip() for p in line.split(',')]
-                if len(parts) >= 2:
+                parts = [p.strip() for p in line.split(';')]
+                if len(parts) >= 10:  # Now expecting 10 columns
                     comp = parts[0]
-                    try:
-                        qty = int(parts[1])
-                        if qty > 0:  # Only include components with positive quantities
-                            bom[comp] = qty
-                    except ValueError:
-                        print(f"[DEBUG] Non-numeric quantity for component '{comp}': '{parts[1]}'")
+                    # Create a structured component entry
+                    bom[comp] = {
+                        'quantity': int(parts[1]) if parts[1].isdigit() else 1,  # Default to 1 if not specified
+                        'size': parts[2],
+                        'type': parts[3],
+                        'signal': parts[4],
+                        'rating': parts[5],
+                        'material': parts[6],
+                        'reference': parts[7],
+                        'location': parts[8],
+                        'specifications': parts[9]
+                    }
             except Exception as e:
                 print(f"[DEBUG] Error parsing line '{line}': {e}")
 

@@ -5,7 +5,7 @@ from flask import Flask, request, send_file, render_template_string, url_for, js
 from werkzeug.utils import secure_filename
 import pandas as pd
 from pdf2image import convert_from_path
-from detection import detect_components, openai_detect_components
+from detection import openai_detect_components
 from functools import wraps
 
 app = Flask(__name__)
@@ -262,19 +262,6 @@ def index():
                         <h4 class="mb-3">Select Analysis Method</h4>
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="method-card" onclick="selectMethod('yolov5')">
-                                    <div class="text-center">
-                                        <i class="fas fa-robot method-icon"></i>
-                                        <h5 class="method-title">YOLOv5 Detection</h5>
-                                        <p class="method-description">Advanced computer vision for precise component detection</p>
-                                    </div>
-                                    <div class="form-check text-center">
-                                        <input class="form-check-input" type="radio" name="analysis_method" id="yolov5" value="yolov5" checked>
-                                        <label class="form-check-label" for="yolov5">Select</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
                                 <div class="method-card" onclick="selectMethod('openai')">
                                     <div class="text-center">
                                         <i class="fas fa-brain method-icon"></i>
@@ -282,7 +269,7 @@ def index():
                                         <p class="method-description">AI-powered text analysis for detailed component identification</p>
                                     </div>
                                     <div class="form-check text-center">
-                                        <input class="form-check-input" type="radio" name="analysis_method" id="openai" value="openai">
+                                        <input class="form-check-input" type="radio" name="analysis_method" id="openai" value="openai" checked>
                                         <label class="form-check-label" for="openai">Select</label>
                                     </div>
                                 </div>
@@ -356,7 +343,7 @@ def index():
             }
 
             // Initialize the first method as selected
-            selectMethod('yolov5');
+            selectMethod('openai');
 
             const dropZone = document.getElementById('dropZone');
             const fileInput = document.getElementById('file');

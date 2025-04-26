@@ -1,5 +1,5 @@
 import os
-import torch
+# import torch  # Commented out to reduce memory usage
 from openai import OpenAI
 import base64
 import PyPDF2
@@ -16,37 +16,11 @@ if not OpenAI.api_key:
     print("[ERROR] OPENAI_API_KEY is not set in the environment.")
 
 # --- YOLOv5-based detection function --- #
-model = torch.hub.load('ultralytics/yolov5', 'yolov5s', trust_repo=True)
-
-# A sample mapping for YOLOv5 detections (using COCO classes as a placeholder)
-COCO_MAPPING = {
-    0: 'person',
-    1: 'bicycle',
-    2: 'car',
-    3: 'motorcycle',
-    4: 'airplane',
-    5: 'bus'
-    # Extend mapping as needed.
-}
-
-def detect_components(image_path):
-    """
-    Uses YOLOv5 to detect objects from an image.
-    Returns a dictionary with component counts.
-    """
-    print("[DEBUG] Starting YOLOv5 detection for image:", image_path)
-    results = model(image_path)
-    print("[DEBUG] YOLOv5 raw predictions:", results.pred)
-    counts = {}
-    if results.pred and len(results.pred[0]) > 0:
-        for pred in results.pred[0]:
-            cls = int(pred[5])
-            component = COCO_MAPPING.get(cls, 'unknown')
-            counts[component] = counts.get(component, 0) + 1
-    else:
-        print("[DEBUG] YOLOv5 did not detect any objects.")
-    print("[DEBUG] YOLOv5 detection counts:", counts)
-    return counts
+# model = torch.hub.load('ultralytics/yolov5', 'yolov5s', trust_repo=True)
+# COCO_MAPPING = { ... }
+# def detect_components(image_path):
+#     ...
+#     return counts
 
 # --- OpenAI API-based detection function updated for openai 1.73.0 --- #
 

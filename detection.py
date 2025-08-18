@@ -11,8 +11,10 @@ import io
 
 # Load environment variables from .env file
 load_dotenv()
-OpenAI.api_key = os.getenv("OPENAI_API_KEY")
-if not OpenAI.api_key:
+
+# Initialize OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+if not os.getenv("OPENAI_API_KEY"):
     print("[ERROR] OPENAI_API_KEY is not set in the environment.")
 
 # --- YOLOv5-based detection function --- #
@@ -82,9 +84,8 @@ def encode_image_to_base64(image_path):
         return None
 
 def openai_detect_components(file_path):
-    client = OpenAI()
     """
-    Uses the OpenAI Vision API to analyze a technical drawing document.
+    Uses the OpenAI GPT-5 Vision API to analyze a technical drawing document.
     Returns a dictionary of the extracted BOM with detailed information in separate columns.
     """
     print("[DEBUG] Reading file for OpenAI detection:", file_path)
@@ -92,8 +93,8 @@ def openai_detect_components(file_path):
     # Validate file size
     try:
         file_size = os.path.getsize(file_path)
-        if file_size > 10 * 1024 * 1024:  # 10MB limit
-            print("[ERROR] File too large (max 10MB)")
+        if file_size > 20 * 1024 * 1024:  # Increased to 20MB limit for GPT-5
+            print("[ERROR] File too large (max 20MB)")
             return {}
     except Exception as e:
         print("[ERROR] Failed to check file size:", e)
@@ -107,7 +108,7 @@ def openai_detect_components(file_path):
         if not image_path:
             return {}
 
-    # Prepare the image for GPT-4 Vision API
+    # Prepare the image for GPT-5 Vision API
     base64_image = encode_image_to_base64(image_path)
     if not base64_image:
         return {}
@@ -119,48 +120,51 @@ def openai_detect_components(file_path):
         except:
             pass
 
-    # Enhanced prompt with technical standards and detailed BOM structure
-    prompt_text = """Analyze this technical drawing according to VDI 3814, ISO 16484, and ISO 14617 standards.
-    Extract all components and their details in a structured format.
+    # Enhanced prompt optimized for GPT-5
+    prompt_text = """Analyze this technical drawing with expert precision according to international engineering standards (VDI 3814, ISO 16484, ISO 14617, IEC 60617).
 
-    For each component, identify:
-    1. Component Name with its identifier (e.g., "Pump P1", "Valve V1")
+    Extract ALL visible components and create a comprehensive Bill of Materials (BOM) with the following structure:
+
+    For each component, identify and categorize:
+    1. Component Name & Identifier (e.g., "Pump P1", "Valve V1", "Sensor S1")
     2. Quantity (count of identical components)
-    3. Size/Dimensions (in metric units, e.g., DN32, 1000 L)
-    4. Type (according to ISO standards)
-    5. Signal Type (for control components)
-    6. Rating/Capacity (power, pressure, flow rate)
-    7. Material
+    3. Size/Dimensions (in metric units, e.g., DN32, 1000 L, 100 kW)
+    4. Component Type (according to ISO standards)
+    5. Signal Type (for control/automation components)
+    6. Rating/Capacity (power, pressure, flow rate, voltage, etc.)
+    7. Material Specification
     8. Reference Code (according to DIN EN 81346)
-    9. Location/System
-    10. Additional Specifications
+    9. System Location/Zone
+    10. Technical Specifications & Notes
 
     Pay special attention to:
-    - Valves (Ball, Gate, Check, Control, Safety)
-    - Pumps and Motors
-    - Sensors and Instruments
-    - Control System Components
-    - Pipes and Fittings
-    - Electrical Components
+    - Control Valves (Ball, Gate, Check, Control, Safety, Solenoid)
+    - Pumps, Motors, and Drives
+    - Sensors and Measurement Instruments
+    - Control System Components (PLCs, DCS, SCADA)
+    - Pipes, Fittings, and Supports
+    - Electrical Components and Wiring
+    - HVAC Equipment
+    - Safety and Emergency Systems
 
-    Format the response in a structured table with these exact columns (separated by semicolons):
+    Format the response as a structured table with these exact columns (separated by semicolons):
     Component;Quantity;Size;Type;Signal;Rating;Material;Reference;Location;Specifications
 
-    Use standard technical abbreviations where appropriate.
-    Include all visible components. Use semicolons to separate fields for better parsing.
-    If multiple identical components exist, list them as one entry with the appropriate quantity."""
+    Use standard technical abbreviations and ensure accurate counting of identical components.
+    Include ALL visible components - be thorough and systematic in your analysis."""
 
     try:
         response = client.chat.completions.create(
-            model="o4-mini-2025-04-16",  # Using the latest model
+            model="gpt-5o-mini",  # Using GPT-5 for superior technical analysis
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are an expert in technical drawing analysis specializing in building automation "
-                        "and control systems (BACS). You understand VDI 3814, ISO 16484, ISO 14617, and IEC 60617 standards. "
-                        "Analyze the image and provide detailed component information in a structured table format. "
-                        "Use semicolons as separators and ensure proper counting of identical components."
+                        "You are an expert engineering analyst specializing in technical drawing interpretation "
+                        "for building automation, control systems (BACS), and industrial applications. "
+                        "You have deep knowledge of VDI 3814, ISO 16484, ISO 14617, IEC 60617, and DIN EN 81346 standards. "
+                        "Your analysis is precise, thorough, and follows engineering best practices. "
+                        "Always provide structured, semicolon-separated output for optimal parsing."
                     )
                 },
                 {
@@ -176,7 +180,8 @@ def openai_detect_components(file_path):
                     ]
                 }
             ],
-            max_completion_tokens=4096
+            max_tokens=4096,
+            temperature=0.1  # Low temperature for consistent, precise analysis
         )
     except Exception as e:
         print("[ERROR] OpenAI API request failed:", e)
@@ -197,11 +202,11 @@ def openai_detect_components(file_path):
                 continue
             try:
                 parts = [p.strip() for p in line.split(';')]
-                if len(parts) >= 10:  # Now expecting 10 columns
+                if len(parts) >= 10:  # Expecting 10 columns
                     comp = parts[0]
                     # Create a structured component entry
                     bom[comp] = {
-                        'quantity': int(parts[1]) if parts[1].isdigit() else 1,  # Default to 1 if not specified
+                        'quantity': int(parts[1]) if parts[1].isdigit() else 1,
                         'size': parts[2],
                         'type': parts[3],
                         'signal': parts[4],
@@ -210,6 +215,19 @@ def openai_detect_components(file_path):
                         'reference': parts[7],
                         'location': parts[8],
                         'specifications': parts[9]
+                    }
+                elif len(parts) >= 5:  # Handle cases with fewer columns
+                    comp = parts[0]
+                    bom[comp] = {
+                        'quantity': int(parts[1]) if parts[1].isdigit() else 1,
+                        'size': parts[2] if len(parts) > 2 else '',
+                        'type': parts[3] if len(parts) > 3 else '',
+                        'signal': parts[4] if len(parts) > 4 else '',
+                        'rating': parts[5] if len(parts) > 5 else '',
+                        'material': parts[6] if len(parts) > 6 else '',
+                        'reference': parts[7] if len(parts) > 7 else '',
+                        'location': parts[8] if len(parts) > 8 else '',
+                        'specifications': parts[9] if len(parts) > 9 else ''
                     }
             except Exception as e:
                 print(f"[DEBUG] Error parsing line '{line}': {e}")

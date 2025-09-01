@@ -1,0 +1,3257 @@
+﻿Bezeichnung / Feldgeräte,Beschreibung
+Allgemein,
+Analoger Ausgang,
+Analoger Eingang,
+BSK,
+BWW Elektroeinsatz,
+Digitaler Ausgang,
+Digitaler Eingang,
+Druckfühler,
+Presostat,
+EC Ventilator,
+Elektrozähler M-Bus,
+Elektrozähler ModBus IP,
+Elektrozähler ModBus RTU,
+Entgaser,
+Expansion,
+Frostschutzwächter,
+Fühler CO2,
+Fühler Feuchte,
+Fühler Temperatur,
+Fühler Temperatur / Feuchte,
+Fühler Temperatur / Feuchte / CO2,
+Gasmelder,
+Kältemaschine gross,
+Kältemaschine klein,
+Luftklappe 3-Punkt,
+Luftklappe Stetig,
+Pumpe,
+Pumpe Drehzahlgeregelt Extern,
+Pumpe mit SSM Modul,
+Reserve,
+Schalter (Beleuchtet),
+Stufenschalter (1Stufig),
+Thermostat,
+VAV - Mod-Bus,
+VAV,
+Ventil 2-Punkt,
+Ventil 3-Punkt,
+Ventil Stetig,
+Ventilator 1 Stufig,
+Ventilator 2 Stufig,
+Ventilator FU,
+Wärmezähler M-Bus,
+Wetterstation,
+WRG Rotor,
+Zähl Eingang,
+Rückkühler,
+5WG1140-1AB13,Linien-/Bereichskoppler N 140/13
+5WG1141-1AB03,N141/03 DALI Gateway plus
+5WG1141-1AB21,N141/21 DALI Gateway Twin plus
+5WG1141-1AB31,N141/31 DALI Gateway Twin
+5WG1141-2AB71,DALI-Tastereingang 4fach
+5WG1143-1AB01,IP Gateway KNX/BACnet N143
+5WG1146-1AB02,IP Router  N146/02
+5WG1146-1AB03,5WG1146-1AB03 /N 146/03 IP Router
+5WG1148-1AB12,USB Schnittstelle N148/12
+5WG1148-1AB22,IP SCHNITTSTELLE N148/22
+5WG1152-1AB01,IP Control Center N152
+5WG1190-8AD01,Überspannungsschutz 190
+5WG1193-8AB01,Busklemme 193
+5WG1211-2DB01,Tastsensor Glas Grundmodul 1fach
+5WG1211-8DB11,"Tastsensor Glas Abdeckung 1f, weiss"
+5WG1211-8DB11/CH,"Tastsensor Glas 1fach, weiss"
+5WG1211-8DB21,"Tastsensor Glas Abdeckung 1f, schwarz"
+5WG1211-8DB21/CH,"Tastsensor Glas 1fach, schwarz"
+5WG1212-2DB01,Tastsensor Glas Grundmodul 2fach
+5WG1212-8DB11,"Tastsensor Glas Abdeckung 2f, weiss"
+5WG1212-8DB11/CH,"Tastsensor Glas 2fach, weiss"
+5WG1212-8DB21,"Tastsensor Glas Abdeckung 2f, schwarz"
+5WG1212-8DB21/CH,"Tastsensor Glas 2fach, schwarz"
+5WG1213-2DB01,Tastsensor Glas Grundmodul 4fach
+5WG1213-8DB11,"Tastsensor Glas Abdeckung 4f, weiss"
+5WG1213-8DB11/CH,"Tastsensor Glas 4fach, weiss"
+5WG1213-8DB21,"Tastsensor Glas Abdeckung 4f, schwarz"
+5WG1213-8DB21/CH,"Tastsensor Glas 4fach, schwarz"
+5WG1220-2AB21,UP 220/21 2X In/Out
+5WG1220-2DB31,Tasterschnittstelle UP 220/31 4X In/Out
+5WG1221-2DB12,"Taster 1-fach UP221/2 TW,"
+5WG1221-2DB13,"Taster 1-fach UP221/3 mit LED, TW"
+5WG1221-2DB32,Taster 1-fach UP221/2 ALU
+5WG1221-2DB33,"Taster 1-fach UP221/3 mit LED, ALU"
+5WG1222-2DB12,Taster 2-fach UP222/2 TW
+5WG1222-2DB13,"Taster 2-fach UP222/3 mit LED, TW"
+5WG1222-2DB32,Taster 2-fach UP222/2 ALU
+5WG1222-2DB33,"Taster 2-fach UP222/3 mit LED, ALU"
+5WG1223-2DB12,Taster 3-fach UP223/2 TW
+5WG1223-2DB13,"Taster 3-fach UP223/3 mit LED, TW"
+5WG1223-2DB32,Taster 3-fach UP223/2 ALU
+5WG1223-2DB33,"Taster 3-fach UP223/3 mit LED, ALU"
+5WG1227-2AB11,Raumbediengerät UP227
+5WG1227-2AB11/CH,"RaumbediengerätUP227,60x60adapt+m.Platte"
+5WG1237-2KB11,Raumtemperaturregler 237K
+5WG1237-2KB11/CH,"Raumtemp.regler 237K, BTM,60x60 adapt"
+5WG1254-2KB13,Raumtemperaturregler 254KB
+5WG1254-3EY02,Kombisensor AP 254/02
+5WG1255-2DB21,"Helligkeitsmelder UP 255D21, ws"
+5WG1255-7AB11,IR-Fernbedienung S 255/11
+5WG1257-3AB22,AP 257/22 Wetterzentrale (GPS)
+5WG1257-3AB51,"Wetterstation AP 257/51, 3 Fassaden"
+5WG1257-3AB61,"Wetterzentrale GPS AP 257/61, 8 Fassaden"
+5WG1258-2DB12,"Präs.meld UP 258D12 Desk, ws"
+5WG1258-2DB12,"Präs.meld UP 258D12 Desk, ws"
+5WG1258-2EB22,"Präs.meld UP 258E22 Desk m.KS, ws"
+5WG1258-7EB01,Gehäuse AP 258E01 für Präs.meld
+5WG1260-4AB23,"Binäreingang RL 260/23,  4fach, 12…230V"
+5WG1260-4AB23,"Binäreingang RL 260/23,  4fach, 12…230V"
+5WG1262-1EB01,Binäreingabegerät N 262E/01
+5WG1262-1EB11,Binäreingabegerät N 262E/11
+5WG1263-1EB01,Binäreingabegerät N 263E/01
+5WG1263-1EB11,Binäreingabegerät N 263E/11
+5WG1264-1EB11,Binäreingabegerät N264
+5WG1286-2DB13,"Taster 2-fach UP286/3 TW, LED, Style"
+5WG1287-2DB13,"Taster 4-fach UP287/3 TW, LED, Style"
+5WG1305-1AB01,Szenen/Ereignisbaustein N305
+5WG1425-7AB72,IR Handsender S 425/72
+5WG1450-7AB03,IR Empfänger-Dekoder S 450/03
+5WG1501-1AB01,N 501 Kombi-Jalousieaktor
+5WG1502-1AB02,"N 502 Kombi-Schaltaktor, 8fach"
+5WG1510-1AB03,Lastschalter N 510/03
+5WG1510-1AB04,Lastschalter N 510/04
+5WG1510-2AB03,"Binärausgabegerät UP 510/03, 2x10A, m.M"
+5WG1510-2AB03,"Binärausgabegerät UP 510/03, 2x10A, m.M"
+5WG1510-2AB13,"Binärausgabegerät UP 510/13,  2x10A, o.M"
+5WG1510-2AB13,"Binärausgabegerät UP 510/13,  2x10A, o.M"
+5WG1510-2AB23,"Binärausgabegerät RS 510/23, Relais2x10A"
+5WG1510-2AB23,"Binärausgabegerät RS 510/23, Relais2x10A"
+5WG1510-2KB23,"Thermoantriebaktor, RS 510K23"
+5WG1511-1AB02,Schaltaktor N 511/02
+5WG1511-2AB10,Schaltaktor UP 511/10
+5WG1512-1AB01,Lastschalter N 512
+5WG1512-1AB11,Schaltaktor N 512/11 M3X16A C-L
+5WG1512-1AB21,Schaltaktor N 512/21 S3X16A C-L
+5WG1512-4AB23,"Schaltaktor RL 512/23,  (Relais) 1x 16A"
+5WG1512-4AB23,"Schaltaktor RL 512/23,  (Relais) 1x 16A"
+5WG1513-1AB11,N 513/11 SCHALTAKTOR M3X2
+5WG1513-1AB21,N 513/21 SCHALTAKTOR S3X2
+5WG1513-4DB23,BINAERAUSGABEGERAET RL 51
+5WG1513-4DB23,BINAERAUSGABEGERAET RL 51
+5WG1520-2AB03,"Jalusieaktor UP 520/03, 1x6A, m.mont."
+5WG1520-2AB03,"Jalusieaktor UP 520/03, 1x6A, m.mont."
+5WG1520-2AB13,"Jalusieaktor UP 520/13, 1x6A,  ohne.mont"
+5WG1520-2AB13,"Jalusieaktor UP 520/13, 1x6A,  ohne.mont"
+5WG1520-2AB23,"Jalusieaktor RS 520/23, 1x 6A"
+5WG1520-2AB23,"Jalusieaktor RS 520/23, 1x 6A"
+5WG1520-2AB31,Jalousieaktor UP 520/31
+5WG1521-4AB23,"Jalusieaktor RL 521/23, 2x 6A"
+5WG1521-4AB23,"Jalusieaktor RL 521/23, 2x 6A"
+5WG1523-1AB02,"Jalousieschalter N523/02, 4 Kanal"
+5WG1523-1AB03,"Rolloschalter N523/03, 4 Kanal"
+5WG1523-1AB04,"Jalousieaktor N523/04, 4 Kanal"
+5WG1523-1AB11,"Jalousieaktor N523/11, 8 Kanal"
+5WG1524-1AB01,JALOUSIESCHALTER N 524
+5WG1525-1EB01,"Schalt-/Dimmaktor N 525E DALI, 8 Kanal"
+5WG1525-2AB03,"Universaldimmer UP 525/03,  1x250VA, m.M"
+5WG1525-2AB03,"Universaldimmer UP 525/03,  1x250VA, m.M"
+5WG1525-2AB13,"Universaldimmer UP 525/13,  1x250VA, o.M"
+5WG1525-2AB13,"Universaldimmer UP 525/13,  1x250VA, o.M"
+5WG1525-2AB23,"Universaldimmer RS 525/23,  1x250VA"
+5WG1525-2AB23,"Universaldimmer RS 525/23,  1x250VA"
+5WG1525-2AB31,Universal Dimmer UP 525/31 2x pot.frei
+5WG1526-1AB02,Schalt-Dimmaktor N526/02
+5WG1527-1AB41,N 527/41 Universaldimmer S500 VA
+5WG1527-1AB51,N 527/51 Universaldimmer S1000 VA
+5WG1528-1AB31,N 528/31 Universaldimmer M300 VA
+5WG1528-1AB41,N 528/41 Universaldimmer S300 VA
+5WG1528-1DB01,"N528D01 Universaldimmer, 2x300VA"
+5WG1528-1DB01,"N528D01 Universaldimmer, 2x300VA"
+5WG1530-1DB31,SCHALTAKTOR N530D31
+5WG1530-1DB31,SCHALTAKTOR N530D31
+5WG1530-1DB51,SCHALTAKTOR N530D51
+5WG1530-1DB51,SCHALTAKTOR N530D51
+5WG1530-1DB61,SCHALTAKTOR N530D61
+5WG1530-1DB61,SCHALTAKTOR N530D61
+5WG1532-1DB31,SCHALTAKTOR N532D31
+5WG1532-1DB31,SCHALTAKTOR N532D31
+5WG1532-1DB51,SCHALTAKTOR N532D51
+5WG1532-1DB51,SCHALTAKTOR N532D51
+5WG1532-1DB61,SCHALTAKTOR N532D61
+5WG1532-1DB61,SCHALTAKTOR N532D61
+5WG1534-1DB31,SCHALTAKTOR N534D31
+5WG1534-1DB31,SCHALTAKTOR N534D31
+5WG1534-1DB51,SCHALTAKTOR N534D31
+5WG1534-1DB51,SCHALTAKTOR N534D31
+5WG1534-1DB61,SCHALTAKTOR N534D61
+5WG1534-1DB61,SCHALTAKTOR N534D61
+5WG1536-1DB51,DIMMAKTOR N536D51
+5WG1543-1DB51,SONNENSCHUTZAKTOR N543D51
+5WG1554-1DB31,Universaldimmer N554D31
+5WG1554-1DB31,Universaldimmer N554D31
+5WG1562-1AB11,"N562/11 Schaltaktor, M 3x10AX"
+5WG1562-1AB21,"N562/21 Schaltaktor, S 3x10AX"
+5WG1562-2AB31,"UP562/31 Schaltaktor, 6A, 2X230V"
+5WG1562-7AB02,Ventilstellantrieb AP 562/02
+5WG1567-1AB01,"Schaltaktor N567, 4x8 A, 230V"
+5WG1567-1AB11,"Schaltaktor N567/11, 8x8 A, 230V"
+5WG1567-1AB22,"N 567/22 Schaltaktor, 16x10A, 230V"
+5WG1588-2AB13,"UP 588/13 Touch Panel, 230 V"
+5WG1588-8AB13,Designrahmen Touchp. UP588  edelstahl
+5WG1588-8AB14,Designrahmen Touchp. UP588  glas schwarz
+5WG1588-8EB01,Einbau-/Hohlwanddose für Touchp. UP 588
+5WG1605-1AB01,"Thermoantriebaktor N 605, 6A"
+5WG1641-3AB01,Raumautomationsbox AP 641 für RS/RL mod.
+5WG1641-3AB01,Raumautomationsbox AP 641 für RS/RL mod.
+5WG3260-3AB11,"AP 260, Tür-/Fensterkontakt, weiss"
+5WG3260-3AB11,"AP 260, Tür-/Fensterkontakt, weiss"
+5WG4221-3AB10,Wandsender 1-fach EnOcean AP 221
+6AV2104-0DA03-0AA0,"HMI,RT Adv. 512"
+6AV2104-0FA03-0AA0,"HMI,RT Adv. 2048"
+6AV2107-0CA00-0BB0,"HMI,Opt SM@RT Server Runtime Advance"
+6AV2107-0CP00-0BB0,"HMI,Opt SM@RT Panel"
+6AV2107-0RA00-0BB0,SIMATIC WINCC AUDIT
+6AV2107-0RP00-0BB0,"HMI,Opt Audit P"
+6AV2123-2DB03-0AX0,"HMI,KTP400 BsPN"
+6AV2123-2GA03-0AX0,"HMI,KTP700 BsPB"
+6AV2123-2GB03-0AX0,"HMI,KTP700 BsPN"
+6AV2123-2JB03-0AX0,"HMI,KTP900 BsPN"
+6AV2123-2MA03-0AX0,"HMI,KTP1200 BsPB"
+6AV2123-2MB03-0AX0,"HMI,KTP1200 BsPN"
+6AV2124-0GC01-0AX0,"HMI,TP700 CMT"
+6AV2124-0JC01-0AX0,SIMATIC HMI TP900 CO
+6AV2124-0MC01-0AX0,SIMATIC HMI TP1200 C
+6AV2124-0UC02-0AX0,"HMI,TP1900 CMT"
+6AV2124-0XC02-0AX0,"HMI,TP2200 CMT"
+6AV2124-2DC01-0AX0,"HMI,KTP400 CMT"
+6BK1700-0BA20-0AA0,LOGO!8 CMK2000
+6EP1252-0AA01,BUS Spannungsversorgung 1.5A
+6EP1332-4BA00,"S7-1500,PS 3A"
+6EP1333-3BA10,SITOP 5A
+6EP1333-4BA00,"S7-1500,PS 8A"
+6EP1334-3BA10,SITOP 10A
+6EP1336-3BA10,SITOP 20A
+6EP1961-2BA11,SITOP SEL 0.5-3
+6EP1961-2BA21,SITOP SEL 3-10
+6EP3332-6SB00-0AY0,LOGO Power 24V / 2.5A
+6EP3332-6SB00-0AY0,LOGO Power 24V / 2.5A
+6EP3332-6SB00-0AY0,LOGO Power 24V / 2.5A
+6ES7131-4BD01-0AA0,"SIMATIC DP, 5 ELEKTRONIKMODULE FUER ET 2"
+6ES7131-4BF00-0AA0,"SIMATIC DP, 1 ELEKTRONIKMODUL FUER ET 20"
+6ES7131-6BF01-0BA0,"ET200SP,8DI"
+6ES7131-6BH01-0BA0,"ET200SP,16DI"
+6ES7131-6TF00-0CA0,"ET200SP,8DI NAMUR"
+6ES7132-4BD02-0AA0,"SIMATIC DP, 5 ELEKTRONIKMODULE FUER ET 2"
+6ES7132-4BF00-0AA0,"SIMATIC DP, 1 ELEKTRONIKMODUL FUER ET 20"
+6ES7132-4HB12-0AB0,"ET200S,2DO-R,W"
+6ES7132-6BF01-0BA0,"ET200SP,8DO"
+6ES7132-6BH01-0BA0,"ET200SP,16DO"
+6ES7132-6GD51-0BA0,"ET200SP,4DO-R,W"
+6ES7132-6HD01-0BB1,"ET200SP,4DO-R,S"
+6ES7134-4FB01-0AB0,"ET200S,2AI,U"
+6ES7134-4GB01-0AB0,"ET200S,2AI,I-2"
+6ES7134-4GB11-0AB0,"ET200S,2AI,I-4"
+6ES7134-4GD00-0AB0,"ET200S,4AI,I-2"
+6ES7134-4NB51-0AB0,"ET200S,2AI,RTD"
+6ES7134-6FF00-0AA1,"ET200SP,8AI,U"
+6ES7134-6GD00-0BA1,"ET200SP,4AI,I"
+6ES7134-6GF00-0AA1,"ET200SP,8AI,I"
+6ES7134-6HD00-0BA1,"ET200SP,4AI,UI"
+6ES7134-6JD00-0CA1,"ET200SP,4AI,RTD"
+6ES7134-6JF00-0CA1,"ET200SP,8AI,RTD"
+6ES7134-6PA01-0BD0,"ET200SP,AI,Energy"
+6ES7134-6TD00-0CA1,"ET200SP,4AI,I-Ht"
+6ES7135-4GB01-0AB0,"ET200S,2AO,I"
+6ES7135-6HD00-0BA1,"ET200SP,4AO,UI"
+6ES7137-6AA00-0BA0,"ET200SP,CM,PTP"
+6ES7138-4CA01-0AA0,"ET200S,PM"
+6ES7138-4DA04-0AB0,"ET200S,Count"
+6ES7138-6AA00-0BA0,"ET200SP,Count"
+6ES7151-1AA06-0AB0,"ET200S,IM-PB"
+6ES7151-8AB01-0AB0,"SIMATIC DP, IM151-8 PN/DP CPU FUER ET200"
+6ES7153-1AA03-0XB0,SIMATIC DP ET200M
+6ES7153-4AA01-0XB0,"ET200M,IM-PN"
+6ES7155-5BA00-0AB0,"ET200MP,IM-PB"
+6ES7155-6AA01-0BN0,"ET200SP,IM-PN"
+6ES7155-6AU00-0CN0,"ET200SP,IM155-6 HF für Redundanz"
+6ES7155-6BA00-0CN0,"ET200SP,IM-PB"
+6ES7158-0AD01-0XA0,PB DP/DP-Koppler
+6ES7193-4CA40-0AA0,"ET200S,TM,EM"
+6ES7193-4CD20-0AA0,"ET200S,TM,PM"
+6ES7193-6AR00-0AA0,"ET200SP,PN-Adapter zu IM155-6 HF"
+6ES7193-6BP00-0BA0,ET200SP BU15-P16+A0+2B
+6ES7193-6BP00-0BD0,"ET200SP,BU,Energy"
+6ES7193-6BP00-0DA0,"ET200SP,BU15-P16+A0+2D"
+6ES7193-6BP20-0BA0,ET 200SP BU15-P16+A10+2B
+6ES7193-6BP20-0DA0,"ET200SP,BU15-P16+A10+2D"
+6ES7193-6BP40-0BA1,ET 200SP BU15-P16+A0+12B/T
+6ES7193-6BP40-0DA1,"ET200SP,BU15-P16+A0+12D/T"
+6ES7195-7HB00-0XA0,"ET200M,Busmodul f. 2 Baugruppen"
+6ES7197-1LA12-0XA0,"ET200M,Y-Link-Bundle"
+6ES7307-1BA01-0AA0,SIMATIC S7-300 Laststromversorg. PS307
+6ES7307-1EA01-0AA0,SIMATIC S7-300 Laststromvers. PS307 5A
+6ES7307-1KA02-0AA0,"S7-300,PS 10A"
+6ES7314-1AG14-0AB0,"S7-300,CPU314"
+6ES7315-2EH14-0AB0,"S7-300,CPU315-PN"
+6ES7317-2AK14-0AB0,"S7-300,CPU317-DP"
+6ES7317-2EK14-0AB0,"S7-300,CPU317-PN"
+6ES7321-1BH02-0AA0,SIMATIC S7-300 Digitaleingabe SM321 16DE
+6ES7321-1BL00-0AA0,SIMATIC S7-300 Digitaleingabe SM321 32DE
+6ES7322-1BH01-0AA0,"S7-300,16DO"
+6ES7322-1BL00-0AA0,SIMATIC S7-300 Digitalausgabe SM322 32DA
+6ES7331-1KF02-0AB0,"S7-300,8AI"
+6ES7332-5HD01-0AB0,SIMATIC S7-300 Analogausgabe SM332 4AA
+6ES73325HF000AB0,SIMATIC S7 Analogausgabe SM332 8AA
+6ES7340-1AH02-0AE0,"S7-300,CP340"
+6ES7341-1AH02-0AE0,"S7-300,CP341"
+6ES7365-0BA01-0AA0,SIMATIC S7-300 Anschaltung IM365
+6ES7390-1AE80-0AA0,Universalrack Profilschiene
+6ES7390-1AJ30-0AA0,SIMATIC S7-300 Profilschiene 830 mm
+6ES7392-1AJ00-0AA0,SIMATIC S7-300 Frontstecker 20polig
+6ES7392-1AM00-0AA0,SIMATIC S7-300 Frontstecker 40polig
+6ES7400-0HR02-4AB0,"S7-400H,H-Bundle 414-5H"
+6ES7400-1JA01-0AA0,"S7-400,UR2"
+6ES7403-1JA01-0AA0,"S7-400,ER2"
+6ES7403-1TA01-0AA0,"S7-400,ER1"
+6ES7407-0DA02-0AA0,"S7-400,PS 4A"
+6ES7407-0KA02-0AA0,"S7-400,PS 10A"
+6ES7412-2EK07-0AB0,"S7-400,CPU412-DP"
+6ES7414-2XL07-0AB0,"S7-400,CPU414-DP-2"
+6ES7414-3XM07-0AB0,"S7-400,CPU414-DP-3"
+6ES7422-1BH11-0AA0,"S7-400,16DO"
+6ES7422-1BL00-0AA0,"S7-400,32DO"
+6ES7431-1KF00-0AB0,"S7-400,SM 431 13 BIT"
+6ES7431-1KF10-0AB0,"S7-400,SM 431 14 BIT"
+6ES7431-7KF10-0AB0,"S7-400,SM 431 16 BIT"
+6ES7440-1CS00-0YE0,"S7-400,CP440"
+6ES7441-1AA05-0AE0,"S7-400,CP441"
+6ES7460-0AA01-0AB0,"S7-400,IM460-0"
+6ES7460-3AA01-0AB0,"S7-400,IM460-3"
+6ES7461-0AA00-7AA0,"S7-400,IM461-0"
+6ES7461-0AA01-0AA0,"S7-400,IM461-0"
+6ES7461-3AA00-7AA0,"S7-400,IM461-3"
+6ES7461-3AA01-0AA0,"S7-400,IM461-3"
+6ES7468-1BF00-0AA0,"S7-400,IM46x-x"
+6ES7468-1DB00-0AA0,"S7-400,IM46x-3"
+6ES7510-1DJ01-0AB0,"ET200SP,CPU1510"
+6ES7512-1DK01-0AB0,"ET200SP,CPU1512"
+6ES7513-1AL01-0AB0,"S7-1500,CPU1513"
+6ES7515-2AM01-0AB0,"S7-1500,CPU1515"
+6ES7516-3AN01-0AB0,"S7-1500,CPU1516"
+6ES7521-1BH00-0AB0,"S7-1500,16DI"
+6ES7521-1BL00-0AB0,"S7-1500,32DI"
+6ES7522-1BH01-0AB0,"S7-1500,16DO"
+6ES7522-1BL01-0AB0,"S7-1500,32DO"
+6ES7531-7KF00-0AB0,"S7-1500,8/4AI"
+6ES7532-5HD00-0AB0,"S7-1500,4AO"
+6ES7532-5HF00-0AB0,"S7-1500,8AO"
+6ES7540-1AB00-0AA0,"S7-1500,CM PTP RS422/485 BA"
+6ES7540-1AD00-0AA0,"S7-1500,CM PTP RS-232 BA"
+6ES7541-1AB00-0AB0,"S7-1500,CM PTP RS-422/485 HF"
+6ES7541-1AD00-0AB0,"S7-1500,CM PTP RS-232 HF"
+6ES7590-1AE80-0AA0,"S7-1500,PRFS 482"
+6ES7590-1AJ30-0AA0,"S7-1500,PRFS 830"
+6ES7592-1BM00-0XB0,"S7-1500,FRNTS 35"
+6ES7647-8BA11-7CA1,"Nanobox PC IPC227E, 2GB RAM"
+6ES7647-8BA11-7CA1,"Nanobox PC IPC227E, 2GB RAM"
+6ES7647-8BB21-7CA1,"Nanobox PC IPC227E, 4GB RAM"
+6ES7658-7BA00-2YB0,"HMI,Opt Logon 3"
+6ES7658-7BB00-2YB0,"HMI,Opt Logon 10"
+6ES7658-7BX51-0YA0,"HMI,Opt Logon SW"
+6ES7952-1AK00-0AA0,"S7-400,RAM 1MB"
+6ES7952-1AL00-0AA0,"S7-400,RAM 2MB"
+6ES7952-1AM00-0AA0,"S7-400,RAM 4MB"
+6ES7952-1KK00-0AA0,"S7-400,FLASH 1MB"
+6ES7952-1KM00-0AA0,"S7-400,FLASH 4MB"
+6ES7953-8LJ31-0AA0,"S7-300,MMC 512kB"
+6ES7953-8LL31-0AA0,"S7-300,MMC 2MB"
+6ES7954-8LC02-0AA0,"S7-1500,MMC 4MB"
+6ES7960-1AA04-5AA0,"S7-400H,Synch-Modul LWL 1m"
+6ES7960-1AA04-5BA0,"S7-400H,Synch-Modul LWL 2m"
+6ES7960-1AA04-5KA0,"S7-400H,Synch-Modul LWL 10m"
+6ES7960-1AA06-0XA0,"S7-400H,Synch-Modul LWL<10m"
+6ES7960-1AB06-0XA0,"S7-400H,Synch-Modul LWL<10km"
+6ES7971-0BA00,"S7-400,BATT"
+6ES7972-0AA02-0XA0,PB DP-Repeater
+6ES7972-0BB52-0XA0,PB-Stecker 90°
+6ES7972-0CB35-0XA0,TS-Adapter MPI
+6FL4214-4NC91,Anbindung S7 an SICLIMAT X über TCP/IP
+6FLD7-040-125,6FLD7-040-125 Upgrade Lizen
+6FLD7-040-ALL,6FLD7-040-ALL Upgrade Lizen
+6FLD7-125-ALL,6FLD7-125-ALL Upgrade Lizen
+6FLD7-HLK-040,6FLD7-HLK-040 Runtime Lizen
+6FLD7-HLK-125,6FLD7-HLK-125 Runtime Lizen
+6FLD7-HLK-ALL,6FLD7-HLK-ALL Lizenz ohne D
+6FLDONGLE,6FLDONGLE USB-Dongle zum
+6FLXPGSW-41VM,6FLXPGSW-41VM SW-Paket X-PG
+6GK7342-5DA03-0XE0,"S7-300,CP342-5"
+6GK7443-1EX30-0XE0,"S7-400,CP443-1"
+6GK7443-5DX05-0XE0,"S7-400,CP443-5"
+6GK7542-1AX00-0XE0,"S7-1500,CM542-1"
+6GK7542-5FX00-0XE0,"S7-1500,CM542-5"
+6GK7543-1AX00-0XE0,"S7-1500,CM543-1"
+7KT1531,"E-ZAEHLER,LC-DISPLAY,80A"
+7KT1542,5A
+7KT1546,"E-ZAEHLER,LC-DISPLAY,125A 3PH"
+7KT1900,"KOMMUNIKATIONSMODUL, EIB-KNX"
+7LF45110,Dig. Jahreszeitschaltuhr 1-Kanal AC230V
+7LF45120,Dig. Jahreszeitschaltuhr 2-Kanal AC230V
+7LF45212,Dig. Wochenzeitschaltuhr 1-Kanal AC24V
+7ME6520.100-80,"Durchflussm. DN100,80m3/h,250 mm,AC230V"
+7ME6520.125-120,"Durchflussm. DN125,120m3/h,250 mm,AC230V"
+7ME6520.150-180,"Durchflussm. DN150,180m3/h,300 mm,AC230V"
+7ME6520.200-320,"Durchflussm. DN200,320m3/h,350 mm,AC230V"
+7ME6520.250-500,"Durchflussm. DN250,500m3/h,450 mm,AC230V"
+7ME6520.25-5,"Durchflussm. DN25,5m3/h,200 mm,AC230V"
+7ME6520.300-730,"Durchflussm. DN300,730m3/h,500 mm,AC230V"
+7ME6520.350-970,"Durchflussm. DN350,970m3/h,550 mm,AC230V"
+7ME6520.400-1270,"Durchflussm. DN400,1270m3/h,600 mm,AC230V"
+7ME6520.40-13,"Durchflussm. DN40,13m3/h,200 mm,AC230V"
+7ME6520.450-1600,"Durchflussm. DN450,1600m3/h,600 mm,AC230V"
+7ME6520.500-1980,"Durchflussm. DN500,1980m3/h,600 mm,AC230V"
+7ME6520.50-20,"Durchflussm. DN50,20m3/h,200 mm,AC230V"
+7ME6520.65-35,"Durchflussm. DN65,35m3/h,200 mm,AC230V"
+7ME6520.80-50,"Durchflussm. DN80,50m3/h,200 mm,AC230V"
+"933-10,2-6.35-IP54",Sinusfilter IP54 zu G120P-4kW
+"933-178-0,325-IP54",Sinusfilter IP54 zu G120P-55...90kW
+"933-18-2,7-IP54",Sinusfilter IP54 zu G120P-5.5...7.5kW
+"933-2,5-13-IP54",Sinusfilter IP54 zu G120P-0.37…0.75kW
+9332-145-0.18-IP54,Sinusfilter IP54 zu G120P-55…75kW
+9332-178-0.148-I5,Sinusfilter IP54 zu G120P-90kW
+9332-18-1.45-IP54,Sinusfilter IP54 zu G120P-4...7.5kW
+9332-2.5-10-IP54,Sinusfilter IP54 zu G120P-0.37…0.75kW
+9332-38-0.69-IP54,Sinusfilter IP54 zu G120P-11...18.5kW
+9332-60-0.445-IP54,Sinusfilter IP54 zu G120P-22...30kW
+9332-7.7-3.4-IP54,Sinusfilter IP54 zu G120P-1.1...3.0kW
+9332-90-0.292-IP54,Sinusfilter IP54 zu G120P-37...45kW
+"933-32-1,8-IP54",Sinusfilter IP54 zu G120P-11...15kW
+"933-38-1,65-IP54",Sinusfilter IP54 zu G120P-18.5kW
+"933-60-0,95-IP54",Sinusfilter IP54 zu G120P-22...30kW
+"933-7,7-5,8-IP54",Sinusfilter IP54 zu G120P-1.1...3.0kW
+"933-90-0,68-IP20",Sinusfilter IP20 zu G120P-37...45kW
+"933-90-0,68-IP54",Sinusfilter IP54 zu G120P-37...45kW
+ADN20,Durchgangs-Rücklaufverschraubung
+AEN15,Eck-Rücklaufverschraubung
+AEN20,Eck-Rücklaufverschraubung
+AEW310.2,Impulsadapter für M-BUS inkl. MBUSSET
+AL100,"Adapter ex SCS 3W/4W mit SSP.., STP..,"
+AL100,"Adapter ex SCS 3W/4W mit SSP.., STP..,"
+AL431,Schutz gegen Demontage der Antriebe
+AL80,Adapter zu 2T-Ventile (ex SCS)
+ALF41B100,Adapt-Flansch PN16 VXF43.100>VXF41.90
+ALF41B125,Adapt-Flansch PN16 VXF43.125>VXF41.91
+ALF41B15,Adapt-Flansch PN16 VXF53.15>VXF41.14/15
+ALF41B150,Adapt-Flansch PN16 VXF43.150>VXF41.92
+ALF41B25,Adapt-Flansch PN16 VXF53.25>VXF41.24/25
+ALF41B40,Adapt-Flansch PN16 VXF53.40>VXF41.39/40
+ALF41B50,Adapt-Flansch PN16 VXF53.50>VXF41.49/50
+ALF41B65,Adapt-Flansch PN16 VXF43.65>VXF41.65
+ALF41B80,Adapt-Flansch PN16 VXF43.80>VXF41.80
+ALG10/20,Verschraubung für VVP47-Synergyr
+ALG122,"Verschraubung Temperguss 3/8"" - 2-er Set"
+ALG123,"Verschraubung Temperguss 3/8"" - 3-er Set"
+ALG13.152B,"Verschraubungs-Set, 2x, G1/2B, Rp1/2"
+ALG132,"Verschraubung MS AG3/8xIG 1/2, 2 Stück"
+ALG133,"Verschraubung MS AG3/8xIG 1/2, 2 Stück"
+ALG142,"Verschraubung MS AG1/2xIG 3/4, 2 Stück"
+ALG143,"Verschraubung MS AG1/2xIG 3/4, 3 Stück"
+ALG15.152B,"Verschraubungs-Set, 2x G1B, Rp1/2"
+ALG15.202B,"Verschraubungs-Set, 2x G1B, Rp3/4"
+ALG15.252B,"Verschraubungs-Set, 2x G1B, Rp1"
+ALG152,Verschraubung Set Durchgangsventil DN15
+ALG152B,"Ms-Vers DN15 mit IG 1/2"", 2er Set"
+ALG153,Verschraubung Set 3-Weg Ventil DN15
+ALG153B,"Ms-Vers DN15 mit IG 1/2"", 3er Set"
+ALG202,Verschraubung Set Durchgangsventil DN20
+ALG202B,"Ms-Vers DN20 mit IG 3/4"", 2er Set"
+ALG203,Verschraubung Set 3-Weg Ventil DN20
+ALG203B,"Ms-Vers DN20 mit IG 3/4"", 3er Set"
+ALG252,Verschraubung Set Durchgangsventil DN25
+ALG252B,"Ms-Vers DN25 mit IG 1"", 2er Set"
+ALG253,Verschraubung Set 3-Weg Ventil DN25
+ALG253B,"Ms-Vers DN25 mit IG 1"", 3er Set"
+ALG322,Verschraubung Set Durchgangsventil DN32
+ALG322B,"Ms-Vers DN32 mit IG 11/4"", 2er Set"
+ALG323,Verschraubung Set 3-Weg Ventil DN32
+ALG323B,"Ms-Vers DN32 mit IG 11/4"", 3er Set"
+ALG402,Verschraubung Set Durchgangsventil DN40
+ALG402B,"Ms-Vers DN40 mit IG 11/2"", 2er Set"
+ALG403,Verschraubung Set 3-Weg Ventil DN40
+ALG403B,"Ms-Vers DN40 mit IG 11/2"", 3er Set"
+ALG502,Verschraubung Set Durchgangsventil DN50
+ALG502B,"Ms-Vers DN50 mit IG 2"", 2er Set"
+ALG503,Verschraubung Set 3-Weg Ventil DN50
+ALG503B,"Ms-Vers DN50 mit IG 2"", 3er Set"
+ALG80WRI,Einbauset für WRV81/84-Ersatz
+ALG80WRI-CH,"Einbauset für WRV8..-Ersatz,110 mm Zähler"
+ALG83WRI,Einbauset für WRV83-Ersatz
+ALI10VWG41,"Isolationsschale für VWG41.., DN10"
+ALI15VAG60/61,"Isolationsschale 2-Weg-Kugelhahn,AG,DN15"
+ALI15VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN15"
+ALI15VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN15"
+ALI15VBI60/61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN15"
+ALI20VAG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN20"
+ALI20VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN20"
+ALI20VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN20"
+ALI20VBI60,"Isolationsschale 3-Weg-Kugelhahn,IG,DN20"
+ALI20VBI61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN20"
+ALI20VWG41,Isolationsschale für VWG41..
+ALI25VAG60/61,"Isolationsschale 2-Weg-Kugelhahn,AG,DN25"
+ALI25VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN25"
+ALI25VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN25"
+ALI25VBI60/61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN25"
+ALI32VAG60/61,"Isolationsschale 2-Weg-Kugelhahn,AG,DN32"
+ALI32VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN32"
+ALI32VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN32"
+ALI32VBI60/61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN32"
+ALI40VAG60/61,"Isolationsschale 2-Weg-Kugelhahn,AG,DN40"
+ALI40VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN40"
+ALI40VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN40"
+ALI40VBI60/61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN40"
+ALI50VAG60/61,"Isolationsschale 2-Weg-Kugelhahn,AG,DN50"
+ALI50VAI60/61,"Isolationsschale 2-Weg-Kugelhahn,IG,DN50"
+ALI50VBG60/61,"Isolationsschale 3-Weg-Kugelhahn,AG,DN50"
+ALI50VBI60/61,"Isolationsschale 3-Weg-Kugelhahn,IG,DN50"
+ALN15.152B,"Verschraubungs-Set, 2x G1B, G1B"
+ALN15.202B,"Verschraubungs-Set, 2x G1B, G3/4B"
+ALP46,Verschlusstopfen zu VPI/VPP..Q
+ALP47,Ablasskugelhahn zu VPI/VPP..Q
+ALP48,Komb.PT / Ablasskugelhahn zu VPI/VPP..Q
+ALP49,Langer PT-Anschl.2Stk zu VPI/VPP..Q
+ALS152,"Schweissverschraubung G3/4"""
+ALS202,"Schweissverschraubung G1"""
+ALS252,Schweissverschraubung G5/4
+ALT-AB200,Gelöchertes Schutzrohr 200 mm RAK-TW.5000
+ALT-AB200,Gelöchertes Schutzrohr 200 mm RAK-TW.5000
+ALT-C001,Montagezubehör zu RAK...
+ALT-DB150J,"Doppelschutzrohr, Ms.vernickelt, 150 mm,"
+ALT-DB280J,"Doppelschutzrohr,Ms. vernickelt,280 mm,"
+ALT-DB450J,"Doppelschutzrohr,Ms. vern.,450 mm,2x7"
+ALT-DS100J,"Schutzrohr, CrNi,d=15 mm,L100,PN16 für RA"
+ALT-DS150J,"Doppelschutzrohr, CrNi,di15 mm,L150,PN16"
+ALT-DS280J,"Doppelschutzrohr, CrNi,d=15 mm,280 mm,PN16"
+ALT-DS450J,"Doppelschutzrohr, CrNi,LW15, L450 mm,PN16"
+ALT-SB100,"Schutzrohr, Ms,vern, LW7 mm, 100 mm, PN10"
+ALT-SB100,"Schutzrohr, Ms,vern, LW7 mm, 100 mm, PN10"
+ALT-SB150,"Schutzrohr, Ms,vern, LW7 mm, 150 mm, PN10"
+ALT-SB150,"Schutzrohr, Ms,vern, LW7 mm, 150 mm, PN10"
+ALT-SB200,"Schutzrohr, Ms,vern, LW7 mm, 200 mm, PN10"
+ALT-SB280,"Schutzrohr, Ms,vern, LW7 mm, 280 mm, PN10"
+ALT-SS100,"Schutzrohr, CrNi, LW7 mm, 100 mm, PN16"
+ALT-SS100,"Schutzrohr, CrNi, LW7 mm, 100 mm, PN16"
+ALT-SS150,"Schutzrohr, CrNi, LW7 mm, 150 mm, PN16"
+ALT-SS150,"Schutzrohr, CrNi, LW7 mm, 150 mm, PN16"
+ALT-SS280,"Schutzrohr, CrNi, LW7 mm, 280 mm, PN16"
+ALT-SS450,"Schutzrohr, CrNi, LW7 mm, 450 mm, PN16"
+ALT-SSF100,"Schutzrohr, CrNi, LW7, 100 mm, PN40, FL"
+ALT-SSF100,"Schutzrohr, CrNi, LW7, 100 mm, PN40, FL"
+ALT-SSF150,"Schutzrohr, CrNi, LW7, 150 mm, PN40, FL"
+ALT-SSF150,"Schutzrohr, CrNi, LW7, 150 mm, PN40, FL"
+ALT-SSF200,"Schutzrohr, CrNi, LW7, 200 mm, PN40, FL"
+ALT-SSF280,"Schutzrohr, CrNi, LW7, 280 mm, PN40, FL"
+ALT-SSF450,"Schutzrohr, CrNi, LW7, 450 mm, PN40, FL"
+ALT-SSF600,"Schutzrohr, CrNi, LW7, 600 mm, PN40, FL"
+APG-10,"Aufputzgehäuse für luna10, schwarz"
+APG-16,"Aufputzgehäuse für luna16, schwarz"
+AQB2000,Montagebügel für QBM2../3..
+AQB2001,Anschluss Set für Montage QBE2X03..
+AQB2002,Anschluss Set für Montage QBE..
+AQB2004,Montagebügel für QBE2x03..
+AQE2102,Klemmringverschraubung G1/2''
+AQF3100,Strahlungsschutz zu Aussenfeuchtefühler
+AQF3101,Filterkappen für Feuchtefühler
+AQF3101,Filterkappen für Feuchtefühler
+AQF3150,Messspitze zu QFA31../QFM31..
+AQF3150,Messspitze zu QFA31../QFM31..
+AQF3153,Service-Set für Loop-Test
+AQF4150,Auswechselbare Messspitze mit Zertifikat
+AQF4150,Auswechselbare Messspitze mit Zertifikat
+AQM63.0,Montageflansch zu QAF63/64 / QAM..
+AQM63.0,Montageflansch zu QAF63/64 / QAM..
+AQM63.0,Montageflansch zu QAF63/64 / QAM..
+AQM63.2,Kapillarrohrhalterungen 3er Set zu QAF
+AQM63.2,Kapillarrohrhalterungen 3er Set zu QAF
+AQM63.3,Kapillarrohrhalterungen 6er Set zu QAF
+AQM63.3,Kapillarrohrhalterungen 6er Set zu QAF
+AQR2500K31A/AR52,Raumfühler UP °C/ Ni-1000/AR52
+AQR2500K31A/CH,Raumfühler UP °C/ Ni-1000/CH
+AQR2500NF,Raumfühler UP Montageplatte
+AQR2510NFW,Rahmen Delta line titanweiss
+AQR2510NHW,Rahmen Delta miro titanweiss
+AQR2540K32/AR52,Raumfühler UP °C/ Aktiv/AR52
+AQR2540K32/CH,Raumfühler UP °C/ Aktiv/CH
+AQR2540K34A/AR52,Raumfühler UP %rF/°C/Aktiv/Ni-1000/AR52
+AQR2540K34A/CH,Raumfühler UP %rF/°C/Aktiv/Ni-1000/CH
+AQR2540K35/AR52,Raumfühler UP %rF/°C/ Aktiv/AR52
+AQR2540K35/CH,Raumfühler UP %rF/°C/ Aktiv/CH
+AQR2540NF,S55720-S142 /AQR2540NF Unterputzfühler B
+AQR2540NF/AR52,ZZT:AQR2540NF/AR52 /RAUMFÜHLER UP BASIS
+AQR2546K30/AR52,Raumfühler UP CO2/AR52
+AQR2546K30/CH,Raumfühler UP CO2/CH
+AQR2546K32/AR52,Raumfühler UP CO2/°C/ Aktiv/AR52
+AQR2546K32/AR52,Raumfühler UP CO2/°C/ Aktiv/AR52
+AQR2546K32/CH,Raumfühler UP CO2/°C/ Aktiv/CH
+AQR2546K34A/AR52,Raumfühl UP CO2/%rF/°C/Aktiv/Ni1000/AR52
+AQR2546K34A/CH,Raumfühler UP CO2/%rF/°C/Aktiv/Ni1000/CH
+AQR2546K35/AR52,Raumfühler UP CO2/%rF/°C/ Aktiv/AR52
+AQR2546K35/CH,Raumfühler UP CO2/%rF/°C/ Aktiv/CH
+AQR2546K35Q/AR52,Raumfühler UP CO2/%rF/°C/Aktiv/LED/AR52
+AQR2546K35Q/CH,Raumfühler UP CO2/%rF/°C/Aktiv/LED/CH
+AQR2547K30/CH,Raumfühler UP VOC/CH
+AQR2547K32/CH,Raumfühler UP VOC/°C/ Aktiv/CH
+AQR2547K34A/CH,Raumfühler UP VOC/%rF/°C/Aktiv/Ni1000/CH
+AQR2547K35/CH,Raumfühler UP VOC/%rF/°C/ Aktiv/CH
+AQR2548K30/AR52,Raumfühler UP IAQ/AR52
+AQR2548K30/CH,Raumfühler UP IAQ/CH
+AQR2548K32/AR52,Raumfühler UP IAQ/°C/ Aktiv/AR52
+AQR2548K32/CH,Raumfühler UP IAQ/°C/ Aktiv/CH
+AQR2548K34A/AR52,Raumfühl UP IAQ/%rF/°C/Aktiv/Ni1000/AR52
+AQR2548K34A/CH,Raumfühler UP IAQ/%rF/°C/Aktiv/Ni1000/CH
+AQR2548K35/AR52,Raumfühler UP IAQ/%rF/°C/ Aktiv/AR52
+AQR2548K35/CH,Raumfühler UP IAQ/%rF/°C/ Aktiv/CH
+AQR2548K35Q/AR52,Raumfühler UP IAQ/%rF/°C/Aktiv/LED/AR52
+AQR2548K35Q/CH,Raumfühler UP IAQ/%rF/°C/Aktiv/LED/CH
+AQR2548NF,S55720-S148 /AQR2548NF Unterputzfühler H
+AQR2570K32/AR52,Raumfühler UP °C/AR52 KNX
+AQR2570K32/AR52,Raumfühler UP °C/AR52 KNX
+AQR2570K32/CH,Raumfühler UP °C/CH KNX
+AQR2570K32/CH,Raumfühler UP °C/CH KNX
+AQR2570K35/AR52,Raumfühler UP %rF/ °C/ AR52 KNX
+AQR2570K35/AR52,Raumfühler UP %rF/ °C/ AR52 KNX
+AQR2570K35/CH,Raumfühler UP %rF/ °C/ CH KNX
+AQR2570K35/CH,Raumfühler UP %rF/ °C/ CH KNX
+AQR2576K30/AR52,Raumfühler UP CO2/ AR52 KNX
+AQR2576K30/AR52,Raumfühler UP CO2/ AR52 KNX
+AQR2576K30/CH,Raumfühler UP CO2/ CH KNX
+AQR2576K30/CH,Raumfühler UP CO2/ CH KNX
+AQR2576K32/AR52,Raumfühler UPCO2/ °C/ AR52 KNX
+AQR2576K32/AR52,Raumfühler UPCO2/ °C/ AR52 KNX
+AQR2576K32/CH,Raumfühler UPCO2/ °C/ CH KNX
+AQR2576K32/CH,Raumfühler UPCO2/ °C/ CH KNX
+AQR2576K35/AR52,Raumfühler UP CO2/ %rF/ °C/ AR52 KNX
+AQR2576K35/AR52,Raumfühler UP CO2/ %rF/ °C/ AR52 KNX
+AQR2576K35/CH,Raumfühler UP CO2/ %rF/ °C/ CH KNX
+AQR2576K35/CH,Raumfühler UP CO2/ %rF/ °C/ CH KNX
+AQR2576K35Q/AR52,Raumfühler UP CO2/ %rF/ °C/ LED/AR52 KNX
+AQR2576K35Q/AR52,Raumfühler UP CO2/ %rF/ °C/ LED/AR52 KNX
+AQR2576K35Q/CH,Raumfühler UP CO2/ %rF/ °C/ LED/ CH KNX
+AQR2576K35Q/CH,Raumfühler UP CO2/ %rF/ °C/ LED/ CH KNX
+AQR9510NFW,AQR9510NFW Designframe_CH
+AQR9510NNW,Adapter zu Abdeckrahmen 60x60 mm
+AQS2700,"Sensormodul für Ersatz, PM2.5/ PM10"
+AR52,Aufnahmering mit Befestigungsdist. 52 mm
+AR52,Aufnahmering mit Befestigungsdist. 52 mm
+AR52,Aufnahmering mit Befestigungsdist. 52 mm
+AR52,Aufnahmering mit Befestigungsdist. 52 mm
+ARG22.1,Changeover Bausatz zu QAP22
+ARG22.2,Alu-Leistenbefestigung für Kabelfühler
+ARG62.201,Fronteinbaurahmen für Synco 200-Regler
+ARG70.3,"AP Montageplatte für RDU, RDF"
+ARP238777,"Spezial-Kabel gekreuzt,grau 1.5m,"
+ARP238778,"Spezial-Kabel gekreuzt,grau 3m"
+ARP238779,"Spezial-Kabel gekreuzt,grau 5m,"
+ARP926086,USB SERIELL ADAPTER PXC
+AS-1,Lizenz AS-1 zusätzlicher Motor
+AS-1-SUR,P54594-P101-B300-Z /Annual Shading - 1 z
+ASA23U10,"Anschlusskabel 1 m, Hilfsschalter zu STA"
+AS-B,Lizenz AS-Basis mit 100 Motoren
+AS-B-SUR,P54594-P101-B100-Z /Annual Shading - Bas
+ASC1.6,"Hilfsschalter zu SKD6, SKB6, SKC6"
+ASC10.42,Hilfsschalter-Paar zu SQV91
+ASC10.51,"Hilfsschalter zu SA..31, SA..61, SA..81"
+ASC2.1/18,"Hilfsschalter zu SFA, SFP"
+ASC36,Hilfsschalterpaar zu SQL36E
+ASC77.1E,Extern. Hilfsschalterbaugruppe 1Schalter
+ASC77.2E,Extern. Hilfsschalterbaugruppe 2Schalter
+ASC9.3,Hilfsschalterpaar zu SKB/C/D32../82..
+ASE1,"Austauschelektr. zu MXG/MXF461,DN15-32"
+ASE12,Austauschelektronik zu MXG461B/MVF461H
+ASE2,"Austauschelektr. zu MXG/MXF461,DN40-65"
+AS-H,Lizenz pro redundant. Verschattungsrechn
+AS-H-SUR,P54594-P101-B202-Z /Annual Shading - hoh
+ASK30,Adapter für Ventile mit 55 mm Spindel
+ASK30,Adapter für Ventile mit 55 mm Spindel
+ASK31N,Montagesatz für SAL.. auf VBF21
+ASK31N,Montagesatz für SAL.. auf VBF21
+ASK32N,Montagesatz SAL..T10 auf Hähne DN20..50
+ASK32N,Montagesatz SAL..T10 auf Hähne DN20..50
+ASK33N,Montagesatz für SAL.. auf VKF41
+ASK35N,Montagesatz für SAL.. auf VKF45
+ASK39.1,"Wetterschutzhaube für SAX, SAV, SAL"
+ASK39.1,"Wetterschutzhaube für SAX, SAV, SAL"
+ASK39.2,Wetterschutzhaube für SAS..
+ASK39.2,Wetterschutzhaube für SAS..
+ASK46.1,Rasterhebel zu VKF46 für DN40...65
+ASK46.2,Rasterhebel zu VKF46 für DN80...125
+ASK46.3,Rasterhebel zu VKF46 für DN150...200
+ASK46.4,Rasterhebel zu VKF46 für DN250...400
+ASK50,Hubumkehr mechanisch zu SKD..
+ASK51,Hubumkehr mechanisch zu SKB..
+ASK55.2,Mitnehmer für Gestängeachsen 5…8 mm
+ASK71.01,"S55859-Z101 /ASK71.01 Zubehör-Set 1, Sma"
+ASK71.02,"S55859-Z102 /ASK71.02 Zubehör-Set 1, Med"
+ASK71.1,"Dreh/Linearaufbausatz zu GCA, GIB...1E"
+ASK71.11,"Dreh-/Linearaufbausatz zu GMA,GEB...1E"
+ASK71.13,"Dreh / Linearaufbausatz GMA, GEB...1E"
+ASK71.14,"Dreh / Linearaufbausatz GMA, GEB...1E"
+ASK71.2,Dreh-/Linearaufbausatz zu GCA / GIB...1E
+ASK71.3,Dreh-/Linearaufbausatz zu GCA / GIB...1E
+ASK71.4,Dreh-/Linearaufbausatz zu GCA / GIB...1E
+ASK71.5,"Dreh/Linearaufbausatz zu GLB, GDB"
+ASK71.6,Dreh-/Linearaufbausatz zu GLB...1E
+ASK71.9,"Universalhebel zu GEB, GMA"
+ASK73.1,"Verdrehsicherung für Powerpack GCA,GIB"
+ASK73.2,Flexible Verdrehsicherung für Powerpack
+ASK73.3,"Verdrehsicherung für Powerpack GEB,GMA"
+ASK74.1,"Spezial-Achsadapter zu GCA..,GIB…"
+ASK74.7,"Achsverlaengerung GEB, GIB"
+ASK75.1,Wetterschutzhaube für Drehantrieb GIB
+ASK75.3,Wetterschutzhaube für Drehantrieb GEB
+ASK75.4,"Wetterschutzhaube für Drehantrieb GIB,GB"
+ASK75.5,Wetterschutz für Dreh-/Linearantrieb
+ASK75.6,Wetterschutz für Dreh-/Linearantrieb
+ASK77.2,Montagesatz für GMA auf VAI61/VBI61
+ASK77.2,Montagesatz für GMA auf VAI61/VBI61
+ASK77.3,Montagesatz für GLB/GDB auf VAI61/VBI61
+ASK77.3,Montagesatz für GLB/GDB auf VAI61/VBI61
+ASK77.5,S55845-Z199 /ASK77.5 Accessoir kit für B
+ASK77.5,S55845-Z199 /ASK77.5 Accessoir kit für B
+ASK78.12,"Zentriereinsatz, rund, D-Prof.12x9"
+ASK78.3,"Einlegeteil zu GDB, GLB"
+ASK78.6,"Zentriereinsatz, 4kt-Profil 8 mm"
+ASK78.7,"Zentriereinsatz, 4kt-Profil 10 mm"
+ASP1.1,Spannungsversorgung AC230V zu SQV91P..
+ASP23U10,"Anschlusskabel 1 m, Hilfsschalter zu STP"
+AS-R,Lizenz AS-spiegelnde Reflektion
+ASR0.16N,"Vent.-Einsatz MVS661, kvs0.16"
+ASR0.4N,"Vent.-Einsatz MVS661, kvs0.4"
+ASR1.0N,"Vent.-Einsatz MVS661, kvs1.0"
+ASR2.5N,"Vent.-Einsatz MVS661, kvs2.5"
+ASR6.3N,"Vent.-Einsatz MVS661, kvs6.3"
+ASR61,"Austauschelektronik zu MVL661, MVF661"
+ASR61EX,"Austauschelektronik zu MVL661, MVS661,Ex"
+AS-R-SUR,P54594-P101-B201-Z /Annual Shading - spi
+AS-S,Lizenz AS-Simulations-Tool für Kunden
+AS-S-SUR,P54594-P101-B102-Z /Annual Shading - Sim
+AS-T,Lizenz AS-Engineering-Tool pro Jahr
+AST20,VAV Handbediengerät zu GLB… GDB..
+AST22,S55499-D373 /AST22 Schnittstellenkonv. U
+AS-U,Lizenz für unlimitierter Anzahl Motoren
+AS-U-SUR,P54594-P101-B101-Z /Annual Shading - Bas
+ASV181.1E/3,VVS-Modularer Volumenstromregler
+ASY100,"Klemmenblock 24V, 0-10V"
+ASY23L100,Kabel 10 m
+ASY23L100HF,"Kabel 10 m, halogenfrei"
+ASY23L150,Kabel 15 m
+ASY23L20,Kabel 2 m
+ASY23L20HF,"Kabel 2 m, halogenfrei"
+ASY23L20LD,"Kabel 2 m, LED"
+ASY23L50,Kabel 5 m
+ASY3L25,"Anschlusskabel 230V, 3-Punkt, 2.5m"
+ASY3L45,"Anschlusskabel 230V, 3-Punkt, 4.5m"
+ASY6AL20,"Anschlusskabel 24V,0-10V,2m"
+ASY6AL20HF,"Anschlusskabel 24V,0-10V,2m,halogenfrei"
+ASY6L25,"Anschlusskabel 24V,0-10V , 2.5m"
+ASY6L45,"Anschlusskabel 24V, 0-10V, 4.5m"
+ASY6L45HF,"Anschlusskabel 24V, 0-10V, halogenfrei"
+ASY6PL20,"Anschlusskabel 24V,0-10V,2m"
+ASY6PL20HF,"Anschlusskabel 24V,0-10V,2m,halogenfrei"
+ASY8L45,"Anschlusskabel 24V, 3-Punkt, 4.5m"
+ASY8L45HF,"Anschlusskabel 24V, 3-Punkt, halogenfrei"
+ASY98,Sicherungsschraube
+ASY99,"Klemmenblock 24V, 3-Punkt"
+ASZ36,Potentiometer 1000 Ohm zu SQL36E..
+ASZ6.6,"Stösselheizung AC 24V, 30W"
+ASZ7.3,"Potentiometer,1000 Ohm zu SKB/C/D32/82"
+ASZ7.31,"Potentiometer,135 Ohm zu SKB/C/D32/82"
+ASZ7.32,"Potentiometer,200 Ohm zu SKB/C/D32/82"
+ASZ7.5/1000,"Potentiometer,1000 Ohm, zu SAX31, SAX81"
+ASZ7.5/1000,"Potentiometer,1000 Ohm, zu SAX31, SAX81"
+ASZ7.6/1000,Potentiometer 1000 Ohm zu SQV91
+ASZ7.6/1000,Potentiometer 1000 Ohm zu SQV91
+ATFS705L,Switch 10/100 5-Port (kein Rack-Einbau)
+ATFS724L,Switch 10/100 24-Port (Rack-Einbau)
+ATN4,Handrad weiss für VDN/VEN/VUN
+AUZ3.7,Analoge Wochenschaltuhr
+AUZ3.7,Analoge Wochenschaltuhr
+AV301,"Adapter zu Ventil M30x1,5"
+AV302,"Adapter zu Ventil M28x1,5 Herz, Comap"
+AV303,Adapter zu Ventil M30x1 TA
+AV304,Adapterset für Diverse 5 Stk.
+AV305,"Standard-Bajonettadapter, 10 Stk,M30x1,5"
+AV305,"Standard-Bajonettadapter, 10 Stk,M30x1,5"
+AV52,Adapter Comap
+AV53,Adapter Danfoss RA-2000
+AV54,Adapter Danfoss RAVL
+AV55,Adapter Danfoss RAV
+AV56,Adapter Giacomini
+AV57,Adapter Herz
+AV58,Adapter M30x1.5 auf Oventrop M30x1
+AV59,Adapter Vaillant
+AV60,Adapter TA
+AV61,Adapter Markaryd
+AV63,Adapter zu Giacomini
+AV64,"Adapter zu Ventil M28x1,5 Pettinarolie"
+AV-SSA-OV,Zwischenring für SSA... auf Oventrop
+AV-SSA-OV,Zwischenring für SSA... auf Oventrop
+AZX61.1,Funktionsmodul/Wirksinnumschaltung
+BACNET-OPC SERVER,BACnet-OPC Server
+BAU200,Digitale Universal-Einzelanzeige
+BB PUR100-150,Beschichtung zu Flanschventil DN100-150
+BB PUR15-40,Beschichtung zu Flanschventilen DN15-40
+BB PUR50-80,Beschichtung zu Flanschventilen DN50-80
+BB-RPS-MO4-M,BB-RPS-MO4-M
+BG6:SOL-B-CP-AP-A1,Package G: Unigyr Klein
+BG6:SOL-B-CP-AP-A2,Package H: Unigyr medium
+BG6:SOL-B-CP-AP-A3,Package I: Unigyr Gross
+BG6:SOL-B-CP-AP-A4,Package J: Visonik Klein
+BG6:SOL-B-CP-AP-A5,Package K: Visonik medium
+BG6:SOL-B-CP-AP-A6,Package L: Visonik Gross
+BG6:SOL-B-MS-PP-A1,BG6:SOL-B-MS-PP-A1 /Package A:(Project i
+BG6:SOL-B-MS-PP-A2,BG6:SOL-B-MS-PP-A2 /Pack.B:(10 Graphics)
+BG6:SOL-B-MS-PP-A4,BG6:SOL-B-MS-PP-A4 /Pack.D:(300 Graphics
+B-KOPPL.(BTM)117,"B-koppl.(BTM)117/12,60x60ADAPT, AR52"
+BSG21.1,Sollwertgeber mit 0...1000 Ohm
+BSG21.5,"Sollwertschieber -3...+3 K, LG-Ni1000"
+BSG61,"Sollwertgeber aktiv, mit div. Skalen"
+CAU.04,ADP CC V4 SOFTWARE UNITS
+CCA-100000-BA,Lizenz für 100000 BA Punkte
+CCA-100000-BA-PSM,Lizenz für 100000 BACnet Punkte PSM
+CCA-100000-BA-SSM,Lizenz für 100000 BACnet Punkte SSM
+CCA-100000-VAL,CCA-100000-VAL
+CCA-100000-VAL-PSM,CCA-100000-VAL-PSM
+CCA-100000-VAL-SSM,CCA-100000-VAL-SSM
+CCA-10000-BA,Lizenz für 10000 BA Punkte
+CCA-10000-BA-PSM,Lizenz für 10000 BACnet Punkte PSM
+CCA-10000-BA-SSM,Lizenz für 10000 BACnet Punkte SSM
+CCA-10000-FIRE,Lizenz für 10000 Fire Punkte
+CCA-10000-FIRE-PSM,Lizenz für 10000 Fire Punkte PSM
+CCA-10000-FIRE-SSM,Lizenz für 10000 Fire Punkte SSM
+CCA-10000-VAL,CCA-10000-VAL
+CCA-10000-VAL-PSM,CCA-10000-VAL-PSM
+CCA-10000-VAL-SSM,CCA-10000-VAL-SSM
+CCA-100-BA,Lizenz für 100 BA Punkte
+CCA-100-BA-PSM,Lizenz für 100 BACnet Punkte PSM
+CCA-100-BA-SSM,Lizenz für 100 BACnet Punkte SSM
+CCA-100-FIRE,Lizenze für 100 Fire Punkte
+CCA-100-FIRE-PSM,Lizenz für 100 Fire Punkte PSM
+CCA-100-FIRE-SSM,Lizenz für 100 Fire Punkte SSM
+CCA-100-SCADA,Lizenz für 100 integration Punkte
+CCA-100-SCADA-PSM,Lizenz für 100 integration Punkte PSM
+CCA-100-SCADA-SSM,Lizenz für 100 integration Punkte SSM
+CCA-100-SEC,Lizenz für 100 Security Punkte
+CCA-100-SEC-PSM,Lizenz für 100 Security Punkte PSM
+CCA-100-SEC-SSM,Lizenz für 100 Security Punkte PSM
+CCA-100-VALID,Lizenz für 100 validierte Objekte
+CCA-100-VALID-PSM,Lizenz für 100 validierte Objekte PSM
+CCA-100-VALID-SSM,Lizenz für 100 Security Punkte SSM
+CCA-10-METER,CCA-10-METER CC add 10
+CCA-10-METER-PSM,CCA-10-METER CC add 10 PSM
+CCA-10-METER-SSM,CCA-10-METER CC add 10 SSM
+CCA-1-ARCHGRP,Lizenz für 1 benutzerspez. Archivgr.
+CCA-1-ARCHGRP-PSM,Lizenz für 1 benutzerspez. Archivgr. PSM
+CCA-1-ARCHGRP-SSM,Lizenz für 1 benutzerspez. Archivgr. SSM
+CCA-1-CL,Lizenz für einen zusätzlichen Client
+CCA-1-CL-PSM,Lizenz für einen zusätzlichen Client PSM
+CCA-1-CL-SSM,Lizenz für einen zusätzlichen Client SUS
+CCA-1-INT-TK,CCA-1-INT-TK
+CCA-1-SUR-UNIT,Desigo CC Lizenz Erneuerung
+CCA-1-SUS-UNIT,Desigo CC Lizenz Abo
+CCA-30000-BA,Lizenz für 30000 BA Punkte
+CCA-30000-BA-PSM,Lizenz für 30000 BACnet Punkte PSM
+CCA-30000-BA-SSM,Lizenz für 30000 BACnet Punkte SSM
+CCA-30000-VAL,CCA-30000-VAL
+CCA-30000-VAL-PSM,CCA-30000-VAL-PSM
+CCA-30000-VAL-SSM,CCA-30000-VAL-SSM
+CCA-5000-BA,Lizenz für 5000 BA Punkte
+CCA-5000-BA-PSM,Lizenz für 5000 BACnet Punkte PSM
+CCA-5000-BA-SSM,Lizenz für 5000 BACnet Punkte SSM
+CCA-5000-FIRE,Lizenze für 5000 Fire Punkte
+CCA-5000-FIRE-PSM,Lizenz für 5000 Fire Punkte PSM
+CCA-5000-FIRE-SSM,Lizenze für 5000 Fire Punkte SSM
+CCA-5000-SCADA,CCA-5000-SCADA CC
+CCA-5000-SCADA-PSM,CCA-5000-SCADA-PSM
+CCA-5000-SCADA-SSM,CCA-5000-SCADA-SSM
+CCA-5000-VAL,CCA-5000-VAL
+CCA-5000-VAL-PSM,CCA-5000-VAL-PSM
+CCA-5000-VAL-SSM,CCA-5000-VAL-SSM
+CCA-500-BA,Lizenz für 500 BA Punkte
+CCA-500-BA-PSM,Lizenz für 500 BA Punkte PSM
+CCA-500-BA-SSM,Lizenz für 500 BA Punkte SSM
+CCA-500-FIRE,Lizenz für 500 Fire Punkte
+CCA-500-FIRE-PSM,Lizenz für 500 Fire Punkte PSM
+CCA-500-FIRE-SSM,Lizenz für 500 Fire Punkte SSM
+CCA-500-SCADA,Lizenz für 500 integration Punkte
+CCA-500-SCADA-PSM,Lizenz für 500 integration Punkte PSM
+CCA-500-SCADA-SSM,Lizenz für 500 integration Punkte SSM
+CCA-500-SEC,Lizenz für 500 Security Punkte
+CCA-500-SEC-PSM,Lizenz für 500 Security Punkte PSM
+CCA-500-SEC-SSM,Lizenz für 500 Security Punkte SSM
+CCA-500-VAL,CCA-500-VAL CC add 500
+CCA-500-VAL-PSM,CCA-500-VAL-PSM
+CCA-500-VAL-SSM,CCA-500-VAL-SSM
+CCA-6-SEC,Lizenz für 6 Security Punkte
+CCA-6-SEC-PSM,Lizenz für 6 Security Punkte PSM
+CCA-6-SEC-SSM,Lizenz für 6 Security Punkte PSM
+CCA-AC-128EXTD,CCA-AC-128EXTD 128
+CCA-AC-128EXTD-PSM,CCA-AC-128EXTD-PSM
+CCA-AC-128EXTD-SSM,CCA-AC-128EXTD-SSM
+CCA-AC-16EXTD,Lizenz für 16 zusätzlichen Türen
+CCA-AC-16EXTD-PSM,Lizenz für 16 zusätzlichen Türen PSM
+CCA-AC-16EXTD-SSM,Lizenz für 16 zusätzlichen Türen SSM
+CCA-CMPT-BA,Compact Feature set BA
+CCA-CMPT-BA-U,Comp. Feature set BA upsell
+CCA-CMPT-DMS,Compact Feature set DMS
+CCA-CMPT-DMS-PSM,Comp. Feature set DMS PSM
+CCA-CMPT-DMS-SSM,Comp. Feature set DMS SSM
+CCA-CMPT-DMS-U,Comp. Feature set DMS upsell
+CCA-CMPT-VM,CCA-CMPT-VM
+CCA-DEMO,Demo Lizenz  Desigo CC
+CCA-ENG,Engineering Lizenz
+CCA-FIRE-GRA-U,CCA-FIRE-GRA-U CC upse
+CCA-GW-FSET,Desigo Connect Gateway Feature Set
+CCA-GW-FSET-PSM,Desigo Connect Gateway Feature Set
+CCA-GW-FSET-SSM,Desigo Connect Gateway Feature Set
+CCA-IEC61850,Lizenz für IEC 61850 Treiber
+CCA-MAX-CL,Lizenz für unbegr. Anzahl von Clients
+CCA-MAX-CL-PSM,Lizenz für unbegr. Anzahl von Clients PSM
+CCA-MAX-CL-SSM,Lizenz für unbegr. Anzahl von Clients SSM
+CCA-M-GN,Lizenz für Group Notification
+CCA-OP-AS-TR,Option geführte Eventbearbeitung
+CCA-OP-GRAPH-ED,Option Grafikeditor
+CCA-OP-LOG-V,Option Log viewer
+CCA-OP-OPC,Option OPC-Server
+CCA-OP-RENO,Option Alarm-Fernbenachrichtigung
+CCA-OP-RENO-PSM,Option Alarm-Fernbenachrichtigung PSM
+CCA-OP-RENO-SSM,Option Alarm-Fernbenachrichtigung SSM
+CCA-OP-RE-PR,Option Reaktionsprozessor
+CCA-OP-WS-ADD,Option WS zusätzliche Web Session
+CCA-OP-WS-CMD,Option WS commanding
+CCA-OP-WS-HIST,Option WS Hist. Daten
+CCA-OP-WS-LIVE,Option WS Live data
+CCA-S7-CONN,Lizenz S7 Verbindung
+CCA-S7-PLUS,Desigo CC Lizenz S7 Plus
+CCA-STARTUP-BASE,Lizenz Startup
+CCA-STD-FSET,CCA-STD-FSET CC std fe
+CCA-STD-FSET-PSM,CCA-STD-FSET-PSM CC st
+CCA-STD-FSET-SSM,CCA-STD-FSET-SSM CC st
+CCA-V-128EXTC,Lizenz für 128 zusätzliche Kameras ext.
+CCA-V-128EXTC-PSM,Lizenz für 128 zusätzliche Monitore ext. PSM
+CCA-V-128EXTC-SSM,Lizenz für 128 zusätzliche Kameras SSM
+CCA-V-128MON,Lizenz für 128 zusätzliche Monitore
+CCA-V-128MON-PSM,Lizenz für 128 zusätzliche Monitore PSM
+CCA-V-128MON-SSM,Lizenz für 128 zusätzliche Monitore SSM
+CCA-V-16EMBC,Lizenz für 16 zusätzliche Kameras emb.
+CCA-V-16EXTC,Lizenz für 16 zusätzliche Kameras ext.
+CCA-V-16EXTC-PSM,Lizenz für 16 zusätzliche Monitore ext. PSM
+CCA-V-16EXTC-SSM,Lizenz für 16 zusätzliche Kameras SSM
+CCA-V-16MON,Lizenz für 16 zusätzliche Monitore
+CCA-V-16MON-PSM,Lizenz für 16 zusätzliche Monitore PSM
+CCA-V-16MON-SSM,Lizenz für 16 zusätzliche Monitore SSM
+CCA-V-PLUS,CCA-V-PLUS
+CIM.0165,Infocenter V1.6.5
+CLIMA SENSOR D WTF,"Kombi-Wetterstation, , ,"
+CLIMA SENSOR US,Kombi-Wetterstation
+CMD.02,Lizenz-Dongle USB
+CMD.04,LMS Micro Dongle
+CMD.04,LMS Micro Dongle
+CMM.04,Desigo Insight SW Units V4
+CMM.05,DESIGO INSIGHT Lizenz V5
+CMM.06,Lizenz DI V6
+CMS-10R-D,ZZT:CMS-10R-D/AC110-240V-Z
+CMS-10R-D,ZZT:CMS-10R-D/AC110-240V-Z
+CMS-10R-D,ZZT:CMS-10R-D/AC110-240V-Z
+CMS-ANT-MAG/2.5,Magnetfussantenne 2.5m Kabel
+COMPACT-OFFICE,"Präsenzmelder mit Mischsensor, 203.6003."
+COMSERVER++,W&T ComServer 1 Port (58631)
+CP1623,CP1623 Kommunikationsprozessor
+CTX-LEN.5M,XWP-ABT Eng. Lic. SSP 1 Year
+CU230P-2-BT,"G120P control unit, USS, Modbus, BacNet"
+CU230P-2DP,"G120P control unit, Profibus"
+CU230P-2PN,"G120P control unit, ProfiNet"
+CU-DICHTUNG,Dichtung zu Verschluss-Schraube
+DESIGO-TP700,DESIGO-TP700 Desigo S7 Touc
+DI-MODEM-ISDN,ISDN Modem Desigo
+DK35A DIN,DIN-Rail Mounting Kit (35 mm)
+DNA-KA-BS,DCC KABA Access INTE
+DNA-NO-BS,DNA-NO-BS
+DNA-NO-EX,DNA-NO-EX
+DNA-SE-BS,DCC SeeTec Basis
+DNA-SE-EX,DCC SeeTec Ext
+DNA-SI-BS,DCC SiNVR Basis
+DNA-SI-EX,DCC SiNVR Ext
+DURHWN/SSL,Set Haltewinkel
+DXA.B130,Schieberfühler 50”
+DXA.B200,Schieberfühler 80”
+DXA.H110,"Klemmenabdeckung für DXR…230VAC, 2 Stk"
+DXA.H180,"Klemmenabdeckung für DXR…24VAC, 2 Stk"
+DXA.S04P1,Luftvolumenstrom-Druckfühler (SCOM)
+DXA.S04P1-B,Luftvolumenstrom-Druckfühler IP54(SCOM)
+DXR2.E09-101A,"Kompaktkontroller BACnet, 230 VAC"
+DXR2.E09T-101A,"Kompaktkontroller BACnet, 230 VAC"
+DXR2.E10-101A,"Kompaktkontroller BACnet, 230 VAC"
+DXR2.E12P-102A,"Kompaktkontroller BACnet, 24 VAC"
+DXR2.E12PX-102A,"Kompaktkontroller BACnet, 24 VDC"
+DXR2.E17C-103A,"Raumdruck & Abzug Automationsst.,30 DP"
+DXR2.E17CX-103A,"Raumdruck & Abzug Automationsst.,60 DP"
+DXR2.E18-101A,"Kompaktkontroller BACnet, 24VAC"
+DXR2.E18-102A,"Kompaktkontroller BACnet, 24 VAC"
+DXR2-230/BOX-W,Standardverteiler DXR2-230VAC
+DXR2-24/BOX-W,Standardverteiler DXR2-24VAC
+EBV73200,LON Karte PCMCIA PCC-10 73200 (Echelon)
+ECOAP-360,AP-Montage-Rahmen für ECO-IR360
+ECOFTT10,LON Busank. f. IR360/180
+ECO-IR180A,Präsenzmelder Tageslicht
+ECO-IR360A,Präsenzmelder für Deckenmontage
+EDS-205,Switch 5 X 10/100TX DIN-Schiene 24V
+EDS-208,MOXA
+EDS-208A-MM-SC,"DIN Switch 6xTX, 2x100 FX MM SC,24VDC/AC"
+EDS-208-M-SC,"Switch 7 X 10/100TX, 1 X 100 FX SC MM, D"
+EDS-316,"DIN Switch 16xTX, 12/24/48 VDC"
+EDS-P206A,"EDS-P206A-4POE, 4X P"
+EDS-P206A-4POE,DIN PoE Switch 6x10/100TX
+EDSP206A4POEMSC,"DIN PoE Switch 5xTX,1xFX MM SC,24 /48VDC"
+EHSPSM2/18.24,DIN-Gehäuse-Stromversorgung 24VDC/0.75A
+EHSTBD2/018.24/P3,Transformator 230/24VAC / 18VA
+EHSTBD2/035.24/F5,Gehäuse-Transformator 24VAC/35VA
+EHSTBD2/035-COVER,Klemmeabdeckung zu Transformator EHSTBD2
+EHSTBD2/050.24/F6,Gehäuse-Transformator 24VAC/50VA
+EHSTBD2/050-COVER,Klemmeabdeckung zu Transformator EHSTBD2
+EHSTBD2/075.24/F8,Gehäuse-Transformator 24VAC/75VA
+EHSTBD2/075-COVER,Klemmeabdeckung zu Transformator EHSTBD2
+EHSTBD2/100.24/F8,GEHÄUSE-TRANSFORM
+EHSTBD2AS.40.24E,Gehäuse-Stromversorgung 24VDC/0.40A
+EKW2.2.1,Keilriemenwächter Opperman
+EKW2.7.1,Keilriemenwächter Opperman
+ELAST-PUFFER/52112,ENTKOPPLUNGSPUFFER M5X10 SIN
+ELAST-PUFFER/52129,ENTKOPPLUNGSPUFFER M5X12 SIN
+ELAST-PUFFER/52131,ENTKOPPLUNGSPUFFER M8X25 SIN
+ELAST-PUFFER/52158,ENTKOPPLUNGSPUFFER M10X25 SI
+EMCPROFNET,PC-Funkuhr Prof inkl. Ant.
+EMCPROFNET19,"PC-Funkuhr Prof 19"", inkl. Antenne"
+EPG-10,"Aufputzgehäuse für luna10, sw"
+EPG-16,Aufputzgehäuse für luna16
+EPG-22,Aufputzgehäuse für luna22
+ERF910,Funk-Repeater
+FEL4250FMI61,"UP-Raumthermostat 2.2KW, weiss"
+FGT-PT1000,Abgastemperaturfühler
+FKL0012,"Kabel Ausgang 4-polig, 3m, M-Bus"
+FKL0013,"Kabel Eingang 4-polig, 1m, Impuls"
+FKM0038,"Tauchhülse G1/4'', für Fühler 5,0x45 mm"
+FK-PZ1,Set mit zwei Anschlussstutzen
+FK-PZ1,Set mit zwei Anschlussstutzen
+FK-PZ2,"Set mit zwei Anschlussstutzen, Aluminium"
+FK-PZ2,"Set mit zwei Anschlussstutzen, Aluminium"
+FK-PZ3,Set mit zwei Anschlussstutzen Kunststoff
+FK-PZ3,Set mit zwei Anschlussstutzen Kunststoff
+FK-TZ1,"Kapillarhalterung, Metall, verzinkt"
+FS108PEU,10/100Mbps Unm.Switch mit PoE(kein Rack-
+FT5K-BCU-XP,LON Busankoppler UP 2-fach
+FT-BCU-2,LON Busankoppler UP Feller 2-fach
+FT-PZ1,Übergangsverschraubung auf G1/2''.
+FT-TP/100,"Tauchtemperaturfühler 100 mm, Pt100"
+FT-TP/400,Tauchtemperaturfühler 400 mm; Pt100
+FUE380.125-100,"Durchfluss US,DN125,100m3/h,350 mm,AC230V"
+FUE380.150-150,"Durchfluss US,DN150,150m3/h,500 mm,AC230V"
+FUE380.200-250,"Durchfluss US,DN200,250m3/h,500 mm,AC230V"
+FUE380.250-400,"Durchfluss US,DN250,400m3/h,600 mm,AC230V"
+FUE380.300-560,"Durchfluss US,DN300,560m3/h,500 mm,AC230V"
+FUE380.350-750,7ME3410-2VC02-5ES4 /SITRANS FUE380
+FUE380.400-950,"Durchfluss US,DN400,950m3/h,600 mm,AC230V"
+FUE380.500-1475,"DurchflussUS,DN500,1475m3/h,625 mm,AC230V"
+G120P-1.1/32B,Frequenzumrichter 3.0A / 1.1kW / IP20
+G120P-1.1/35A,Frequenzumri 3.0A/ 1.1kW/ IP55/ Filter A
+G120P-1.1/35B,Frequenzumrichter 3.0A / 1.1kW / IP55
+G120P-1.5/32B,Frequenzumrichter 4A / 1.5kW / IP20
+G120P-1.5/35A,Frequenzumri. 4A/ 1.5kW/ IP55/ Filter A
+G120P-1.5/35B,Frequenzumrichter 4A / 1.5kW / IP55
+G120P-11/32B,Frequenzumrichter 26A / 11kW / IP20
+G120P-11/35A,Frequenzumri. 26A/ 11kW/ IP55/ Filter A
+G120P-11/35B,Frequenzumrichter 26A / 11kW / IP55
+G120P-15/32B,Frequenzumrichter 32A / 15kW / IP20
+G120P-15/35A,Frequenzumri. 32A/ 15kW/ IP55/ Filter A
+G120P-15/35B,Frequenzumrichter 32A / 15kW / IP55
+G120P-18.5/32B,Frequenzumrichter 38A / 18.5kW / IP20
+G120P-18.5/35A,Frequenzumri 38A/ 18.5kW/ IP55/ Filter A
+G120P-18.5/35B,Frequenzumrichter 38A / 18.5kW / IP55
+G120P-2.2/32B,Frequenzumrichter 5.9A / 2.2kW / IP20
+G120P-2.2/35A,Frequenzumri 5.9A/ 2.2kW/ IP55/ Filter A
+G120P-2.2/35B,Frequenzumrichter 5.9A / 2.2kW / IP55
+G120P-22/32B,Frequenzumrichter 45A / 22kW / IP20
+G120P-22/35A,Frequenzumri. 45A/ 22kW/ IP55/ Filter A
+G120P-22/35B,Frequenzumrichter 45A / 22kW / IP55
+G120P-3/32B,Frequenzumrichter 7.7A / 3.0kW / IP20
+G120P-3/35A,Frequenzumri 7.7A/ 3.0kW/ IP55/ Filter A
+G120P-3/35B,Frequenzumrichter 7.7A / 3.0kW / IP55
+G120P-30/32B,Frequenzumrichter 62A / 30kW / IP20
+G120P-30/35A,Frequenzumri. 62A/ 30kW/ IP55/ Filter A
+G120P-30/35B,Frequenzumrichter 62A / 30kW / IP55
+G120P-37/32B,Frequenzumrichter 75A / 37kW / IP20
+G120P-37/35A,Frequenzumri. 75A/ 37kW/ IP55/ Filter A
+G120P-37/35B,Frequenzumrichter 75A / 37kW / IP55
+G120P-4/32B,Frequenzumrichter 10.2A / 4kW / IP20
+G120P-4/35A,Frequenzumri. 10.2A/ 4kW/ IP55/ Filter A
+G120P-4/35B,Frequenzumrichter 10.2A / 4kW / IP55
+G120P-45/32B,Frequenzumrichter 90A / 45kW / IP20
+G120P-45/35A,Frequenzumri. 90A/ 45kW/ IP55/ Filter A
+G120P-45/35B,Frequenzumrichter 90A / 45kW / IP55
+G120P-5.5/32B,Frequenzumrichter 13A / 5.5kW / IP20
+G120P-5.5/35A,Frequenzumri. 13A/ 5.5kW/ IP55/ Filter A
+G120P-5.5/35B,Frequenzumrichter 13A / 5.5kW / IP55
+G120P-55/32B,Frequenzumrichter 110A / 55kW / IP20
+G120P-55/35A,Frequenzumri. 110A/ 55kW/ IP55/ Filter A
+G120P-55/35B,Frequenzumrichter 110A / 55kW / IP55
+G120P-7.5/32B,Frequenzumrichter 18A / 7.5kW / IP20
+G120P-7.5/35A,Frequenzumri. 18A/ 7.5kW/ IP55/ Filter A
+G120P-7.5/35B,Frequenzumrichter 18A / 7.5kW / IP55
+G120P-75/32B,Frequenzumrichter 145A / 75kW / IP20
+G120P-75/35A,Frequenzumri. 145A/ 75kW/ IP55/ Filter A
+G120P-75/35B,Frequenzumrichter 145A / 75kW / IP55
+G120P-90/35A,Frequenzumri. 178A/ 90kW/ IP55/ Filter A
+G120P-90/35B,Frequenzumrichter 178A / 90kW / IP55
+G120P-AIRSHEET-FSA,G120P-Luftleitblech-FSA
+G120P-AIRSHEET-FSB,G120P-Luftleitblech-FSB
+G120P-AIRSHEET-FSC,G120P-Luftleitblech-FSC
+G120P-BCOVER,"G120P Blindabdeckung für PM230, IP55"
+G120P-BOP-2,G120P Basisbedienfeld BOP-2
+G120P-DOOR-KIT,G120P Türmontagesatz für IOP/BOP-2
+G120P-FEXTFSA,"G120P PM Lüfter IP20/IP55, extern, FSA"
+G120P-FEXTFSB,"G120P PM Lüfter IP20/IP55, extern, FSB"
+G120P-FEXTFSC,"G120P PM Lüfter IP20/IP55, extern, FSC"
+G120P-FEXTFSF-IP20,"G120P PM Lüfter IP20, external, FSF"
+G120P-FEXTFSF-IP55,"G120P PM Lüfter IP55, extern, FSF"
+G120P-IOP-2-BT,G120P Intelligentes Bedienfeld IOP-2-BT
+G120P-IP55-PAN-EXT,Erweiterungskabel für die Bedienung
+G120P-MSETFSA-IP55,"G120P Montage-Set,PM230, IP55,FSA"
+G120P-MSETFSB-IP55,"G120P Montage-Set,PM230, IP55,FSB"
+G120P-MSETFSC-IP55,"G120P Montage-Set,PM230, IP55,FSC"
+G120P-MSETFSD-IP55,"G120P Montage-Set,PM230, IP55,FSD"
+G120P-MSETFSE-IP55,"G120P Montage-Set,PM230, IP55,FSE"
+G120P-MSETFSF-IP55,"G120P Montage-Set,PM230, IP55,FSF"
+G120P-PC-KIT,G120P PC-Umrichter Verbindungssatz-2
+G120P-REV100A_H410,G120P Revisionsschalter_100A_FSE
+G120P-REV20A_H216,G120P Revisionsschalter_20A_FSA-FSB
+G120P-REV32A_H226,G120P Revisionsschalter_32A_FSC
+G120P-REV40A_H233,G120P Revisionsschalter_38A_FSC/FSD
+G120P-REV63A_B263,G120P Revisionsschalter_63A_FSD
+G120P-REV80A_H408,G120P Revisionsschalter_80A_FSE
+G120P-SAM,G120P-SAM Webserver-
+G120P-STARTER,STARTER Software
+GAP191.1E,"Luftklappen-Drehantrieb, 6Nm, AC/DC24V"
+GAP196.1E,"Luftklappen-Drehantrieb, 6Nm, AC/DC24V"
+GCA121.1E,"Luftklappen-Drehantrieb, 18Nm, AC24V"
+GCA126.1E,"Luftklappen-Drehantrieb, 18Nm, AC24V"
+GCA135.1E,"Luftklappen-Drehantrieb, 18Nm, AC24V"
+GCA161.1E,"Luftklappen-Drehantrieb, 18Nm, AC24V"
+GCA161.1E/MO,Luftklappen-Drehantrieb 18Nm Modbus
+GCA166.1E,"Luftklappen-Drehantrieb, 18Nm, AC24V"
+GCA321.1E,"Luftklappen-Drehantrieb, 18Nm, AC230V"
+GCA326.1E,"Luftklappen-Drehantrieb, 18Nm, AC230V"
+GCS9D,DCC Guarto CS9 INTEG
+GDB111.1E/KN,S55499-D190 /GDB111.1E/KN Stellantrieb
+GDB111.1E/MO,"Drehantrieb, 5Nm, AC24V, Modbus"
+GDB111.9E/KN,"Kugelhahn-Drehantrieb,5Nm,AC24V,KNX"
+GDB141.1E,"Luftklappen-Drehantrieb, 5Nm, AC24V"
+GDB141.9E,"Kugelhahn-Drehantrieb,5Nm,ACDC24V,2/3Pkt"
+GDB146.1E,"Luftklappen-Drehantrieb, 5Nm, AC24V"
+GDB161.1E,"Luftklappen-Drehantrieb, 5Nm, AC24V  C"
+GDB166.1E,"Luftklappen-Drehantrieb, 5Nm, AC24V  C"
+GDB181.1E/3,"VAV-Kompaktregler, 24 V, 5 Nm,0-10V,3Pkt"
+GDB181.1E/BA,"VAV-Kompaktregler BACnet, 5Nm, AC24V"
+GDB181.1E/KN,"VAV-Kompaktregler KNX, 5Nm, AC24V"
+GDB181.1E/KN,"VAV-Kompaktregler KNX, 5Nm, AC24V"
+GDB181.1E/MO,"VAV-Kompaktregler Modbus, 5Nm, AC24V"
+GDB336.9E,"Kugelhahn-Drehantr.,5Nm,AC230V,3Pkt,2HS"
+GDB341.1E,"Luftklappen-Drehantrieb, 5Nm, AC230V"
+GDB341.9E,"Kugelhahn-Drehantrieb,5Nm,AC230V,2/3Pkt"
+GDB346.1E,"Luftklappen-Drehantrieb, 5Nm, AC230V"
+GDB361.1E,"Luftklappen-Drehantrieb,5Nm,AC230V 0-10V"
+GEB141.1E,S55499-D329 /GEB141.1E Stellantrieb
+GEB142.1E,S55499-D330 /GEB142.1E Stellantrieb
+GEB146.1E,S55499-D331 /GEB146.1E Stellantrieb
+GEB161.1E,S55499-D332 /GEB161.1E Stellantrieb
+GEB161.1E,"Luftklappen-Drehantrieb, 15Nm, AC24V"
+GEB161.1E/MO,"Luftklappen-Drehantrieb 15Nm, Modbus"
+GEB166.1E,S55499-D335 /GEB166.1E Stellantrieb
+GEB166.1E,"Luftklappen-Drehantrieb, 15Nm, AC24V"
+GEB331.1E,"Luftklappen-Drehantrieb, 15Nm, AC230V"
+GEB332.1E,"Luftklappen-Drehantrieb, 15Nm, AC230V"
+GEB341.1E,S55499-D336 /GEB341.1E Stellantrieb
+GEB346.1E,S55499-D337 /GEB346.1E Stellantrieb
+GEB361.1E,S55499-D338 /GEB361.1E Stellantrieb
+GGA126.1E/T10,"Stellantrieb-BSK, 18Nm, AC/DC24V"
+GGA126.1E/T12,"Stellantrieb-BSK, 18Nm, AC/DC24V"
+GGA326.1E/T10,"Stellantrieb-BSK, 18Nm, AC230V"
+GGA326.1E/T12,"Stellantrieb-BSK, 18Nm, AC230V"
+GIB131.1E,"Luftklappen-Drehantrieb, 35Nm, AC24V"
+GIB135.1E,"Luftklappen-Drehantrieb, 35Nm, AC24V"
+GIB161.1E,"Luftklappen-Drehantrieb, 35Nm, AC24V"
+GIB161.1E/MO,"Luftklappen-Drehantrieb 35Nm, Modbus"
+GIB166.1E,"Luftklappen-Drehantrieb, 35Nm, AC24V"
+GIB331.1E,"Luftklappen-Drehantrieb, 35Nm, AC230V"
+GIB335.1E,"Luftklappen-Drehantrieb, 35Nm, AC230V"
+GLB111.1E/MO,"Drehantrieb,10Nm, AC24V, Modbus"
+GLB111.9E/KN,"Kugelhahn-Drehantrieb,10Nm,AC24V,KNX"
+GLB111.9E/MO,"Kugelhahn-Antrieb,10Nm,AC24V,Modbus RTU"
+GLB131.2E,"Luftklappen-Linearantrieb, 250N, AC24V"
+GLB141.1E,"Luftklappen-Drehantrieb, 10Nm, AC/DC24V"
+GLB141.9E,"Kugelhahn-Drehantr.,10Nm,ACDC24V,2P/3P"
+GLB146.1E,"Luftklappen-Drehantrieb, 10Nm, AC/DC24V"
+GLB161.1E,"Luftklappen-Drehantrieb, 10Nm, AC/DC24V"
+GLB161.2E,"Luftklappen-Linearantrieb, 250N, AC24V"
+GLB161.9E,"Kugelhahn-Drehantrieb, 10Nm, AC24V,0-10V"
+GLB166.1E,GLB166.1E Stellantrieb
+GLB181.1E/3,"VAV Kompaktregler, 10Nm, AC24V"
+GLB181.1E/BA,"VAV-Kompaktregler BACnet, 10Nm, AC24V"
+GLB181.1E/KN,"VAV-Kompaktregler KNX, 10Nm, AC24V"
+GLB181.1E/KN,"VAV-Kompaktregler KNX, 10Nm, AC24V"
+GLB181.1E/MO,"VAV-Kompaktregler Modbus, 10Nm, AC24V"
+GLB331.2E,"Luftklappen-Linearantrieb, 250N, AC230V"
+GLB336.9E,"Kugelhahn-Drehantr.,10Nm,AC230V,3Pkt,2HS"
+GLB341.1E,"Luftklappen-Drehantrieb, 10Nm, AC230V"
+GLB341.9E,"Kugelhahn-Drehantr.,10Nm,AC230V,2/3Pkt"
+GLB346.1E,"Luftklappen-Drehantrieb, 10Nm, AC230V"
+GLB361.1E,"Luftklappen-Drehantrieb,10Nm,AC230V 0-10V"
+GLD161.9E,"Kugelhahn-Drehantr.,8Nm,ACDC24V,2/0-10V"
+GMA121.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA121.9E,"Kugelhahn-Drehantrieb, 7Nm, ACDC24V,2Pkt"
+GMA126.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA126.9E/CH,"Kugelhahn-Drehantr.,7Nm,ACDC24V,2Pkt,2HS"
+GMA131.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA131.9E,"Kugelhahn-Drehantrieb, 7Nm, ACDC24V,3Pkt"
+GMA136.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA136.9E/CH,"Kugelhahn-Drehantr.,7Nm,ACDC24V,3Pkt,2HS"
+GMA161.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA161.1E/MO,"Luftklappen-Drehantrieb, 7Nm, Modbus"
+GMA161.9E,"Kugelhahn-Drehantrieb, 7Nm, AC24V,0-10V"
+GMA166.1E,"Luftklappen-Drehantrieb, 7Nm, AC/DC24V"
+GMA321.1E,"Luftklappen-Drehantrieb, 7Nm, AC230V"
+GMA321.9E,"Kugelhahn-Drehantrieb, 7Nm, AC230V,2Pkt"
+GMA326.1E,"Luftklappen-Drehantrieb, 7Nm, AC230V"
+GMA326.9E/CH,"Kugelhahn-Drehantr.,7Nm,AC230V,2Pkt,2HS"
+GNA126.1E/C10,"Stellantrieb-BSK, 7Nm, AC/DC24V"
+GNA126.1E/T10,"Stellantrieb-BSK, 7Nm, AC/DC24V"
+GNA126.1E/T12,"Stellantrieb-BSK, 7Nm, AC/DC24V"
+GNA326.1E/T10,"Stellantrieb-BSK, 7Nm, AC230V"
+GNA326.1E/T12,"Stellantrieb-BSK, 7Nm, AC230V"
+GNP191.1E,"Luftklappen-Drehantrieb, 6Nm, ACDC24V"
+GNP196.1E,"Luftklappen-Drehantrieb, 6Nm, ACDC24V,"
+GPC121.1A,GPC121.1A Stellantrieb m. Federrücklauf
+GPC126.1A,GPC126.1A Stellantrieb mit Federrücklauf
+GPC131.1A,GPC131.1A Stellantrieb mit Federrücklauf
+GPC136.1A,GPC136.1A Stellantrieb
+GPC161.1A,GPC161.1A Stellantrieb
+GPC166.1A,GPC166.1A Stellantrieb
+GPC321.1A,GPC321.1A Stellantrieb mit Fderrücklauf
+GPC326.1A,GPC326.1A Stellantrieb mit Federrücklauf
+GPC361.1A,GPC361.1A Stellantrieb mit Federrücklauf
+GQD121.1A,"Luftklappen-Drehantrieb, 2Nm, 2Pkt"
+GQD121.9A,"Kugelhahn-Drehantrieb,2Nm, AC/DC24V,2Pkt"
+GQD131.1A,"Luftklappen-Drehantrieb, AC/DC 24 V, 2 N"
+GQD131.9A,"Kugelhahn-Drehantrieb, 2Nm, ACDC24V,3Pkt"
+GQD161.1A,"Luftklappen-Drehantrieb, AC/DC 24V, 2Nm"
+GQD161.9A,"Kugelhahn-Drehantrieb, 2Nm,ACDC24V,0-10V"
+GQD321.9A,"Kugelhahn-Drehantrieb,2Nm, AC230V, 2Pkt"
+GRA126.1E/10,"Stellantrieb-BSK, 4Nm, AC/DC24V, 10 mm"
+GRA126.1E/12,"Stellantrieb-BSK, 4Nm, AC/DC24V, 12 mm"
+GRA126.1E/T12,"Stellantrieb-BSK, 4Nm, AC/DC24V, 12 mm"
+GRA326.1E/10,"Stellantrieb-BSK, 4Nm, AC 230V, 10 mm"
+GRA326.1E/12,"Stellantrieb-BSK, 4Nm, AC 230V, 12 mm"
+GRA326.1E/T12,"Stellantrieb-BSK, 4Nm, AC230V, 12 mm"
+GSD121.1A,"Luftklappen-Dreha. o. Federrücklauf, 24V"
+GSD141.1A,"Luftklappen-Dreha. 24VAC/DC, 2Nm, 2 Pkt"
+GSD141.9A,"Kugelhahn-Drehantrieb,2Nm, AC/DC24V,2Pkt"
+GSD146.1A,"Luftklappen-Dreha. 24VAC/DC, 2Nm, 2 Pkt"
+GSD161.1A,"Luftklappen-Dreha.24VAC/DC, 0-10V, 2Nm"
+GSD161.9A,"Kugelhahn-Antrieb,2Nm,ACDC24V,2/0-10V"
+GSD166.1A,"Luftklappen-Drehantriebe, AC/DC 24V, 2Nm"
+GSD341.1A,"Luftklappen-Drehantriebe, AC 240 V, 2 Nm"
+GSD341.9A,"Kugelhahn-Drehantrieb,2Nm, AC230V, 2Pkt"
+GSD346.1A,"Luftklappen-Drehantrieb, 2Nm, AC230V"
+GSD361.1A,"Luftklappen-Drehantrieb 230VAC, 0-10V,"
+HLM10.1,Bedien- und Anzeigegerät
+HLV20.1,Seilzug-Wegsensor 2000 mm
+HLV40.1,Schnelllaufender Luftklappen Antrieb
+HMRIK001-001,Wandhalterung für WFM5../WFN5..
+HP THIN CLIENTT520,HP THIN CLIENT T520 MIT WI
+HTS 180 PLLON,LON Präsenzmelder Wandmontage (AP/EB)
+HTS 180A-KNX WH,KNX Präsenzmelder HTS 180A-KNX WH
+HTS 360 PLLON,LON Präsenzmelder Deckenmontage (AP/EB)
+HTS 360A-KNX WH,KNX Präsenzmelder HTS 360A-KNX WH
+HTS AP-RAHMEN PL,AP-Montage-Rahmen für PresenceLight 360
+HTS EWH-A KNX,KNX Präsenzmelder HTS EWH-A KNX
+HTS PASSAGE KNX,KNX Präsenzmelder HTS Compact Passage
+HTS PCLON AP,LON Präsenzmelder Deckeneinbau (Hohld.)
+HTS PCLON EB,LON Präsenzmelder UP-Montage (Betond.)
+HTS PLANOSET RQ,"AP-Einbauset PlanoSet quadratisch, weiss"
+HTS PLANOSET RR,"AP-Einbauset PlanoSet rund, weiss"
+HUBICELERT407,ICELERT STEUERUNG 407
+HUBSONDEICELERT,3-fach Sonde
+HY-WA-BODEN 12-24,Wasser Detektor 24V AC\DC
+IKS67262GTXSFP,Modular managed Switch mit 24+2Gb
+IL10-PC,"Touchpanel iluna10, Win10 IoT"
+IL16-PC,"Touchpanel iluna16, Win10 IoT"
+IM-6700-8SFP,Modul 8 SFP Port 100 für IKS 6727
+IM-6700-8TX,Modul 8 Port 10/100TX für IKS 6726
+INJ-24,"DIN PoE Injector, 24 /48VDC"
+INT51152N142,"Luftstromwächter, 230V, 0,2..8m/s"
+IRA211,"Infrarot-Fernbedienung für RDF…T, RDG1…T"
+JXF:FKM0005,"2“-EAT Sockelgehäuse, 110 mm, G3/4"""
+JXF:FKM0008,"2“-EAT Sockelgehäuse, 80 mm, G3/4''"
+JXF:FKM0053,"Verschlussplatte zu EAT, 2"""
+JXF:FKS0007,"Profildichtung für EAT, 2"""
+JXF:WFK30.E130,"Mech Kaltwasserzähler 4m3/h,130 mm,1"""
+JXF:WFZ.B6-1,Blendensatz Unterputz
+JXF:WFZ.IRDA-USB,Infrarot-Lesekopf mit USB-Schnittstelle
+JXF:WFZ.IRDA-USB,Infrarot-Lesekopf mit USB-Schnittstelle
+JXF:WFZ.MBM-USB,Programmierkabel für M-Bus
+JXF:WFZ.MBM-USB,Programmierkabel für M-Bus
+JXF:WFZ.MBUSSET,M-Bus Anschlussset
+JXF:WFZ.R110,"Zählerersatzstück 3/4'', 110 mm"
+JXF:WFZ.R130,"Zählerersatzstück 1'', 130 mm"
+JXF:WFZ.R80,"Zählerersatzstück 3/4'', 80 mm"
+JXF:WME.EINPUTZ1,Einputzhilfe für Messkapselwasserzähler
+JXF:WMZ.K5,Montageschlüssel für Messkapselzähler
+JXF:WZM-V110,"Verlängerung 80 auf 110 mm G3/4B"", G1B"""
+JXF:WZM-V110,"Verlängerung 80 auf 110 mm G3/4B"", G1B"""
+KA-US-7X025-20M,Anschlusskabel 20m zu Clima Sensor US
+KA-US-8X025-10M,Anschlusskabel 10m zu Clima Sensor US
+KNX ENO 630,"KNX Funkempfänger EnOcean, 16 Kanäle"
+KNX ENO 632,KNX Funkempfänger/-sender EnOcean (24)
+KNX ENO 634,KNX Funkempfänger/-sender EnOcean (32)
+KNX ENO 636,Funkempf/-sender KNX/EnOcean &Sicherheit
+KRM-1,KANALRAUCHMELDER
+KRM-2,KANALRAUCHMELDER 24V
+KVM1-4,"CLAXAN, KVM-SWITCH1-4 M.KAB."
+L10-PC,"TOUCHPANEL LUNA10, WIN10 IOT"
+L16-PC,"TOUCHPANEL LUNA16, WIN10 IOT"
+L22-PC,"TOUCHPANEL LUNA22, WIN10 IOT"
+LOGO 24VDC-4A,LOGO! Power 230V AC / 24V DC 4A
+LOGO-24O,LOGO! 230RC Logikmod.Relais+Uhr 6DE/4DA
+LOGO-AM2-PT100,"LOGO! Erweiterungsmodul 2AI (PT100),"
+LOYLDALI-3E101-U,"DALI/LON-Interface, 2x DALI/2x Ethernet"
+LOYLDALI-3E102-U,"DALI/LON-Interface, 2x DALI/1x Ethernet"
+LOYLDALI-3E104,"DALI/LON-Interface, 4x DALI/1x Eth.,"
+LOYLDALI-PWR2-U,DALI-Stromversorgung 2-fach
+LOYLDALI-PWR4-U,DALI-Stromversorgung 4-fach
+LOYLIP-3333ECTC,"LON/IP Router,4xEth./2xFT-10"
+LOYLIP-33ECRB,"LON/IP Router Redundant,1xEth./2xFT-10,"
+LOYLIP-33ECTC,"LON/IP Router, 2x Ethernet / 2x FT-10"
+LOYLIP-3ECTC,"LON/IP Router,2x Eth./1xFT-10"
+LOYLP-33E100,"L-Proxy LON Multiport Gateway,"
+LOYLPOW-2415B,Gehäuse-Stromversorgung 24VDC/15W
+LOYLS13300C,L-Switch 2xFT-10/1xTP-1250
+LOYLS13333C,L-Switch 4xFT-10/1xTP-1250
+LOYLT33,LON-Busabschluss 2x 52.3/105Ohm
+LOYL-VIS3E100,"5.7"" UP-Touch Panel"
+LOYL-VIS3E115,"15"" UP-Touch Panel"
+LOYL-VIS3ME12A1,"12.1"" UP-Touch Panel"
+LOYL-VIS3ME15A1,"15"" UP-Touch Panel"
+LOYL-VIS3ME7G1,"L-VIS UP-Touch Panel 7"", silber"
+LOYL-VISFRAME1,"Installationsrahmen zu Touch Panel 5.7"""
+LOYL-VISFRAME12,"Installationsrahmen zu Touch Panel 12"""
+LOYL-VISFRAME15,"Installationsrahmen zu Touch Panel 15"""
+LOYNIC709-USB,NIC709-USB / Lon Karte PCMCIA
+LT-DESIGO,Lifebook
+LTE ANTENNA MAGNET,LTE ANTENNA MAGNET
+LTE ANTENNA WALL M,LTE ANTENNA WALL M
+LTE SMARTSTART ROU,LTE SMARTSTART ROU
+LVIS-3ME15-A1,"15"" UP-Touch Panel"
+M3FB15LX/A,"Kältemittelventil, PS43, Heissgas, 3"
+M3FB15LX06/A,"Kältemittelventil, PS43, Heissgas, 0.6"
+M3FB15LX15/A,"Kältemittelventil, PS43, Heissgas, 1.5"
+M3FB20LX/A,"Kältemittelventil, PS43, Heissgas, 5"
+M3FB25LX/A,"Kältemittelventil, PS43, Heissgas, 8"
+M3FB32LX,"Kältemittelventil, PS43, Heissgas, 12"
+M3FK15LX,"Kältemittelventil, PN32 Kondensator, 3"
+M3FK15LX06,"Kältemittelventil, PN32 Kondensator, 06"
+M3FK15LX15,"Kältemittelventil, PN32 Kondensator, 15"
+M3FK20LX,"Kältemittelventil, PN32 Kondensator, 5"
+M3FK25LX,"Kältemittelventil, PN32 Kondensator, 8"
+M3FK32LX,"Kältemittelventil, PN32 Kondensator, 12"
+M3FK40LX,"Kältemittelventil, PN32 Kondensator, 20"
+M3FK50LX,"Kältemittelventil, PN32 Kondensator, 30"
+M3P100FY,"Magnetvent.,Flansch,PN16,130,AC24V,0-10V"
+M3P80FY,"Magnetvent.,Flansch,PN16,80,AC24V,0-10V"
+MB3180 MODBUS GATE,MGate MB3180 ModBus Gateway Moxa
+MF100-ST150-PN25,"Montage-Set 360mm, DN100, PN25, komplett"
+MF25-STV100,"Montage-Set 260mm, DN25, PN16, komplett"
+MF40-ST100,"Montage-Set 300mm, DN40, PN16, komplett"
+MF50-ST100,"Montage-Set 270mm, DN50, PN16, komplett"
+MF65-ST100,"Montage-Set 300mm, DN65, PN25, komplett"
+MF80-ST150,"Montage-Set 300mm, DN80, PN16, komplett"
+MG-L-1,Montage-Set Large 1“ x 130 mm
+MG-L-1B,Montage-Set Large 1“ x 190 mm
+MG-L-3/4,Montage-Set Large 3/4“ x 110 mm
+MG-L-5/4,Montage-Set Large 11/4” x 260 mm
+MG-S-1,Montage-Set Small 1“ x 130 mm
+MG-S-1,Montage-Set Small 1“ x 130 mm
+MG-S-1B,Montage-Set Small 1“ x 190 mm
+MG-S-1B,Montage-Set Small 1“ x 190 mm
+MG-S-3/4,Montage-Set Small 3/4“ x 110 mm
+MG-S-3/4,Montage-Set Small 3/4“ x 110 mm
+MG-S-5/4,Montage-Set Small 11/4” x 260 mm
+MG-S-5/4,Montage-Set Small 11/4” x 260 mm
+MINI DB9F-TO-TB,Mini Female DB9 to Terminal Block
+MODEM-ANALOG,Modem analog
+MODEM-ANALOG,Modem analog
+MODEM-ANALOG,Modem analog
+MODEM-ISDN,BM33k6-ISDN
+MP1X1,Montageplatte 1x1
+MP2X1,Montageplatte 2x1 hoch
+MP2X1,Montageplatte 2x1 hoch
+MP2X2,Montageplatte 2x2
+MP2X2,Montageplatte 2x2
+MP3X1,Montageplatte 3x1 hoch
+MP3X1,Montageplatte 3x1 hoch
+MP3X2,Montageplatte 3x2 hoch
+MP3X2,Montageplatte 3x2 hoch
+MULTICASE,Notebook Tragtasche
+MVF461H15-0.6,"Durchgangs-Magnetventil, PN16, kvs 0.6"
+MVF461H15-1.5,"Durchgangs-Magnetventil, PN16, kvs 1.5"
+MVF461H15-3,"Durchgangs-Magnetventil, PN16, kvs 3"
+MVF461H20-5,"Durchgangs-Magnetventil, PN16, kvs 5"
+MVF461H25-8,"Durchgangs-Magnetventil, PN16, kvs 8"
+MVF461H32-12,"Durchgangs-Magnetventil, PN16, kvs 12"
+MVF461H40-20,"Durchgangs-Magnetventil, PN16, kvs 20"
+MVF461H50-30,"Durchgangs-Magnetventil, PN16, kvs 30"
+MVL661.15-0.4,"Kältemittelventil, PN40, kvs 0.4"
+MVL661.15-0.4EX,"Kältemittelventil, PN40, kvs 0.4,Ex"
+MVL661.15-1.0,"Kältemittelventil, PN40, kvs 1"
+MVL661.15-1.0EX,"Kältemittelventil, PN40, kvs 1,Ex"
+MVL661.20-2.5,"Kältemittelventil, PN40, kvs 2.5"
+MVL661.20-2.5EX,"Kältemittelventil, PN40, kvs 2.5,Ex"
+MVL661.25-6.3,"Kältemittelventil, PN40, kvs 6.3"
+MVL661.25-6.3EX,"Kältemittelventil, PN40, kvs 6.3,Ex"
+MVL661.32-10,"Kältemittelventil, PN40, kvs 10"
+MVL661.32-12,"Kältemittelventil, PN40, kvs 12"
+MVS661.25-0.4EX,"Kältemittelventil, PN40, kvs 0.4,Ex"
+MVS661.25-0.4N,"Kältemittelventil, PN40, kvs 0.4"
+MVS661.25-016EX,"Kältemittelventil, PN40, kvs 0.16,Ex"
+MVS661.25-1.0EX,"Kältemittelventil, PN40, kvs 1,Ex"
+MVS661.25-1.0N,"Kältemittelventil, PN40, kvs 1"
+MVS661.25-2.5EX,"Kältemittelventil, PN40, kvs 2.5,Ex"
+MVS661.25-2.5N,"Kältemittelventil, PN40, kvs 2.5"
+MVS661.25-6.3EX,"Kältemittelventil, PN40, kvs 6.3,Ex"
+MVS661.25-6.3N,"Kältemittelventil, PN40, kvs 6.3"
+MXF461.15-0.6,"Magnetvent.,Flansch,PN16,0.6,AC24V,0-10V"
+MXF461.15-1.5,"Magnetvent.,Flansch,PN16,1.5,AC24V,0-10V"
+MXF461.15-3.0,"Magnetventil,Flansch,PN16,3,AC24V,0-10V"
+MXF461.20-5.0,"Magnetventil,Flansch,PN16,5,AC24V,0-10V"
+MXF461.25-8.0,"Magnetventil,Flansch,PN16,8,AC24V,0-10V"
+MXF461.32-12,"Magnetventil,Flansch,PN16,12,AC24V,0-10V"
+MXF461.40-20,"Magnetventil,Flansch,PN16,20,AC24V,0-10V"
+MXF461.50-30,"Magnetventil,Flansch,PN16,30,AC24V,0-10V"
+MXF461.65-50,"Magnetventil,Flansch,PN16,50,AC24V,0-10V"
+MXG461.15-0.6,"Magnetventil,AG,PN16,0.6,AC24V,0-10V"
+MXG461.15-1.5,"Magnetventil,AG,PN16,1.5,AC24V,0-10V"
+MXG461.15-3.0,"Magnetventil,AG,PN16,3.0,AC24V,0-10V"
+MXG461.20-5.0,"Magnetventil,AG,PN16,5.0,AC24V,0-10V"
+MXG461.25-8.0,"Magnetventil,AG,PN16,8.0,AC24V,0-10V"
+MXG461.32-12,"Magnetventil,AG,PN16,12,AC24V,0-10V"
+MXG461.40-20,"Magnetventil,AG,PN16,20,AC24V,0-10V"
+MXG461.50-30,"Magnetventil,AG,PN16,30,AC24V,0-10V"
+MXG461B15-0.6,"Magnetvent,F,PN16,0.6,AC24V,0-10V,DVGW"
+MXG461B15-1.5,"Magnetvent.,F,PN16,1.5,AC24V,0-10V,DVGW"
+MXG461B15-3,"Magnetvent,F,PN16,3,AC24V,0-10V,DVGW"
+MXG461B20-5,"Magnetvent,F,PN16,5,AC24V,0-10V,DVGW"
+MXG461B25-8,"Magnetvent,F,PN16,8,AC24V,0-10V,DVGW"
+MXG461B32-12,"Magnetvent,F,PN16,12,AC24V,0-10V,DVGW"
+MXG461B40-20,"Magnetvent,F,PN16,20,AC24V,0-10V,DVGW"
+MXG461B50-30,"Magnetvent,F,PN16,30,AC24V,0-10V,DVGW"
+MXG461S15-1.5,"Magnetvent,F,PN16,1.5,AC24V,0-10V,CrNi"
+MXG461S25-8.0,"Magnetvent,F,PN16,8,AC24V,0-10V,CrNi"
+MXG461S32-12,"Magnetvent,F,PN16,12,AC24V,0-10V,CrNi"
+NPORT 5110A,NPORT 5110A
+NPORT 5610-8,Serielle Geräteserver 8/16 Ports
+OCI700.1,Service- und Bedientool für KNX/LPB
+OCI700.1,Service- und Bedientool für KNX/LPB
+OCI700.1,Service- und Bedientool für KNX/LPB
+OCI702,USB - KNX Serviceinterface
+OCI702,USB - KNX Serviceinterface
+OCI702,USB - KNX Serviceinterface
+OMN-FK101-RW,Enocean Fensterkontakt mit Magnet
+OMN-R101-RW,Enocean Handsender 4-Kanal reinweiss
+OMN-R101-SB,Enocean Handsender 4-Kanal Alu lackiert
+OMN-R101-SW,Enocean Handsender 4-Kanal schwarz
+OMN-UPR230-03,Enocean UP 2-Level Repeater
+OMN-WS-CH-102-J-RW,Enocean Wandsender-Set 4-Kanal Jal.
+OMN-WS-CH-102-RW,Enocean Wandsender-Set 4-Kanal
+OPC-SERVER S7,Softing S7 OPC-Server
+OZW672.01,Web-Server LPB
+OZW672.01,Web-Server LPB
+OZW672.04,Web Server für 4 LPB Geräte
+OZW672.04,Web Server für 4 LPB Geräte
+OZW672.16,Web Server für 16 LPB Geräte
+OZW672.16,Web Server für 16 LPB Geräte
+OZW772.01,Web Server für 1 KNX Gerät
+OZW772.01,Web Server für 1 KNX Gerät
+OZW772.01,Web Server für 1 KNX Gerät
+OZW772.04,Web Server für 4 KNX Geräte
+OZW772.04,Web Server für 4 KNX Geräte
+OZW772.04,Web Server für 4 KNX Geräte
+OZW772.16,Web Server für 16 KNX Geräte
+OZW772.16,Web Server für 16 KNX Geräte
+OZW772.16,Web Server für 16 KNX Geräte
+OZW772.250,Web Server für 250 KNX Geräte
+OZW772.250,Web Server für 250 KNX Geräte
+OZW772.250,Web Server für 250 KNX Geräte
+P54594-P102-A100-Z,Lizenz für SBR-BACnet Browser
+P54594-P102-A101-Z,Lizenz für SBR-Execution
+P54594-P102-A102-Z,Lizenz für SBR-Specialist
+PADPULS M2,"M-Bus Impulsadapter, 2 Impulseingänge"
+PATCH_FLAT_10M,PATCHKABEL FLACH PXM20-E 10m
+PATCH_FLAT_3M,PATCHKABEL FLACH PXM20-E 3m
+POL042.25/STD,Stecker-Set für Climatix POL42X.XX
+POL063.85/STD,Steckerset für POL63X (Screw)
+POL098.55/STD,Steckerset für POL985 (Screw)
+POL424.50/STD,Climatix 400 programmierbarer Controller
+POL636.00/STD,Basis Controller mit LON
+POWER SUPPLY WUT,POWER SUPPLY WUT
+PROFIBUS DP KARTE,Softing Profibus DP Karte
+PROFIBUS DP MASTER,Profibus DP Master / Modbus RTU Slave
+PS1-110,"Zählerersatzstück 110 mm, 1"""
+PT 1X2-24AC-ST,U-Schutz für 24V Stromversorgung
+PT 1X2-BE,Basiselement für Schutzstecker PT
+PT 3-HF-12DC-ST,U-Schutz für 2 Signalstromkreise
+PXA.V40,Wandmontage-Kit für PXM40.E und PXM40-1
+PXA.V50,Wandmontage-Kit für PXM50.E und PXM50-1
+PXA40-RS1,PX Open Erweiterungsmodul 800
+PXA40-RS2,PX Open Erweiterungsmodul 2000
+PXA40-W1,Erweiterungsmodul Web generisch
+PXA-C1,Netzwerkkabel für DESIGO PX Bediengeräte
+PXA-C2,PX Firmware Download adapter
+PXA-C3,Serielles Kabel USB
+PXA-C4,Adapter PXM20.. Firmware Loader
+PXA-H1,Montagerahmen PX
+PXC00.D,"PXC00.D  Automationsstation, Automations"
+PXC001.D,PX Open für BACnet / LonTalk
+PXC001-E.D,PX Open für BACnet / IP
+PXC00-E.D,System Kontroller Ethernet IP
+PXC100.D,Automations Station PXC100 LON
+PXC100-E.D,Automations Station PXC100 Ethernet IP
+PXC12.D,Kompaktkontroller 12 UEA
+PXC12-E.D,Kompaktkontroller
+PXC200.D,Automations Station PXC200 LON
+PXC200-E.D,Automations Station PXC200 Ethernet IP
+PXC22.1.D,"Kompaktkontroller 22 I/Os, BACnet/Lon"
+PXC22.1-E.D,"Kompaktkontroller 22 I/Os, BACnet/IP"
+PXC22.D,Kompaktkontroller 22 UEA
+PXC22-E.D,Regler
+PXC3.E16A-100A,Raumautomationsstation BACnet nur DALI
+PXC3.E72-100A,Multiraumkontroller BACnet (4/8)
+PXC3.E72A-100A,Multiraumkontroller BACnet und DALI(4/8)
+PXC3.E75-100A,Multiraumkontroller BACnet (8/16)
+PXC3.E75A-100A,Multiraumkontroller BACnet & DALI(8/16)
+PXC36.1.D,"Kompaktkontroller 36 I/Os, BACnet/Lon"
+PXC36.1-E.D,"Kompaktkontroller 36 I/Os, BACnet/IP"
+PXC36.D,Kompakt LON
+PXC36-E.D,"Kompakte Automationsstation, 36 I/Os IP"
+PXC50.D,PXC50.D  Automation Station LON
+PXC50-E.D,PXC50-E.D  Automation Station IP
+PXC-NRUD,Ersatz Integral RSM (Migration)
+PXC-NRUF,Ersatz Integral RSC (Migration)
+PXG3.L,BACnet Router Ethernet/IP-LonTalk-MS/TP
+PXG3.M,BACnet Router Ethernet/IP-MS/TP
+PXG3.W100-1,"BACnet/IP Web Interface,Standardfunkt."
+PXG3.W200-1,"BACnet/IP Web Interface,erweitere Funkt."
+PXM10,Bediengerät PXM10
+PXM20,Bediengerät  BACnet LON
+PXM20-E,Bediengerät BACnet IP
+PXM30.E,BACnet/IP Touchpanel 7”  mit Webserver
+PXM30-1,"TCP/ IP Touch-Panel 7” , web-client"
+PXM40.E,BACnet/IP Touchpanel 10”  mit Webserver
+PXM40-1,"TCP/ IP Touch-Panel 10” , Web-Client"
+PXM50.E,BACnet/IP Touchpanel 15”  mit Webserver
+PXM50-1,"TCP/ IP Touch-Panel 15” , Web-Client"
+PXX-L11,Erweiterungsmodul L11 LON Integration
+PXX-L12,Erweiterungsmodul L12 LON Integration
+PXX-PBUS,PXX-PBUS Extension module
+QAA2010,Raumtemperaturfühler Pt100
+QAA2012,Raumtemperaturfühler Pt1000
+QAA2030,Raumtemperaturfühler NTC10k
+QAA2061,Raumtemperaturfühler 0..10V
+QAA2061D,Raumtemperaturfühler 0...10V mit Display
+QAA2071,Raumtemperaturfühler 4...20mA
+QAA24,Raumtemperaturfühler LG-Ni1000
+QAA25,Raumtemp-fühler mit Sollwertgeber 5-35°C
+QAA26,Raumtemp-fühler mit Sollwertgeber 5-30°C
+QAA27,Raumtemp-fühler mit Sollwertsch. +3..-3K
+QAA32,"Raumtemperaturfühler, NTC 3 kOhm"
+QAA50.110/101,Raumgerät (Analog)
+QAA64,Raumtemperaturfühler LG-Ni1000 für UP
+QAA910,Raumtemperaturfühler
+QAC2010,Aussentemperaturfühler Pt100
+QAC2012,Aussentemperaturfühler PT1000
+QAC22,Witterungsfühler LG-Ni1000
+QAC3161,Aussentemperaturfühler 0..10V
+QAC3171,Aussentemperaturfühler 4..20mA
+QAC32,Witterungsfühler NTC 575
+QAC910,Meteofühler
+QAD2010,Anlegetemperaturfühler PT100
+QAD2012,Anlegetemperaturfühler PT1000
+QAD2030,Anlegetemperaturfühler NTC10k
+QAD22,Anlegetemperaturfühler LG-Ni1000
+QAE2111.010,Tauchtemperaturfühl. 100 mm Pt100 ohne SR
+QAE2111.015,Tauchtemperaturfühl. 150 mm Pt100 ohne SR
+QAE2112.010,Tauchtemperaturfühl 100 mm PT1000 ohne SR
+QAE2112.015,Tauchtemperaturfühl 150 mm PT1000 ohne SR
+QAE2120.010,Tauchtemperaturfühler 100 mm LG-Ni mit SR
+QAE2120.015,Tauchtemperaturfühler 150 mm LG-Ni mit SR
+QAE2121.010,Tauchtemperaturfühl. 100 mm LG-Ni ohne SR
+QAE2121.015,Tauchtemperaturfühl. 150 mm LG-Ni ohne SR
+QAE2130.010,Tauchtemperaturfühl 100 mm NTC10k ohne SR
+QAE2130.015,Tauchtemperaturfühl 150 mm NTC10k ohne SR
+QAE2164.010,Tauchtemperaturfühl. 100 mm 0-10V ohne SR
+QAE2164.015,Tauchtemperaturfühl. 150 mm 0-10V ohne SR
+QAE2174.010,Tauchtemperaturfühl 100 mm 4-20mA ohne SR
+QAE2174.015,Tauchtemperaturfühl 150 mm 4-20mA ohne SR
+QAE3010.010,"Tauchtemperaturfühler 100 mm, Pt100"
+QAE3010.016,"Tauchtemperaturfühler 160 mm, Pt100"
+QAE3075.010,"Tauchtemperaturfühler 100 mm, 4..20mA"
+QAE3075.016,"Tauchtemperaturfühler 160 mm, 4..20mA"
+QAF63.2-J,"Frostschutzfühler 2m, stetig"
+QAF63.2K,Frostschutzfühler 2m; stetig Komplettset
+QAF63.6-J,"Frostschutzfühler 6m, stetig"
+QAF63.6K,Frostschutzfühler 6m; stetig Komplettset
+QAF64.2-J,"Frostschutzwächter 2m, stetig & 2-Punkt"
+QAF64.2K,"Frostwächter 2m, stetig, 2Punkt, Set"
+QAF64.6-J,"Frostwächter 6m, stetig & 2-Punkt"
+QAF64.6K,Frostwächter 6m; stetig; 2Punkt; Set
+QAF81.3,"Frostwächter, 2-Punkt, 3,0m, -5…15 °C"
+QAF81.6,"Frostwächter, 2-Punkt, 6,0m, -5…15 °C"
+QAF81.6M,"Frostwächter, 2-Punkt, man. Rückstellung"
+QAM2110.040,"Kanaltemperaturfühler 400 mm, Pt100"
+QAM2112.040,"Kanaltemperaturfühler 400 mm, Pt1000"
+QAM2112.200,"Kanaltemperaturfühler 2m, PT1000"
+QAM2120.040,"Kanaltemperaturfühler 400 mm, LG-Ni1000"
+QAM2120.200,"Kanaltemperaturfühler 2m, LG-Ni1000"
+QAM2120.600,"Kanaltemperaturfühler 6m, LG-Ni1000"
+QAM2130.040,"Kanaltemperaturfühler 400 mm, NTC10k"
+QAM2161.040,"Kanaltemperaturfühler 400 mm, 0..10V"
+QAM2171.040,"Kanaltemperaturfühler 400 mm, 4..20mA"
+QAP1030.200,"Kabeltemperaturfühler 2m, NTC10k"
+QAP1030/UFH,"Kabeltemperaturfühler PVC 4 m, NTC 3k"
+QAP2010.150,"Kabeltemperaturfühler 1,5m, Pt100"
+QAP2012.150,"Kabeltemperaturfühler 1,5m, Pt1000"
+QAP21.2,"Kabeltemperaturfühler 1,5m,  -30..180°C"
+QAP21.3,"Kabeltemperaturfühler 1,5m,  -30..130°C"
+QAP21.3/8000,"Kabeltemperaturfühler 8m, -30..130°C"
+QAP22,"Kabeltemperaturfühler 2m, -25..95°C"
+QAT22,"Fenstertemperaturfühler 1,5m, LG-Ni1000"
+QAW70-A,Raumgerät (Digital)
+QAW740,Raumgerät mit KNX-Bus
+QAW740,Raumgerät mit KNX-Bus
+QAW910,Raumgerät
+QAW912,Raumgerät
+QAW912,Raumgerät
+QAX30.1,"Raumgerät mit Fühler, PPS2-Schnittstelle"
+QAX31.1,"Raumgerät mit Fühler, Sollwertst., PPS2"
+QAX32.1,"Raumger. Fühler,Sollwert-,Betriebsw.PPS2"
+QAX33.1,Raumger. Fühler mit div. Wahleinst. PPS2
+QAX34.3,"Raumger. Fühler,Display,Betriebsw.PPS2"
+QAX84.1/CH,UP-Raumgerät PPS2-Schnittst. mit Rahmen
+QAX84.1/PPS2,UP-Raumger. PPS2 mit Designe Rahmen
+QAX84.1/PRESTIGE,UP-Raumger. PPS2 mit miro Rahmen
+QAX903-9,HLK-Wohnungszentrale mit ECA
+QAX903-9,HLK-Wohnungszentrale mit ECA
+QAX913-9,Wohnungszentrale mit ECA
+QAX913-9,Wohnungszentrale mit ECA
+QAX95.4,FunkRaumgerä EnOcean mit Solarzelle
+QAX95.4,FunkRaumgerä EnOcean mit Solarzelle
+QAX95.4,FunkRaumgerä EnOcean mit Solarzelle
+QAX96.4,"FunkRaumgerät EnOcean‚Solar,Sollwert."
+QAX96.4,"FunkRaumgerät EnOcean‚Solar,Sollwert."
+QAX96.4,"FunkRaumgerät EnOcean‚Solar,Sollwert."
+QAX97.4,"Raumger. EnOcean,Sollwert,Taste/Schalter"
+QAX97.4,"Raumger. EnOcean,Sollwert,Taste/Schalter"
+QAX97.4,"Raumger. EnOcean,Sollwert,Taste/Schalter"
+QAX98.4,"Raumgerät EnOcean, Sollwertge, Universal"
+QAX98.4,"Raumgerät EnOcean, Sollwertge, Universal"
+QAX98.4,"Raumgerät EnOcean, Sollwertge, Universal"
+QBE2003-P1,Druckfühler für Flüssigkeit/Gase 1 bar
+QBE2003-P1.6,Druckfühler für Flüssigkeit/Gase 1.6 bar
+QBE2003-P10,Druckfühler für Flüssigkeit/Gase 10 bar
+QBE2003-P16,Druckfühler für Flüssigkeit/Gase 16 bar
+QBE2003-P2.5,Druckfühler für Flüssigkeit/Gase 2.5 bar
+QBE2003-P25,Druckfühler für Flüssigkeit/Gase 25 bar
+QBE2003-P4,Druckfühler für Flüssigkeit/Gase 4 bar
+QBE2003-P40,Druckfühler für Flüssigkeit/Gase 40 bar
+QBE2003-P6,Druckfühler für Flüssigkeit/Gase 6 bar
+QBE2003-P60,Druckfühler für Flüssigkeit/Gase 60 bar
+QBE2004-P10U,Druckfühler für Kältemittel -1…9bar
+QBE2004-P25U,Druckfühler für Kältemittel -1…24bar
+QBE2004-P30U,Druckfühler für Kältemittel -1…29bar
+QBE2004-P60U,Druckfühler für Kältemittel -1…59bar
+QBE2103-P1,QBE2103-P1 Druckfühler
+QBE2103-P1.6,QBE2103-P1.6 Druckfühler
+QBE2103-P10,QBE2103-P10 Druckfühler
+QBE2103-P16,QBE2103-P16 Druckfühler
+QBE2103-P2.5,QBE2103-P2.5 DruDruckfühler
+QBE2103-P25,QBE2103-P25 Druckfühler
+QBE2103-P4,QBE2103-P4 Druckfühler
+QBE2103-P40,QBE2103-P40 Druckfühler
+QBE2103-P6,QBE2103-P6 Druckfühler
+QBE2103-P60,QBE2103-P60 Druckfühler
+QBE2104-P10U,Druckfühler für Kältemittel -1…9 bar
+QBE2104-P25U,QBE2104-P25U Druckf hler K
+QBE2104-P30U,Druckfühler für Kältemittel -1…29 bar
+QBE2104-P60U,QBE2104-P60U Druckf hler K
+QBE3000-D1,Druckdiff.fühler Flüss/Gas 0…10V 1bar
+QBE3000-D1.6,Druckdiff.fühler Flüss/Gas 0…10V 1.6bar
+QBE3000-D10,Druckdiff.fühler Flüss/Gas 0…10V 10bar
+QBE3000-D16,Druckdiff.fühler Flüss/Gas 0…10V 16bar
+QBE3000-D2.5,Druckdiff.fühler Flüss/Gas 0…10V 2.5bar
+QBE3000-D4,Druckdiff.fühler Flüss/Gas 0…10V 4bar
+QBE3000-D6,Druckdiff.fühler Flüss/Gas 0…10V 6bar
+QBE3100-D1,Druckdiff.fühler Flüss/Gas 4…20mA 1bar
+QBE3100-D1.6,Druckdiff.fühler Flüss/Gas 4…20mA 1.6bar
+QBE3100-D10,Druckdiff.fühler Flüss/Gas 4…20mA 10bar
+QBE3100-D16,Druckdiff.fühler Flüss/Gas 4…20mA 16bar
+QBE3100-D4,Druckdiff.fühler Flüss/Gas 4…20mA 4bar
+QBE3100-D6,Druckdiff.fühler Flüss/Gas 4…20mA 6bar
+QBE61.3-DP10,Druckdifferenzfühler Flüss/Gas10bar
+QBE61.3-DP2,Druckdiff.-fühler Flüssigkeit/Gas 2bar
+QBE61.3-DP5,Druckdiff.-fühler Flüssigkeit/Gas 5bar
+QBE63-DP01,Druckdiff.-fühler Flüssigkeit/Gas 10kPa
+QBE63-DP02,Druckdiff.-fühler Flüssigkeit/Gas 20kPa
+QBE63-DP05,Druckdiff.-fühler Flüssigkeit/Gas 50kPa
+QBE63-DP1,Druckdiff.-fühler Flüssigkeit/Gas 100kPa
+QBM2030-1U,Luftkanaldruckdiff.fühler -100…+100Pa
+QBM2030-30,Luftkanaldruckdiff.fühler 0…3000 Pa
+QBM2030-5,Luftkanaldruckdiff.fühler 0…500 Pa
+QBM3020-1,Luftkanaldruckdiff.fühler 0…100 Pa
+QBM3020-10,Luftkanaldruckdiff.fühler. 0…1000Pa
+QBM3020-10D,Luftkanaldruckdiff.fühler 0…1000 Pa/ LCD
+QBM3020-1D,Luftkanaldruckdiff.fühler 0…100 Pa/ LCD
+QBM3020-1U,Luftkanaldruckdiff.fühler -50…+50 Pa
+QBM3020-25,Luftkanaldruckdiff.fühler 0…2500Pa
+QBM3020-25D,Luftkanaldruckdiff.fühler 0…2500 Pa/ LCD
+QBM3020-3,Luftkanaldruckdiff.fühler 0…300 Pa
+QBM3020-3D,Luftkanaldruckdiff.fühler 0…300 Pa/ LCD
+QBM3020-5,Luftkanaldruckdiff.fühler 0…500 Pa
+QBM3020-5D,Luftkanaldruckdiff.fühler 0…500 Pa/ LCD
+QBM3460-3,VAV Differenzdrucksensor
+QBM4000-1,Luftkanaldruckdiff.fühler 0…100Pa zertif
+QBM4000-10,Luftkanaldruckdif.fühler 0…1000Pa zertif
+QBM4000-25,Luftkanaldruckdif.fühler 0…2500Pa zertif
+QBM4000-3,Luftkanaldruckdiff.fühler 0…300Pa zertif
+QBM4100-1D,Luftkanaldruckdiff.fü 0…100Pa/LCD zertif
+QBM4100-1U,Luftkanaldruckdiff.fühler -50…5Pa zertif
+QBM81-10,"Druckdifferenzschalter, 100…1000 Pa"
+QBM81-20,"Druckdifferenzschalter, 200...2000 Pa"
+QBM81-3,"Druckdifferenzschalter, 20…300 Pa"
+QBM81-5,"Druckdifferenzschalter, 50…500 Pa"
+QBM81-50,Druckdifferenzschalter 1KPa….5KPa
+QFA1000,"Raumhygrostat, Sollwerteinstellung innen"
+QFA1001,Raumhygrostat mit Sollwerteinstellung
+QFA2000,Raumfühler Feuchte 0…10V
+QFA2001,Raumfühler für Feuchte DC4…20mA
+QFA2020,"Raumfühler Feuchte 0...10V,Temp/LGNi1000"
+QFA2060,Raumfühler Temp./Feuchte 2x0…10V
+QFA2060D,Raumfühler Temp/Feuchte 2x0…10V mit Dis
+QFA2071,Raumfühler Temp./Feuchte 2x4…20mA
+QFA3100,"Raumfühler Feuchte 0…10V, IP65"
+QFA3101,"Raumfühler Feuchte 4…20mA, IP65"
+QFA3160,"Raumfühler Temp./Feuchte 2x0…10V,IP65"
+QFA3160D,"Raumfühl Temp/Feucht 2x0…10V,IP65 Diplay"
+QFA3171,"Raumfühler Temp./Feuchte 2x4…20mA, IP65"
+QFA3171D,"Raumfü Temp/Feucht 2x4…20mA,IP65 Display"
+QFA4160,Raumfühler Temp./Feuchte 2x0…10V zerti.
+QFA4160D,Raumfü. Temp/Feucht 2x0…10V zert/Display
+QFA4171,Raumfühler Temp./Feuchte 2x4…20mA zerti
+QFA4171D,"Raumfü Temp/Feucht 2x4…20mA zerti,Displa"
+QFM2100,Kanalfühler Feuchte 0…10V
+QFM2101,Kanalfühler Feuchte 4…20mA
+QFM2120,Kanalfühler Temp. LG-Ni/Feuchte 0…10V
+QFM2160,Kanalfühler Temp./Feuchte 2x0…10V
+QFM2171,Kanalfühler Temp./Feuchte 2x4…20mA
+QFM3100,"Kanalfühler Feuchte 0…10V, IP65"
+QFM3101,"Kanalfühler Feuchte 4…20mA, IP65"
+QFM3160,Kanalfühler Temp./Feuchte 2x0…10V
+QFM3160D,"Kanalfühler Temp/Feuchte 2x0…10V,Display"
+QFM3171,Kanalfühler Temp./Feuchte 2x4…20mA
+QFM3171D,"Kanalfühler Temp/Feucht 2x4…20mA,Display"
+QFM4160,Kanalfühler Temp./Feuchte 2x0…10V zerti
+QFM4171,Kanalfühler Temp/Feuchte 2x4…20mA zerti
+QFM81.2,"Kanalhygrostat, IP30"
+QFM81.21,"Kanalhygrostat, IP55"
+QLS60,"Sonnenfühler 0…1000W/m2, 0…10V"
+QMX2.P33,Raumbediengerät für KNX PL-Link
+QMX2.P43,"Raumbediengerät PL-Link, Temp., Feuchte"
+QMX3.MP1,Montagplatte für QMX3.P
+QMX3.MP1,Montagplatte für QMX3.P
+QMX3.P02,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P02,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P02,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P02-1BSC,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P02-1BSC,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P02-1BSC,"Raumbediengerät KNX, konfig.Touchkeys"
+QMX3.P30,"Raumfühler KNX, Temperatur"
+QMX3.P30,"Raumfühler KNX, Temperatur"
+QMX3.P30-1BSC,"QMX3.P30-1BSC Raumfühler, schwarz"
+QMX3.P30-1BSC,"QMX3.P30-1BSC Raumfühler, schwarz"
+QMX3.P34,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P34,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P34,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P34-1BSC,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P34-1BSC,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P34-1BSC,"Raumbediengerät mit KNX,Display,Temp."
+QMX3.P36F,Raumbediengerät für Unterputzmontage
+QMX3.P36F/CH,Raumbediengerät (EDIZIOdue)
+QMX3.P36F/PRESTIGE,Raumbediengerät (DELTA miro)
+QMX3.P37,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P37,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P37,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P37-1BSC,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P37-1BSC,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P37-1BSC,"Raumbediengerät KNX, Display, Touchkeys"
+QMX3.P40,Raumfühler mit KNX für Temperatur und Fe
+QMX3.P40,Raumfühler mit KNX für Temperatur und Fe
+QMX3.P40-1BSC,"QMX3.P40-1BSC Raumfühler, schwarz"
+QMX3.P40-1BSC,"QMX3.P40-1BSC Raumfühler, schwarz"
+QMX3.P70,"Raumfühler KNX, Temp., Feuchtigkeit, CO2"
+QMX3.P70,"Raumfühler KNX, Temp., Feuchtigkeit, CO2"
+QMX3.P70-1BSC,"QMX3.P70-1BSC Raumfühler, schwarz"
+QMX3.P70-1BSC,"QMX3.P70-1BSC Raumfühler, schwarz"
+QMX3.P74,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P74,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P74,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P74-1BSC,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P74-1BSC,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P74-1BSC,"Raumbediengerät KNX, Temp., Feuchte, CO2"
+QMX3.P87-1WSC,Bediengerätanzeige - Aufputz
+QMX3.P88-1WSC,Bediengerätanzeige - Schmal & Unterputz
+QMX7.E38,"Touch-Raumbediengerät 4,3"""
+QPA1004,QPA1004 Luftqualitätsfühler CO2
+QPA1064,QPA1064 Luftqualitätsfühler CO2 Temp.
+QPA2000,Raum-Luftqualitätsfühler CO2
+QPA2000POS,Luftqualitätsdisplay CO2
+QPA2002,Raum-Luftqualitätsfühler CO2/VOC
+QPA2002D,"Raum-Luftqualitätsfühler CO2/VOC,Display"
+QPA2060,Raum-Luftqualitätsfühler CO2/Temp.
+QPA2060D,"Raum-Luftqualitätsfühl CO2/Temp,Display"
+QPA2062,Raum-Luftqualitätsfühler CO2/Temp/Feucht
+QPA2062D,"RaumLuftqualitätsfühl CO2/Temp/Feuch,LCD"
+QPA2080,Raumfühler CO2/Temp. Passiv
+QPM1104,QPM1104 Kanal-Luftqualitätsfühler CO2
+QPM1164,QPM1164 Kanal-Luftqualitätsfühler CO2/T
+QPM2100,Kanal-Luftqualitätsfühler CO2
+QPM2102,Kanal-Luftqualitätsfühler CO2/VOC
+QPM2160,KanalLuftqualitätsfühler CO2/Temp.
+QPM2160D,"Kanalqualitätsfühler CO2/ Temp, Display"
+QPM2162,Kanalqualitätsfühler CO2/Temp/Feuchte
+QPM2162D,"Kanalqualitätsfühler CO2/Temp/Feucht,LCD"
+QSA2700,"Feinstaubfühler, PM2.5/ PM10"
+QSA2700D,"Feinstaubfühler mit LCD, PM2.5/ PM10"
+QVE1900,"Strömungswächter für Wasser, DN32..200"
+QVE1901,"Strömungswächter für Wasser, DN20..200"
+QVE1902.010,Strömungswächter / DN10
+QVE1902.015,Strömungswächter / DN15
+QVE1902.020,Strömungswächter / DN20
+QVE1902.025,Strömungswächter / DN25
+QVE2000.010,Strömungsfühler / 0…10 V / DN10/ PVC
+QVE2000.015,Strömungsfühler / 0…10 V / DN15/ PVC
+QVE2000.020,Strömungsfühler / 0…10 V / DN20/ PVC
+QVE2000.025,Strömungsfühler / 0…10 V / DN25/ PVC
+QVE2100.010,Strömungsfühler / 4…20 mA / DN10/ PVC
+QVE2100.015,Strömungsfühler / 4…20 mA / DN15/ PVC
+QVE2100.020,Strömungsfühler / 4…20 mA / DN20/ PVC
+QVE2100.025,Strömungsfühler / 4…20 mA / DN25/ PVC
+QVE3000.010,Strömungsfühler / 0…10 V / DN10
+QVE3000.015,Strömungsfühler / 0…10 V / DN15
+QVE3000.020,Strömungsfühler / 0…10 V / DN20
+QVE3000.025,Strömungsfühler / 0…10 V / DN25
+QVE3001,Strömungsfühler
+QVE3100.010,Strömungsfühler / 4…20 mA / DN10
+QVE3100.015,Strömungsfühler / 4…20 mA / DN15
+QVE3100.020,Strömungsfühler / 4…20 mA / DN20
+QVE3100.025,Strömungsfühler / 4…20 mA / DN25
+QVM62.1,Luftgeschwindigkeitsfühler 0…10V
+QXA2100,"Kondensationswächter, 24V Fühler intern"
+QXA2101,"Kondenswächter, 24V  Fühler abgesetzt"
+R509880,"19"" Patchpanel 16xRJ45/s, Cat.6A"
+RAA11,"Raumthermostat, H od. K, Behördenmodell"
+RAA21,"Raumthermostat, H od. K"
+RAA31,"Raumtherm., H od. K, Schalter EIN/AUS"
+RAA41,"Raumtherm., H od. K, Schalter H/AUS/K"
+RAB11,"Raumthermostat, H od. K, Stufenschalter"
+RAB21,"Raumthermostat, H od. K, Stufenschalter"
+RAB31,"Raumthermostat, 4 Rohr, Wahlschalter"
+RAK-H-M,Anschlussgehäuse  Kabelfühler
+RAK-H-M,Anschlussgehäuse  Kabelfühler
+RAK-ST.010FP-M,"Sicherh.-Temperaturbegr.95°C,10(2.5)A"
+RAK-ST.030FP-M,"Sicherh.-Temperaturbegr.110°C,10(2.5)A"
+RAK-ST.1300P-M,Sicherheitstemperaturbegr. 110..130°C
+RAK-ST.1310P-M,Sicherheitstemperaturbegr. 90..110°C
+RAK-ST.1385M,Sicherheitstemperaturbegrenzer 40..70°C
+RAK-TB.1400S-M,"Temperaturbegrenzer 45..60°C,10(2.5)A"
+RAK-TB.1410B-M,"Temperaturbegr. 50..70°C,10(2.5)A Schutz"
+RAK-TB.1420S-M,"Temperaturbegrenzer 65..80°C,10(2.5)A"
+RAK-TR.1000B-H,"Temperaturregler 15..95ºC, Schutzrohr"
+RAK-TR.1000S-H,"Temperaturregler 15..95ºC,10(2.5)A"
+RAK-TW.1000HB,"Temperaturwächter 15..95ºC,10(2.5)A IP65"
+RAK-TW.1000S-H,"Temperaturwächter 15..95ºC,10(2.5)A"
+RAK-TW.1200S-H,"Temperaturwächter 40..120ºC,10(2.5)A"
+RAK-TW.5000S-H,"Frostschutzwächter 5..65ºC,10(2.5)A"
+RAK-TW.5010S-H,Frostschutzwächter -10..50°C
+RAV11.1,"Raumthermostat,T-Uhr, analog, Bat, 2Pkt."
+RAZ-ST.1500P-J,"Doppelthermostat, TR 15..95°C/STB 110..130°C"
+RAZ-ST.1510P-J,"Doppelthermostat, TR 15...95°C/STB 90..110°C"
+RAZ-TW.1200P-J,"Doppelthermostat, TR 40..120°C/TW 40..120°C"
+RCC10,Raumtemperaturregler 2-Rohr
+RCU10,Raumthermostat 4-Rohr
+RDE100,"Raumthermostat mit Anzeige, Schaltuhr"
+RDE100.1,"Raumthermostat mit Anzeige,Schaltuhr"
+RDE100.1RF,"Raumthermostat mit Uhr, drahtlos"
+RDE100.1RFS,"Raumthermostat mit Uhr, drahtlos Set"
+RDE410/EH,Raumthermostat für Fussbodenheizung
+RDE-MZ6,Multizone Empfänger AC 230V
+RDF600,RDF600 Raumthermostat mit Anzeige
+RDF600KN,Raumthermostat mit Anzeige KNX
+RDF600T,"RDF600T Raumthermostat mit Anzeige, Uhr"
+RDF800KN,"Touchscreen Raumthermostat für UP, KNX"
+RDG100,Raumthermostat mit Anzeige
+RDG100KN,Elektronischer Raumtemperaturregler KNX
+RDG100KN,Elektronischer Raumtemperaturregler KNX
+RDG100T,"Raumthermostat mit Anzeige, Uhr und IR"
+RDG160KN,"KNX Raumthermostat für Fankoil, Wärmepp."
+RDG160KN,"KNX Raumthermostat für Fankoil, Wärmepp."
+RDG160T,Raumthermostat mit Wochenschaltuhr 0-10V
+RDG165KN,KNX Raumthermostat für Temp. + Feuchte.
+RDG165KN,KNX Raumthermostat für Temp. + Feuchte.
+RDG400,"Raumthermostat VVS, Heizen und Kühlen"
+RDG405KN,"Raumthermostat KNX,VVS H/K  und CO2"
+RDG405KN,"Raumthermostat KNX,VVS H/K  und CO2"
+RDS110,Smart Thermostat RDS110
+REIR170268,"RJ45-Adapter LON FT-10 / TP-1250, besteh"
+REIR30315,Rangierführungswanne f.horiz.Führung
+RELKBA1,ANALOGWERTGEBER
+RELKBD1,KOPPELBAUSTEIN 1-KANAL
+RELKBD2,KOPPELBAUSTEIN 2-KANAL
+RELKBZ2,KOPPELBAUSTEIN 2-STUFIG
+REV13DC,"Raumthermostat,T-uhr,dig,Bat,2-Pkt"
+REV24DC,"Raumthermostat,W-uhr,dig,Bat,2-Pkt"
+REV24RFDC/SET,Elektronischer Raumtemperaturregler Set
+REV34-XA,"Raumthermostat 3-Punkt, Wochenuhr o. Fun"
+RLA162,"Raumtemperaturregler, AC24V, 2 AO 0..10V"
+RLE132,"Tauchtemperaturregler, 3-Punkt"
+RLE162,Tauchtemperaturregler
+RLJ:MBMR004CSIEMEN,M-Bus Pegelwandler für 60 Geräte
+RLJ:MBMR004CSIEMEN,M-Bus Pegelwandler für 60 Geräte
+RLJ:MBMR004DL,"M-Bus-Zentrale, 60 Zähler m. Datenlogger"
+RLJ:MBMR004FA,M-Bus-Zentrale für 60 Zähler
+RLJ:MBMR005,M-Bus-Zentrale für 3 Zähler
+RLJ:MBMR006DL,"M-Bus-Zentrale, 20 Zähler m. Datenlogger"
+RLJ:MBMR006FA,M-Bus-Zentrale für 20 Zähler
+RLJ:MBMR006IR,M-Bus Pegelwandler für 20 Geräte
+RLJ:MBPW250,"M-BUS PEGELWANDLER, 250 GERÄT"
+RLJ:MBPW250,"M-BUS PEGELWANDLER, 250 GERÄT"
+RLJ:MBWEBLOG250,M-Bus-Zentrale/Webserver für 250 Geräte
+RLM162,Luftkanaltemperaturregler
+RLU202,"Universalregler, 1 Rk, 4 UI,2 DO"
+RLU220,"Universalregler, 1 Rk, 3 UI, 2 AO"
+RLU222,"Universalregler, 2 Rk, 4 UI, 2 AO, 2 DO"
+RLU232,"Universalregler, 2 Rk, 5 UI, 3 AO, 2 DO"
+RLU236,"Universalregler, 2 Rk, 5 UI, 3 AO, 6 DO"
+RMB795B-1,Steuerzentrale für Raumkontroller
+RMH760B-1,"Modularer Heizungsregler, de, fr, it"
+RMH760B-1,"Modularer Heizungsregler, de, fr, it"
+RMK770-1,Kesselfolgeregler
+RMK770-1,Kesselfolgeregler
+RMS705B-1,Steuerungs- und Überwachunsgsgerät
+RMS705B-1,Steuerungs- und Überwachunsgsgerät
+RMU710B-1,"Modularer Universalregler, de, fr, it"
+RMU710B-1,"Modularer Universalregler, de, fr, it"
+RMU720B-1,"Modularer Universalregler, de, fr, it"
+RMU720B-1,"Modularer Universalregler, de, fr, it"
+RMU730B-1,"Modularer Universalregler, de, fr, it"
+RMU730B-1,"Modularer Universalregler, de, fr, it"
+RMZ780,Modulverbinder
+RMZ780,Modulverbinder
+RMZ780,Modulverbinder
+RMZ782B,Heizkreis-Erweiterungsmodul
+RMZ783B,Brauchwasser-Erweiterungsmodul
+RMZ785,"Erweiterungsmodul, 8 UI"
+RMZ785,"Erweiterungsmodul, 8 UI"
+RMZ785,"Erweiterungsmodul, 8 UI"
+RMZ787,"Erweiterungsmodul, 4 UI, 4 DO"
+RMZ787,"Erweiterungsmodul, 4 UI, 4 DO"
+RMZ787,"Erweiterungsmodul, 4 UI, 4 DO"
+RMZ787,"Erweiterungsmodul, 4 UI, 4 DO"
+RMZ788,"Erweiterungsmodul, 4 UI, 2 AO, 2 DO"
+RMZ788,"Erweiterungsmodul, 4 UI, 2 AO, 2 DO"
+RMZ789,"Erweiterungsmodul, 6 UI, 2 AO, 2 DO"
+RMZ789,"Erweiterungsmodul, 6 UI, 2 AO, 2 DO"
+RMZ790,Aufsetzbares Bediengerät
+RMZ790,Aufsetzbares Bediengerät
+RMZ790,Aufsetzbares Bediengerät
+RMZ791,"Abgesetztes Bediengerät, 3 m Kabel"
+RMZ791,"Abgesetztes Bediengerät, 3 m Kabel"
+RMZ791,"Abgesetztes Bediengerät, 3 m Kabel"
+RMZ792,Bus-Bediengerät Synco
+RMZ792,Bus-Bediengerät Synco
+ROT21.15.0161,Patch-Kabel STP 5m  (Kupfer rot)
+ROT21.15.9901,Patchkabel Glasfaser SC-SC 50um/125um;1m
+ROT21.15.9903,Patchkabel Glasfaser SC-SC 50um/125um;3m
+ROT21.99.0710,"Patchkabel RJ45 Kat.6 S/FTP 10m, grau"
+ROT21.99.1264,"Patchkabel RJ45 Kat.6 S/FTP 5m, blau"
+ROUTER-ADSL-A,ADSL-Router Zyxel Prestige 660HN+Filter
+ROUTER-ADSL-I,ADSL Router ISDN Zyx.Prest.660H-I
+RRV912,"Heizkreisregler, bis 2 Heizkreise"
+RRV918,"Heizkreisregler, bis 8 Heizkreise"
+RRV924-10,Konvert. Ventilation 3-Stufen auf 0-10 V
+RRV934,Multikontroller
+RTN51,Heizkörperthermostat
+RTN71,Heizkörperthermostat mit Fernfühler
+RTN81,Heizkörperthermostat mit Fernversteller
+RVD250-A,Fernheizungsregler für 1 Heizkreise
+RVD260-A,Fernheizungsregler für 2 Heizkreise
+RVL479,Heizungsregler slave 1 Heizkreise
+RVL480,Heizungsregler für 1 Heizkreise
+RVL481,Heizungsregler mit Kesseltemperaturreg.
+RVL482,Heizungsregler modul./2-stufige Brenner
+RVP201.0,Heizungsregler ohne Schaltuhr
+RVP201.1.,"Heizungsregler, analoger Tagesschaltur"
+RVP211.0,"Heizungsregl ohne Schaltuhr,Brauchwasser"
+RVP211.1.,"Heizungsreg anal. Schaltuhr,Brauchwasser"
+RVP340,Heizungsregler für 1 Heizkreis
+RVP350,Heizungsregler 1 Heizkreis/ Brauchwasser
+RVP360,Heizungsregler 2 Heizkreis/ Brauchwasser
+RVP361,"Heizungsreg 2 Heizkr/Brauchwas,ohne Komm"
+RXB21.1/FC-10,KNX Raum-Controller für 3 stuf.Fan-Co
+RXB21.1/FC-10,KNX Raum-Controller für 3 stuf.Fan-Co
+RXB21.1/FC-11,KNX Raum-Controller für 3 stuf.Fan-Co
+RXB21.1/FC-11,KNX Raum-Controller für 3 stuf.Fan-Co
+RXB22.1/FC-12,KNX Raum-Controller für Vent.+E.Lufterw.
+RXB22.1/FC-12,KNX Raum-Controller für Vent.+E.Lufterw.
+RXB24.1/CC-02,KNX Raum-Controller für Kühld. und Rad.
+RXB24.1/CC-02,KNX Raum-Controller für Kühld. und Rad.
+RXB39.1/FC-13,KNX Raum-Controller für EC.Fan-Co
+RXB39.1/FC-13,KNX Raum-Controller für EC.Fan-Co
+RXM21.1,I/O-Block für PL-Link
+RXM21.1/BOX.W,Wielandbox CH Standard RXM21.1
+RXM39.1,I/O-Block für PL-Link
+RXM39.1/BOX.W,Wielandbox CH Standard RXM39.1
+RXT20.1,Service-Tool mit LCD-Display
+RXZ01.1,LON Busabschluss 52.3 Ohm
+RXZ02.1,LON Busabschluss 105 Ohm
+RXZ10.1,Kabelset
+RXZ20.1,"Paar Klemmenabdeckung RXB,RXL,RXC2.."
+RXZ20.1,"Paar Klemmenabdeckung RXB,RXL,RXC2.."
+RXZ30.1,"Paar Klemmenabdeckung RXC3..,RXB39.1"
+RXZ30.1,"Paar Klemmenabdeckung RXC3..,RXB39.1"
+S7 REDCONNECT,S7 REDCONNECT
+S7 REDCONNECT VM,S7 REDCONNECT VM
+S7-POET,Desigo S7 Export Too
+SAL31.00T10,"Drehantrieb 10Nm,90°,230V, 3Pkt, 120s"
+SAL31.00T10,"Drehantrieb 10Nm,90°,230V, 3Pkt, 120s"
+SAL31.00T20,"Drehantrieb 20Nm,90°,230V, 3Pkt, 120s"
+SAL31.00T40,"Drehantrieb 40Nm, 90°,230V, 3Pkt, 120s"
+SAL31.03T10,"Drehantrieb 10Nm,90°,230V, 3Pkt, 30s"
+SAL31.03T10,"Drehantrieb 10Nm,90°,230V, 3Pkt, 30s"
+SAL61.00T10,"Drehantrieb 10Nm, 90°, 24V,0-10V,120s"
+SAL61.00T10,"Drehantrieb 10Nm, 90°, 24V,0-10V,120s"
+SAL61.00T20,"Drehantrieb 20Nm, 90°, 24V,0-10V,120s"
+SAL61.00T40,"Drehantrieb 40Nm, 90°, 24V,0-10V,120s"
+SAL61.03T10,"Drehantrieb 10Nm, 90°, 24V,0-10V,30s"
+SAL61.03T10,"Drehantrieb 10Nm, 90°, 24V,0-10V,30s"
+SAL81.00T10,"Drehantrieb 10Nm, 90°, 24V, 3Pkt, 120s"
+SAL81.00T10,"Drehantrieb 10Nm, 90°, 24V, 3Pkt, 120s"
+SAL81.00T20,"Drehantrieb 20Nm, 90°, 24V, 3Pkt, 120s"
+SAL81.00T40,"Drehantrieb 40Nm, 90°, 24V, 3Pkt, 120s"
+SAL81.03T10,"Drehantrieb 10Nm, 90°, 24V, 3Pkt, 30s"
+SAL81.03T10,"Drehantrieb 10Nm, 90°, 24V, 3Pkt, 30s"
+SAS31.00,"Stellantrieb 400N,AC230V,3P,120s"
+SAS31.03,"Stellantrieb 400N,AC230V,3P,30s"
+SAS31.50,"Stellantrieb 400N,AC230V,3P,SR,120/28s"
+SAS31.53,"Stellantrieb 400N,AC230V,3P,SR,30/14s"
+SAS61.03,"Stellantrieb 400N,ACDC24V,0-10V,30s"
+SAS61.03/MO,"Stellantrieb 400N,ACDC 24V,ModbusRTU,30s"
+SAS61.33,"Stellantrieb 400N,ACDC24V,0-10V,SR,U,30/"
+SAS61.53,"Stellantrieb 400N,ACDC24V,0-10V,SR,30/14"
+SAS81.00,"Stellantrieb 400N,ACDC24V,3P,120s"
+SAS81.03,"Stellantrieb 400N,ACDC24V,3P,30s"
+SAS81.33,"Stellantrieb 400N,ACDC24V,3P,SR,U,30/14s"
+SAV31.00,"Stellantrieb 1600N, 230V, 3P, 40 mm"
+SAV31P00,"Stellantrieb 1100N zu VPF, 230V, 3P"
+SAV61.00,"Stellantrieb 1600N,ACDC 24V,0-10V,40 mm"
+SAV61P00,"Stellantrieb 1100N zu VPF,ACDC24V,0-10V"
+SAV81.00,"Stellantrieb 1600N, ACDC 24V, 3P, 40 mm"
+SAV81P00,"Stellantrieb 1100N zu VPF, ACDC 24V, 3P"
+SAX31.00,"Stellantrieb 800N, AC 230V, 3P"
+SAX31.03,"Stellantrieb 800N, AC 230V, 3P, 35s"
+SAX31P03,"Stellantrieb 800N zu VPF, AC 230V, 3P"
+SAX61.03,"Stellantrieb 800N, ACDC 24V, 0-10V"
+SAX61.03/MO,"Stellantrieb 800N, ACDC 24V,Modbus RTU"
+SAX61P03,"Stellantrieb 800N zu VPF, ACDC 24V,0-10V"
+SAX81.00,"Stellantrieb 800N, ACDC 24V, 3P"
+SAX81.03,"Stellantrieb 800N, ACDC 24V, 3P, 35s"
+SAX81P03,"Stellantrieb 800N zu VPF,ACDC24V, 3P"
+SAY31P03,"Stellantrieb 200N,230V,3P,30s"
+SAY61P03,"Stellantrieb 200N,ACDC24V,0-10V,30s"
+SAY81P03,"Stellantrieb 200N,ACDC24V,3P,30s"
+SBR-MOXA UC-8112-L,SBR-MOXA UC-8112-LX
+SCHILDER,Bezeichnungsschilder
+SCR-LCD19P,"19"" LCD TFT Monitor / B19-6,"
+SDHC-KARTE PRO 32G,SDHC-KARTE PRO 32GB
+SEA45.1,"Stromventil, 0.5VA"
+SEH62.1,Digitale Wochen-/Tagesschaltuhr 1-Kanal
+SEM61.4,"Signalkonverter, 0…10V, 1VA"
+SEM62.1,"Transformator 30VA, 24V"
+SEM62.2,Transformator 30VA 24V mit Schalter
+SERVER WUT USB-TCP,SERVER WUT USB-TCP/IP
+SEZ220,Multifunktionaler Signalwandler
+SEZ220,Multifunktionaler Signalwandler
+SEZ31.1,Stellzeitmodul 30-180s für SQL36E
+SEZ91.6,"Signalkonverter, 0…20VPhs, 0…10V"
+SEZ91.6,"Signalkonverter, 0…20VPhs, 0…10V"
+SEZ91.6,"Signalkonverter, 0…20VPhs, 0…10V"
+SFA21/18,"Stellantrieb zu V..I46.., AC230V, 2P"
+SFA71/18,"Stellantrieb zu V..I46.., AC24V, 2P"
+SFP-1FEMLC-T,1-port fast Ethernet SFP modules
+SFP-1GSXLC,1G-port Gigabit Ethernet SFP modules
+SFP21/18,"Stellantrieb zu V..P47.., AC230V, 2P"
+SFP71/18,"Stellantrieb zu V..P47.., AC24V, 2P"
+SKB32.50,"Stellantrieb 2800N, 230V, 3P"
+SKB32.51,"Stellantrieb 2800N, 230V, 3P,NS"
+SKB60,"Stellantrieb 2800N, AC24V,0-10V"
+SKB62,"Stellantrieb 2800N, AC24V,0-10V,NS"
+SKB62UA,"Stellantrieb 2800N, AC24V,0-10V,NS,UL"
+SKC32.60,"Stellantrieb 2800N, 230V, 3P"
+SKC32.61,"Stellantrieb 2800N, 230V, 3P,NS"
+SKC60,"Stellantrieb 2800N, AC24V,0-10V"
+SKC62,"Stellantrieb 2800N, AC24V,0-10V,NS"
+SKC62UA,"Stellantrieb 2800N, AC24V,0-10V,NS,UL"
+SKD32.21,"Stellantrieb 1000N, 230V, 3P,30s"
+SKD32.50,"Stellantrieb 1000N, 230V, 3P"
+SKD32.51,"Stellantrieb 1000N, 230V, 3P,NS"
+SKD60,"Stellantrieb 1000N, AC24V,0-10V"
+SKD62,"Stellantrieb 1000N, AC24V,0-10V,NS"
+SKD62UA,"Stellantrieb 1000N, AC24V,0-10V,NS,UL"
+SQK34.00,"Drehantrieb 5N, 230V, 3Pkt"
+SQK84.00,"Drehantrieb 5N, 24V, 3Pkt"
+SQL36E110,"Drehantrieb 400N, 230V, 3Pkt"
+SQL36E160,"Drehantrieb 1200N, 230V, 3Pkt, DN450-600"
+SQL36E50F04,"Drehantrieb 40N, 230V, 3-Pkt, DN40-65"
+SQL36E50F05,"Drehantrieb 40N, 230V, 3-Pkt, DN80-125"
+SQL36E65,"Drehantrieb 100N, 230V, 3Pkt"
+SQV91P30,"Antrieb 1100N zu VPF,ACDC24V,3P,0-10V"
+SQV91P40,"Antrieb 1100N zu VPF,ACDC24V,3P,0-10V"
+SRO-1,Lizenz SRO - zusätzlicher Benutzer
+SRO-B,Lizenz SRO - Basis mit 1 Benutzer
+SRO-H,Lizenz SRO - pro redundanten Webserver
+SSA31,"Stellantrieb 100N, 230V, 3Pkt"
+SSA31.04,"Stellantrieb 160N, 230V, 3Pkt,43s"
+SSA31.1,"Stellantrieb 100N, 230V, 3Pkt, HS"
+SSA61,"Stellantrieb 100N, ACDC24V,0-10V"
+SSA61EP,"Stellantrieb 100N, ACDC24V,0-10V, =%"
+SSA81,"Stellantrieb 100N, AC24V, 3Pkt"
+SSA81.1,"Stellantrieb 100N, AC24V, 3Pkt, HS"
+SSA955,"Heizkörper-Regelantrieb, Funk"
+SSB31,"Stellantrieb 200N, 230V, 3Pkt"
+SSB31.1,"Stellantrieb 200N, 230V, 3Pkt, HS"
+SSB61,"Stellantrieb 200N, ACDC24V, 0-10V"
+SSB81,"Stellantrieb 200N, AC24V, 3Pkt"
+SSB81.1,"Stellantrieb 200N, AC24V, 3Pkt, HS"
+SSC31,"Stellantrieb 300N, 230V, 3Pkt"
+SSC61,"Stellantrieb 300N, ACDC24V, 0-10V"
+SSC61.5,"Stellantrieb 300N, ACDC24V, 0-10V, NS"
+SSC81,"Stellantrieb 300N, AC24V, 3Pkt"
+SSC-TOUCH-15R,"TOUCH PANEL PC, resistiv"
+SSC-TOUCH-2931-10,EINBAU TOUCHPANEL 10.1 resistiv
+SSC-TOUCH-2931-10P,EINBAU TOUCHPANEL 10.1 kapazitiv
+SSC-TOUCH-2931-15,"Einbau Touchpanel 15, resistiv"
+SSC-TOUCH-2931-15P,Einbau Touchpanel 15 kapazitiv
+SSC-TOUCH-2931-17,Einbau Touchpanel 17 resistiv
+SSC-TOUCH-2931-17P,Einbau Touchpanel 17 kapazitiv
+SSP31,"Stellantrieb 105N, 230V, 3Pkt"
+SSP61,"Stellantrieb 105N, ACDC24V, 0-10V"
+SSP81,"Stellantrieb 105N, AC24V, 3Pkt"
+SSP81.04,"Stellantrieb 105N, AC24V, 3Pkt"
+ST10,8fach-Steckliste 230V KS+RS
+STA23,"Therm. Stellantrieb,AC230V,NC,2P,1m"
+STA23/00,"Therm. Stellantr.,AC230V,NC,ohne Kabel"
+STA23/50,"Therm. Stellantr.,AC230V,NC,2P,5m"
+STA23HD,"Therm. Stellantrieb,AC230V,NC,2P,1m,FBH"
+STA63,"Therm. Stellantrieb,AC24V,NC,0-10V"
+STA73,"Therm. Stellantrieb,ACDC24V,NC,2P,1m"
+STA73/00,"Therm. Stellantr,ACDC24V,NC,2P,ohne Kab"
+STA73/50,"Therm. Stellantr.,ACDC24V,NC,2P,5m"
+STA73HD,"Therm. Stellantr,ACDC24V,NC,2P,1m,FBH"
+STA73PR/00,"Therm Antr,ACDC24V,NC,2P/PDM,//,ohne Kab"
+STA73PR/20LD,"Therm Antr,ACDC24V,NC,2P/PDM,//,2m,LED"
+STP23,"Therm. Stellantrieb,AC230V,NO,2P,1m"
+STP23/00,"Therm. Stellantr.,AC230V,NO,ohne Kabel"
+STP23/50,"Therm. Stellantr.,AC230V,NO,2P,5m"
+STP63,"Therm. Stellantrieb,AC24V,NO,0-10V"
+STP73,"Therm. Stellantrieb,ACDC24V,NO,2P,1m"
+STP73/00,"Therm. Stellantr,ACDC24V,NO,2P,ohne Kab"
+STP73/50,"Therm. Stellantr.,ACDC24V,NO,2P,5m"
+STP73PR/00,"Therm Antr,ACDC24V,NO,2P/PDM,//,ohne Kab"
+STP73PR/20LD,"Therm Antr,ACDC24V,NO,2P/PDM,//,2m,LED"
+SYNCO-UMBAUSET,Synco Umbauset
+SYNCO-UMBAUSET,Synco Umbauset
+SYNCO-UMBAUSET,Synco Umbauset
+T23-1EPDM10,EPDM Dichtungen 1'' (10 Stk.)
+T23-34EPDM10,EPDM Dichtungen 3/4'' (10 Stk.)
+T23-E1,"Einbausatz 1"", EPDM Dichtungen"
+T23-E34,"Einbausatz 3/4"", EPDM Dichtungen"
+T23-WA,"Wandhalterung für WSM5../WSB5.., 10 Stk."
+TA GSM DUAL 2M,Tisch Antenne GSM Dual 2m
+TKM2,Temperaturwächter Luftkanal 20..110°C
+TRAFO 24VAC-1.6A,TRAFO 40VA
+TRAFO100VA,"Transformator 100VA, 230/24V"
+TRAFO1232VA,"TRANSFORMATOR 1232VA, 400V,"
+TRAFO250VA,Transformator 250VA
+TRAFO422VA,Transformator 422VA
+TRAFO772VA,Transformator 772VA
+TRG2,Raumthermostat -5..50°C Industrie
+TRG22,"Raumthermostat,-5..50°C,SD2 Industrie"
+TXA1.5K120,"Adressstecker 5,10,..,120"
+TXA1.IBE,Inselbus-Erweiterungsmodul
+TXA1.K12,Adressstecker 1-12
+TXA1.K-120,Adressstecker K120 TX-I/O
+TXA1.K24,Adressstecker 1-24
+TXA1.K-48,"Adressstecker 25-48,"
+TXA1.K-72,"Adressstecker 49,72"
+TXA1.K-96,Adressstecker K96 TX-I/O
+TXI2.OPEN,TX-Open Version 2
+TXI2-S.OPEN,TXI2-S.OPEN TX Open Modul
+TXM1.16D,"DI-Kontakt, Impuls, Zähler"
+TXM1.6R,"DO-Potfrei US 230 VAC, 3A universal"
+TXM1.6RL,I/O Module 6 bistabile Relais
+TXM1.6R-M,"DO-Potfrei US 230 VAC, 3A universal, MAN"
+TXM1.8D,8 I/O Digital Eingänge
+TXM1.8P,IO Modul PT100
+TXM1.8RB,Relaismodul für Jalousiensteuerung
+TXM1.8T,I/O Module 8 Triac
+TXM1.8U,I/O Modul 8 universell
+TXM1.8U-ML,I/O Modul 8 unvers. Man.Bedienung
+TXM1.8X,I/O Modul 8 univ.4..20mA
+TXM1.8X-ML,"I/O Modul 8 univ.4..20mA, man. Bedienung"
+TXS1.12F10,Speisungsmodul für TX-I/O-Module
+TXS1.EF10,Busanschlussmodul
+UA1T-P,"Leistungsverst. AC24V,PDM,DIN-Hutschiene"
+UC50-500-OF,"Rechenwerk Wärme, Wasser/Glykol,Rücklauf"
+UC50-700-OF,"Rechenwerk Kälte, Wasser/Glykol,Rücklauf"
+UC50-D00-OF,"DURCHFLUSSMESSER, WASSER"
+UC50-L00-OF,"Rechenwerk Wärme, Wasser, Rücklauf"
+UC50-T00-OF,"Rechenwerk Kälte, Wasser, Rücklauf"
+UH50-A05-00,"Wärmezähler 0,6m3/h, G3/4"", 110mm"
+UH50-A07-OF,"Wärmezähler 0,6m3/h, G1"", 190 mm"
+UH50-A21-00,"Wärmezähler 1.5m3/h, 3/4"", 110 mm"
+UH50-A21-OF,"Wärmezähler 1.5m3/h, 3/4"
+UH50-A23-00,"Wärmezähler 1.5m3/h, 1"", 190 mm"
+UH50-A23-OF,"Wärmezähler 1.5m3/h, 1"
+UH50-A24-OF,"Wärmezähler 1.5m3/h, DN20, 190 mm"
+UH50-A36-00,"Wärmezähler 2.5m3/h, 1"", 130 mm"
+UH50-A36-OF,"Wärmezähler 2.5m3/h, 1"
+UH50-A38-00,"Wärmezähler 2.5m3/h, 1"", 190 mm"
+UH50-A38-OF,"Wärmezähler 2.5m3/h, 1"
+UH50-A39-OF,"Wärmezähler 2.5m3/h, DN20, 190 mm"
+UH50-A45-00,"Wärmezähler 3.5m3/h, 11/4"", 260 mm"
+UH50-A45-OF,"Wärmezähler 3.5m3/h, 11/4"
+UH50-A46-OF,"Wärmezähler 3.5m3/h, DN25, 260 mm"
+UH50-A50-00,"Wärmezähler 6m3/h, 11/4"", 260 mm"
+UH50-A50-OF,"Wärmezähler 6m3/h, 11/4"
+UH50-A52-OF,"Wärmezähler 6m3/h, DN25, 260 mm"
+UH50-A55-OF,"Wärmezähler 6m3/h, 11/4"
+UH50-A60-00,"LYU:UH50-A60-00 /WÄRMEZÄHLER 10M3/H, 2''"
+UH50-A60-OF,"Wärmezähler 10m3/h, 2"", 300 mm"
+UH50-A61-00,"Wärmezähler 10m3/h, DN40, 300 mm"
+UH50-A61-OF,"Wärmezähler 10m3/h, DN40, 300 mm"
+UH50-A63-OF,"Wärmezähler 10m3/h, 2"", 200 mm"
+UH50-A65-00,"Wärmezähler 15m3/h, DN50, 270 mm"
+UH50-A65-OF,"Wärmezähler 15m3/h, DN50, 270 mm"
+UH50-A69-OF,"Wärmezähler 15m3/h, DN50, 200 mm"
+UH50-A70-00,"Wärmezähler 25m3/h, DN65, 300 mm"
+UH50-A70-OF,"Wärmezähler 25m3/h, DN65, 300 mm"
+UH50-A74-00,"Wärmezähler 40m3/h, DN80, 300 mm"
+UH50-A74-OF,"Wärmezähler 40m3/h, DN80, 300 mm"
+UH50-A83-00,"Wärmezähler 60m3/h, DN100, 360 mm"
+UH50-A83-OF,"Wärmezähler 60m3/h, DN100, 360 mm"
+UH50-AA4-00,"Rechenwerk Wärme, 150m3/h, PN25"
+UH50-C05-00,"Kombizähler 0.6m3/h, 3/4'', 110mm"
+UH50-C21-00,"Kombizähler 1.5m3/h, 3/4"", 110 mm"
+UH50-C38-00,"Kombizähler 2.5m3/h, 1'', 190 mm"
+UH50-C45-00,"Kombizähler 3.5m3/h, 11/4"", 260 mm"
+UH50-C50-00,"Kombizähler 6.0m3/h, 11/4"", 260 mm"
+UH50-C61-00,"Kombizähler 10m3/h, DN40, 300 mm"
+UH50-C65-00,"Kombizähler 15m3/h, DN50, 270 mm"
+UH50-C70-00,"Kombizähler 25m3/h, DN65, 300 mm"
+UH50-C74-00,"Kombizähler 40m3/h, DN80, 300 mm"
+UH50-C83-00,"Kombizähler 60m3/h, DN100, 360 mm"
+UH50-G21-00,"Kältezähler 1.5m3/h, 3/4'', 110 mm"
+UH50-G21-OF,"Kältezähler 1.5m3/h, 3/4"
+UH50-G23-00,"Kältezähler 1.5m3/h, 1"", 190 mm"
+UH50-G23-OF,"Kältezähler 1.5m3/h, 1"
+UH50-G24-OF,"Kältezähler 1.5m3/h, 1"
+UH50-G36-OF,"Kältezähler 2.5m3/h, 1"
+UH50-G38-00,"Kältezähler 2.5m3/h, 1"", 190 mm"
+UH50-G38-OF,"Kältezähler 2.5m3/h, 1"
+UH50-G39-OF,"Kältezähler 2.5m3/h, DN20, 190 mm"
+UH50-G45-00,"Kältezähler 3.5m3/h, 11/4"", 260 mm"
+UH50-G45-OF,"Kältezähler 3.5m3/h, 11/4"
+UH50-G46-OF,"Kältezähler 3.5m3/h, DN25, 260 mm"
+UH50-G50-00,"Kältezähler 6.0m3/h, 11/4"", 260 mm"
+UH50-G50-OF,"Kältezähler 6m3/h, 11/4"
+UH50-G52-OF,"Kältezähler 6m3/h, DN25, 260 mm"
+UH50-G55-OF,"Kältezähler 6m3/h, 11/4"
+UH50-G60-OF,"Kältezähler 10m3/h, 2"", 300 mm"
+UH50-G61-00,"Kältezähler 10m3/h, DN40, 300 mm"
+UH50-G61-OF,"Kältezähler 10m3/h, DN40, 300 mm"
+UH50-G63-OF,"Kältezähler 10m3/h, 2"", 200 mm"
+UH50-G65-00,"Kältezähler 15m3/h, DN50, 270 mm"
+UH50-G65-OF,"Kältezähler 15m3/h, DN50, 270 mm"
+UH50-G69-OF,"Kältezähler 15m3/h, DN50, 200 mm"
+UH50-G70-00,"Kältezähler 25m3/h, DN65, 300 mm"
+UH50-G70-OF,"Kältezähler 25m3/h, DN65, 300 mm"
+UH50-G74-00,"Kältezähler 40m3/h, DN80, 300 mm"
+UH50-G74-OF,"Kältezähler 40m3/h, DN80, 300 mm"
+UH50-G83-00,"Kältezähler 60m3/h, DN100, 360 mm"
+UH50-G83-OF,"Kältezähler 60m3/h, DN100, 360 mm"
+UH50-GA4-00,"Rechenwerk Kälte, 150m3/h, PN25"
+UH50-ZB,Zusammenbau Zähler Komponenten
+UK24EIB,Gateway MP-Bus zu KNX
+UK24LON,Gateway MP-Bus zu LonWorks
+UK24MOD,Belimo Gateway MP zu Modbus RTU
+UPG-10,"Unterputzgehäuse für luna10, schwarz"
+UPG-16,Unterputzgehäuse für luna16
+UPG-22,Unterputzgehäuse für luna22
+USB DONGLE OPC S7,USB Dongle für S7 OPC-Server
+USB MODEM ANALOG,USB Modem analog
+USBED,"KVM-Verstärker für VGA, Tastatur, Maus ü"
+USB-ETHERNET,USB-ETHERNET
+USB-IP INDUSTRY SE,"TCP/IP-Ethernet - USB, DIN Montage"
+USV1500VA,USV1500VA
+USV750VA,PY UPS 750VA/500W Towe
+UUKIT,Unigyr Umbaukit
+VAG60.15-9,"Absperrkugelhahn, AG, DN15, 9"
+VAG60.20-17,"Absperrkugelhahn, AG, DN20, 17"
+VAG60.25-22,"Absperrkugelhahn, AG, DN25, 22"
+VAG60.32-35,"Absperrkugelhahn, AG, DN32, 35"
+VAG60.40-68,"Absperrkugelhahn, AG, DN40, 68"
+VAG60.50-96,"Absperrkugelhahn, AG, DN50, 96"
+VAG61.15-1,"Durchgangs-Kugelhahn, AG, DN15, 1"
+VAG61.15-1.6,"Durchgangs-Kugelhahn, AG, DN15, 1.6"
+VAG61.15-2.5,"Durchgangs-Kugelhahn, AG, DN15, 2.5"
+VAG61.15-4,"Durchgangs-Kugelhahn, AG, DN15, 4"
+VAG61.15-6.3,"Durchgangs-Kugelhahn, AG, DN15, 6.3"
+VAG61.20-10,"Durchgangs-Kugelhahn, AG, DN20, 10"
+VAG61.20-4,"Durchgangs-Kugelhahn, AG, DN20, 4"
+VAG61.20-6.3,"Durchgangs-Kugelhahn, AG, DN20, 6.3"
+VAG61.25-10,"Durchgangs-Kugelhahn, AG, DN25, 10"
+VAG61.25-16,"Durchgangs-Kugelhahn, AG, DN25, 16"
+VAG61.25-6.3,"Durchgangs-Kugelhahn, AG, DN25, 6.3"
+VAG61.32-10,"Durchgangs-Kugelhahn, AG, DN32, 10"
+VAG61.32-16,"Durchgangs-Kugelhahn, AG, DN32, 16"
+VAG61.32-25,"Durchgangs-Kugelhahn, AG, DN32, 25"
+VAG61.40-16,"Durchgangs-Kugelhahn, AG, DN40, 16"
+VAG61.40-25,"Durchgangs-Kugelhahn, AG, DN40, 25"
+VAG61.40-40,"Durchgangs-Kugelhahn, AG, DN40, 40"
+VAG61.50-25,"Durchgangs-Kugelhahn, AG, DN50, 25"
+VAG61.50-40,"Durchgangs-Kugelhahn, AG, DN50, 40"
+VAG61.50-63,"Durchgangs-Kugelhahn, AG, DN50, 63"
+VAI60.15-15,"Absperrkugelhahn, IG, DN15"
+VAI60.20-22,"Absperrkugelhahn, IG, DN20"
+VAI60.25-22,"Absperrkugelhahn, IG, DN25"
+VAI60.32-35,"Absperrkugelhahn, IG, DN32"
+VAI60.40-68,"Absperrkugelhahn, IG, DN40"
+VAI60.50-96,"Absperrkugelhahn, IG, DN50"
+VAI61.15-1,"Durchgangs-Kugelhahn, IG, DN15, 1"
+VAI61.15-1.6,"Durchgangs-Kugelhahn, IG, DN15, 1.6"
+VAI61.15-10,"Durchgangs-Kugelhahn, IG, DN15, 10"
+VAI61.15-2.5,"Durchgangs-Kugelhahn, IG, DN15, 2.5"
+VAI61.15-4,"Durchgangs-Kugelhahn, IG, DN15, 4"
+VAI61.15-6.3,"Durchgangs-Kugelhahn, IG, DN15, 6.3"
+VAI61.20-10,"Durchgangs-Kugelhahn, IG, DN20, 10"
+VAI61.20-4,"Durchgangs-Kugelhahn, IG, DN20, 4"
+VAI61.20-6.3,"Durchgangs-Kugelhahn, IG, DN20, 6.3"
+VAI61.25-10,"Durchgangs-Kugelhahn, IG, DN25, 10"
+VAI61.25-16,"Durchgangs-Kugelhahn, IG, DN25, 16"
+VAI61.25-6.3,"Durchgangs-Kugelhahn, IG, DN25, 6.3"
+VAI61.32-10,"Durchgangs-Kugelhahn, IG, DN32, 10"
+VAI61.32-16,"Durchgangs-Kugelhahn, IG, DN32, 16"
+VAI61.32-25,"Durchgangs-Kugelhahn, IG, DN32, 25"
+VAI61.40-16,"Durchgangs-Kugelhahn, IG, DN40, 16"
+VAI61.40-25,"Durchgangs-Kugelhahn, IG, DN40, 25"
+VAI61.40-40,"Durchgangs-Kugelhahn, IG, DN40, 40"
+VAI61.50-25,"Durchgangs-Kugelhahn, IG, DN50, 25"
+VAI61.50-40,"Durchgangs-Kugelhahn, IG, DN50, 40"
+VAI61.50-63,"Durchgangs-Kugelhahn, IG, DN50, 63"
+VBF21.100,"Dreiweghahn, Flansch, PN6, DN100, 160"
+VBF21.125,"Dreiweghahn, Flansch, PN6, DN100, 160"
+VBF21.150,"Dreiweghahn, Flansch, PN6, DN150, 820"
+VBF21.40,"Dreiweghahn, Flansch, PN6, DN40, 25"
+VBF21.50,"Dreiweghahn, Flansch, PN6, DN50, 40"
+VBF21.65,"Dreiweghahn, Flansch, PN6, DN65, 63"
+VBF21.80,"Dreiweghahn, Flansch, PN6, DN125, 100"
+VBG60.15-8T,"Umschaltkugelhahn, AG, DN15, 8"
+VBG60.20-13T,"Umschaltkugelhahn, AG, DN20, 13"
+VBG60.25-13T,"Umschaltkugelhahn, AG, DN25, 13"
+VBG60.32-25T,"Umschaltkugelhahn, AG, DN32, 25"
+VBG60.40-49T,"Umschaltkugelhahn, AG, DN40, 49"
+VBG60.50-73T,"Umschaltkugelhahn, AG, DN50, 73"
+VBG61.15-1.6,"Dreiweg-Kugelhahn, AG, DN15, 1.6"
+VBG61.15-2.5,"Dreiweg-Kugelhahn, AG, DN15, 2.5"
+VBG61.15-4,"Dreiweg-Kugelhahn, AG, DN15, 4"
+VBG61.15-6.3,"Dreiweg-Kugelhahn, AG, DN15, 6.3"
+VBG61.20-4,"Dreiweg-Kugelhahn, AG, DN20, 4"
+VBG61.20-6.3,"Dreiweg-Kugelhahn, AG, DN20, 6.3"
+VBG61.25-10,"Dreiweg-Kugelhahn, AG, DN25, 10"
+VBG61.32-16,"Dreiweg-Kugelhahn, AG, DN32, 16"
+VBG61.40-25,"Dreiweg-Kugelhahn, AG, DN40, 25"
+VBG61.50-40,"Dreiweg-Kugelhahn, AG, DN50, 40"
+VBI60.15-12T,"Umschaltkugelhahn,IG,DN15,T,12m3/h"
+VBI60.15-5L,"Umschaltkugelhahn, IG, DN15"
+VBI60.20-16T,"Umschaltkugelhahn,IG,DN20,T,16m3/h"
+VBI60.20-9L,"Umschaltkugelhahn, IG, DN20"
+VBI60.25-16T,"Umschaltkugelhahn,IG,DN25,T,16m3/h"
+VBI60.25-9L,"Umschaltkugelhahn, IG, DN25"
+VBI60.32-13L,"Umschaltkugelhahn, IG, DN32"
+VBI60.32-25T,"Umschaltkugelhahn,IG,DN32,T,25m3/h"
+VBI60.40-25L,"Umschaltkugelhahn, IG, DN40"
+VBI60.40-49T,"Umschaltkugelhahn,IG,DN40,T,49m3/h"
+VBI60.50-37L,"Umschaltkugelhahn, IG, DN50"
+VBI60.50-73T,"Umschaltkugelhahn,IG,DN50,T,73m3/h"
+VBI61.15-1.6,"Dreiweg-Regelkugelhahn, IG, DN15, 1.6"
+VBI61.15-2.5,"Dreiweg-Regelkugelhahn, IG, DN15, 2.5"
+VBI61.15-4,"Dreiweg-Regelkugelhahn, IG, DN15, 4"
+VBI61.15-6.3,"Dreiweg-Regelkugelhahn, IG, DN15, 6.3"
+VBI61.20-6.3,"Dreiweg-Regelkugelhahn, IG, DN20, 6.3"
+VBI61.25-10,"Dreiweg-Regelkugelhahn, IG, DN20, 10"
+VBI61.32-16,"Dreiweg-Regelkugelhahn, IG, DN32, 16"
+VBI61.40-25,"Dreiweg-Regelkugelhahn, IG, DN40, 25"
+VBI61.50-40,"Dreiweg-Regelkugelhahn, IG, DN50, 40"
+VBI61.50-63,"Dreiweg-Regelkugelhahn, IG, DN50, 63"
+VCI31.20,"Vierweghahn, IG, PN10, DN20, 6.3"
+VCI31.25,"Vierweghahn, IG, PN10, DN25, 10"
+VCI31.32,"Vierweghahn, IG, PN10, DN32, 16"
+VCI31.40,"Vierweghahn, IG, PN10, DN40, 25"
+VD115CLC,"Durchgangs-Kleinventil,DIN,15,<1.9m3/h"
+VD120CLC,"Durchgangs-Kleinventil,DIN,20,<2.6m3/h"
+VD125CLC,"Durchgangs-Kleinventil,DIN,25,<2.6m3/h"
+VDN110,"Heizkörper-Durchgangsventil, DN10"
+VDN115,"Heizkörper-Durchgangsventil, DN15"
+VDN120,"Heizkörper-Durchgangsventil, DN20"
+VEN110,"Heizkörper-Eckventil, DN10"
+VEN115,"Heizkörper-Eckventil, DN15"
+VEN120,"Heizkörper-Eckventil, DN20"
+VER-JRG2,"Verschraubung IG 1"" / AG 3/4"""
+VER-JRG2,"Verschraubung IG 1"" / AG 3/4"""
+VKF41.100,"Drosselklappe, DN100, kvs 760"
+VKF41.125,"Drosselklappe, DN125, kvs 1000"
+VKF41.150,"Drosselklappe, DN150 kvs 2100"
+VKF41.200,"Drosselklappe, DN200, kvs 4000"
+VKF41.40,"Drosselklappe, DN40,kvs 50"
+VKF41.50,"Drosselklappe, DN50,kvs 80"
+VKF41.65,"Drosselklappe, DN65, kvs 200"
+VKF41.80,"Drosselklappe, DN80, kvs 400"
+VKF46.100,"Drosselklappe, dichtschliessend, DN100"
+VKF46.125,"Drosselklappe, dichtschliessend, DN125"
+VKF46.150,"Drosselklappe, dichtschliessend, DN150"
+VKF46.200,"Drosselklappe, dichtschliessend, DN200"
+VKF46.250,"Drosselklappe, dichtschliessend, DN250"
+VKF46.300,"Drosselklappe, dichtschliessend, DN300"
+VKF46.350,"Drosselklappe, dichtschliessend, DN350"
+VKF46.40,"Drosselklappe, dichtschliessend, DN40"
+VKF46.400,"Drosselklappe, dichtschliessend, DN400"
+VKF46.450,"Drosselklappe, dichtschliessend, DN450"
+VKF46.50,"Drosselklappe, dichtschliessend, DN50"
+VKF46.500,"Drosselklappe, dichtschliessend, DN500"
+VKF46.600,"Drosselklappe, dichtschliessend, DN600"
+VKF46.65,"Drosselklappe, dichtschliessend, DN65"
+VKF46.80,"Drosselklappe, dichtschliessend, DN80"
+VMP45.10-0.25,"Dreiwegventil, Bypass,PN16,DN10,AG, 0.25"
+VMP45.10-0.4,"Dreiwegventil, Bypass,PN16,DN10,AG, 0.4"
+VMP45.10-0.63,"Dreiwegventil, Bypass,PN16,DN10,AG, 0.63"
+VMP45.10-1,"Dreiwegventil, Bypass,PN16,DN10,AG, 1"
+VMP45.10-1.6,"Dreiwegventil, Bypass,PN16,DN10,AG, 1.6"
+VMP45.15-2.5,"Dreiwegventil, Bypass,PN16,DN15,AG, 2.5"
+VMP45.20-4,"Dreiwegventil, Bypass,PN16,DN20,AG, 4"
+VMP47.10-0.4,"Dreiwegventil, Bypass,PN16,DN10,AG, 0.4"
+VMP47.10-0.63,"Dreiwegventil, Bypass,PN16,DN10,AG, 0.63"
+VMP47.10-1,"Dreiwegventil, Bypass,PN16,DN10,AG, 1"
+VMP47.10-1.6,"Dreiwegventil, Bypass,PN16,DN10,AG, 1.6"
+VMP47.15-2.5,"Dreiwegventil, Bypass,PN16,DN15,AG, 2.5"
+VPD110A-145,"MiniCombiVentil, Durchg, DN10, 145 l/h"
+VPD110A-45,"MiniCombiVentil, Durchg, DN10, 45 l/h"
+VPD110A-90,"MiniCombiVentil, Durchg, DN10, 90 l/h"
+VPD115A-145,"MiniCombiVentil, Durchg, DN15, 145 l/h"
+VPD115A-45,"MiniCombiVentil, Durchg, DN15, 45 l/h"
+VPD115A-90,"MiniCombiVentil, Durchg, DN15, 90 l/h"
+VPD115B-200,"MiniCombiVentil, Durchg, DN15, 200 l/h"
+VPE110A-145,"MiniCombiVentil, Eck, DN10, 145 l/h"
+VPE110A-45,"MiniCombiVentil, Eck, DN10, 45 l/h"
+VPE110A-90,"MiniCombiVentil, Eck, DN10, 90 l/h"
+VPE110B-200,"MiniCombiVentil, Eck, DN10, 200 l/h"
+VPE115A-145,"MiniCombiVentil, Eck, DN15, 145 l/h"
+VPE115A-45,"MiniCombiVentil, Eck, DN15, 45 l/h"
+VPE115A-90,"MiniCombiVentil, Eck, DN15, 90 l/h"
+VPE115B-200,"MiniCombiVentil, Eck, DN15, 200 l/h"
+VPF43.100F70,"Kombiventil, Flansch,PN16, DN100, 12-68"
+VPF43.100F90,"Kombiventil, Flansch,PN16, DN100, 15-90"
+VPF43.125F110,"Kombiventil, Flansch,PN16, DN125, 19-110"
+VPF43.125F135,"Kombiventil, Flansch,PN16, DN125, 23-135"
+VPF43.150F160,"Kombiventil, Flansch,PN16, DN150, 26-148"
+VPF43.150F200,"Kombiventil, Flansch,PN16, DN150, 32-195"
+VPF43.200F210,"Kombiventil, Flansch, PN16"
+VPF43.200F280,"Kombiventil, Flansch, PN16"
+VPF43.50F16,"Kombiventil, Flansch,PN16, DN50,2.3-15"
+VPF43.50F25,"Kombiventil, Flansch,PN16, DN50,4.3-25"
+VPF43.65F24,"Kombiventil, Flansch,PN16, DN65,4.4-24"
+VPF43.65F35,"Kombiventil, Flansch,PN16, DN65,6-35"
+VPF43.80F35,"Kombiventil, Flansch,PN16, DN80,5.3-34"
+VPF43.80F45,"Kombiventil, Flansch,PN16, DN80,7-43"
+VPF53.100F70,"Kombiventil, Flansch,PN25, DN100,12.1-68"
+VPF53.100F90,"Kombiventil, Flansch,PN25, DN100,14.8-90"
+VPF53.125F110,"Kombiventil, Flansch,PN25,DN125,18.5-110"
+VPF53.125F135,"Kombiventil, Flansch,PN25, DN125,23-135"
+VPF53.150F160,"Kombiventil, Flansch,PN25,DN150,25.6-148"
+VPF53.150F200,"Kombiventil, Flansch,PN25, DN150,32-195"
+VPF53.200F210,S55266-V150 /VPF53.200F210 Kombiventil
+VPF53.200F280,S55266-V151 /VPF53.200F280 Kombiventil
+VPF53.50F16,"Kombiventil, Flansch,PN25, DN50,2.3-15"
+VPF53.50F25,"Kombiventil, Flansch,PN25, DN50,4.3-25"
+VPF53.65F24,"Kombiventil, Flansch, PN25, DN65,4.4-24"
+VPF53.65F35,"Kombiventil, Flansch, PN25, DN65,6-34"
+VPF53.80F35,"Kombiventil, Flansch, PN25, DN80,5.3-34"
+VPF53.80F45,"Kombiventil, Flansch, PN25, DN80,7-43"
+VPI46.15L0.2,"Kombiventil DN15, 30-200 l/h, IG"
+VPI46.15L0.2Q,"Kombiventil DN15, 30-200 l/h, IG, P/T"
+VPI46.15L0.6,"Kombiventil DN15, 100-575 l/h, IG"
+VPI46.15L0.6Q,"Kombiventil DN15, 100-575 l/h, IG, P/T"
+VPI46.20F1.4,"Kombiventil DN20, 220-1330 l/h, IG"
+VPI46.20F1.4Q,"Kombiventil DN20, 220-1330 l/h, IG, P/T"
+VPI46.25F1.8,"Kombiventil DN25, 204-1800 l/h, IG"
+VPI46.25F1.8Q,"Kombiventil DN25, 204-1800 l/h, IG, P/T"
+VPI46.32F4,"Kombiventil DN32, 450-4001 l/h, IG"
+VPI46.32F4Q,"Kombiventil DN32, 450-4001 l/h, IG, P/T"
+VPI46.40F9.5Q,"Kombiventil DN40, 1370-9500 l/h, IG, P/T"
+VPI46.50F12Q,"Kombiventil DN50, 1400…11500 l/h, IG,P/T"
+VPP46.10L0.2,"Kombiventil DN10, 30-200 l/h, AG"
+VPP46.10L0.2Q,"Kombiventil DN10, 30-200 l/h, AG, P/T"
+VPP46.10L0.4,"Kombiventil DN10,65-370 l/h,AG"
+VPP46.10L0.4Q,"Kombiventil DN10,65-370 l/h,AG,P/T"
+VPP46.15L0.2,"Kombiventil DN15, 30-200 l/h, AG"
+VPP46.15L0.2Q,"Kombiventil DN15, 30-200 l/h, AG, P/T"
+VPP46.15L0.6,"Kombiventil DN15, 100-575 l/h, AG"
+VPP46.15L0.6Q,"Kombiventil DN15, 100-575 l/h, AG, P/T"
+VPP46.20F1.4,"Kombiventil DN20, 220-1330 l/h, AG"
+VPP46.20F1.4Q,"Kombiventil DN20, 220-1330 l/h, AG, P/T"
+VPP46.25F1.8,"Kombiventil DN25, 204-1800 l/h, AG"
+VPP46.25F1.8Q,"Kombiventil DN25, 204-1800 l/h, AG, P/T"
+VPP46.32F4,"Kombiventil DN32, 450-4001 l/h, AG"
+VPP46.32F4Q,"Kombiventil DN32, 450-4001 l/h, AG, P/T"
+VUN210,"Heizkörper-Umkehreckventil, DN10"
+VUN215,"Heizkörper-Umkehreckventil, DN15"
+VVF22.100-160,"Durchgangsventil,Flansch,PN6,DN100,160"
+VVF22.25-10,"Durchgangsventil,Flansch,PN6,DN25,10"
+VVF22.25-2.5,"Durchgangsventil,Flansch,PN6,DN25,2.5"
+VVF22.25-4,"Durchgangsventil,Flansch,PN6,DN25,4"
+VVF22.25-6.3,"Durchgangsventil,Flansch,PN6,DN25,6.3"
+VVF22.40-16,"Durchgangsventil,Flansch,PN6,DN40,16"
+VVF22.40-25,"Durchgangsventil,Flansch,PN6,DN40,25"
+VVF22.50-40,"Durchgangsventil,Flansch,PN6,DN50,40"
+VVF22.65-63,"Durchgangsventil,Flansch,PN6,DN65,63"
+VVF22.80-100,"Durchgangsventil,Flansch,PN6,DN80,100"
+VVF42.100-125,"Durchgangsventil,Flansch,PN16,DN100,125"
+VVF42.100-160,"Durchgangsventil,Flansch,PN16,DN100,160"
+VVF42.125-200,"Durchgangsventil,Flansch,PN16,DN125,200"
+VVF42.125-250,"Durchgangsventil,Flansch,PN16,DN125,250"
+VVF42.150-315,"Durchgangsventil,Flansch,PN16,DN150,315"
+VVF42.150-400,"Durchgangsventil,Flansch,PN16,DN150,400"
+VVF42.15-1.6,"Durchgangsventil,Flansch,PN16,DN15,1.6"
+VVF42.15-2.5,"Durchgangsventil,Flansch,PN16,DN15,2.5"
+VVF42.15-4,"Durchgangsventil,Flansch,PN16,DN15,4"
+VVF42.20-6.3,"Durchgangsventil,Flansch,PN16,DN20,6.3"
+VVF42.25-10,"Durchgangsventil,Flansch,PN16,DN25,10"
+VVF42.25-6.3,"Durchgangsventil,Flansch,PN16,DN25,6.3"
+VVF42.32-16,"Durchgangsventil,Flansch,PN16,DN32,16"
+VVF42.40-16,"Durchgangsventil,Flansch,PN16,DN40,16"
+VVF42.40-25,"Durchgangsventil,Flansch,PN16,DN40,25"
+VVF42.50-31.5,"Durchgangsventil,Flansch,PN16,DN50,31.5"
+VVF42.50-40,"Durchgangsventil,Flansch,PN16,DN50,40"
+VVF42.65-50,"Durchgangsventil,Flansch,PN16,DN65,50"
+VVF42.65-63,"Durchgangsventil,Flansch,PN16,DN65.63"
+VVF42.80-100,"Durchgangsventil,Flansch,PN16,DN80,100"
+VVF42.80-80,"Durchgangsventil,Flansch,PN16,DN80,80"
+VVF43.100-125,"Durchgangsventil,Flansch,PN16,DN100,125"
+VVF43.100-150K,"Durchgangsv,Flansch,PN16,DN100,150,komp."
+VVF43.100-160,"Durchgangsventil,Flansch,PN16,DN100,160"
+VVF43.125-200,"Durchgangsventil,Flansch,PN16,DN125,200"
+VVF43.125-220K,"Durchgangsv,Flansch,PN16,DN125,220,komp."
+VVF43.125-250,"Durchgangsventil,Flansch,PN16,DN125,250"
+VVF43.150-315K,"Durchgangsv,Flansch,PN16,DN150,315,komp."
+VVF43.150-400,"Durchgangsventil,Flansch,PN16,DN150,400"
+VVF43.200-450K,"Durchgangsv,Flansch,PN16,DN200,450,komp."
+VVF43.250-630K,"Durchgangsv,Flansch,PN16,DN250,630,komp."
+VVF43.65-50,"Durchgangsventil,Flansch,PN16,DN65,50"
+VVF43.65-63,"Durchgangsventil,Flansch,PN16,DN65.63"
+VVF43.65-63K,"Durchgangsv,Flansch,PN16,DN65,63,komp."
+VVF43.80-100,"Durchgangsventil,Flansch,PN16,DN80,100"
+VVF43.80-100K,"Durchgangsv,Flansch,PN16,DN80,100,komp."
+VVF43.80-80,"Durchgangsventil,Flansch,PN16,DN80,80"
+VVF53.100-150K,"Durchgangsv,Flansch,PN25,DN100,150,komp."
+VVF53.100-160,"Durchgangsventil,Flansch,PN25,DN100,160"
+VVF53.125-220K,"Durchgangsv,Flansch,PN25,DN125,220,komp."
+VVF53.125-250,"Durchgangsventil,Flansch,PN25,DN125.250"
+VVF53.15-0.2,"Durchgangsventil,Flansch,PN25,DN15,0.2"
+VVF53.15-0.25,"Durchgangsventil,Flansch,PN25,DN15,0.25"
+VVF53.15-0.32,"Durchgangsventil,Flansch,PN25,DN15,0.32"
+VVF53.15-0.4,"Durchgangsventil,Flansch,PN25,DN15,0.4"
+VVF53.15-0.5,"Durchgangsventil,Flansch,PN25,DN15,0.5"
+VVF53.15-0.63,"Durchgangsventil,Flansch,PN25,DN15,0.63"
+VVF53.15-0.8,"Durchgangsventil,Flansch,PN25,DN15,0.8"
+VVF53.150-315K,"Durchgangsv,Flansch,PN25,DN150,315,komp."
+VVF53.150-400,"Durchgangsventil,Flansch,PN25,DN150,400"
+VVF53.15-1,"Durchgangsventil,Flansch,PN25,DN15,1"
+VVF53.15-1.25,"Durchgangsventil,Flansch,PN25,DN15,1.25"
+VVF53.15-1.6,"Durchgangsventil,Flansch,PN25,DN15,1.6"
+VVF53.15-2,"Durchgangsventil,Flansch,PN25,DN15,2"
+VVF53.15-2.5,"Durchgangsventil,Flansch,PN25,DN15,2.5"
+VVF53.15-3.2,"Durchgangsventil,Flansch,PN25,DN15,3.2"
+VVF53.15-4,"Durchgangsventil,Flansch,PN25,DN15,4"
+VVF53.200-450K,"Durchgangsv,Flansch,PN25,DN200,450,komp."
+VVF53.20-6.3,"Durchgangsventil,Flansch,PN25,DN20,6.3"
+VVF53.250-630K,"Durchgangsv,Flansch,PN25,DN250,630,komp."
+VVF53.25-10,"Durchgangsventil,Flansch,PN25,DN25,10"
+VVF53.25-5,"Durchgangsventil,Flansch,PN25,DN25,5"
+VVF53.25-6.3,"Durchgangsventil,Flansch,PN25,DN25,6.3"
+VVF53.25-8,"Durchgangsventil,Flansch,PN25,DN25,8"
+VVF53.32-16,"Durchgangsventil,Flansch,PN25,DN32,16"
+VVF53.40-12.5,"Durchgangsventil,Flansch,PN25,DN40,12.5"
+VVF53.40-16,"Durchgangsventil,Flansch,PN25,DN40,16"
+VVF53.40-20,"Durchgangsventil,Flansch,PN25,DN40,20"
+VVF53.40-25,"Durchgangsventil,Flansch,PN25,DN40,25"
+VVF53.50-31.5,"Durchgangsventil,Flansch,PN25,DN50,31.5"
+VVF53.50-40,"Durchgangsventil,Flansch,PN25,DN50,40"
+VVF53.50-40K,"Durchgangsv,Flansch,PN25,DN50,40,komp."
+VVF53.65-63,"Durchgangsventil,Flansch,PN25,DN65,63"
+VVF53.65-63K,"Durchgangsv,Flansch,PN25,DN65,63,komp."
+VVF53.80-100,"Durchgangsventil,Flansch,PN25,DN80,100"
+VVF53.80-100K,"Durchgangsv,Flansch,PN25,DN80,100,komp."
+VVF61.09,"Durchgangsventil,Flansch,PN40,DN15,0.19"
+VVF61.10,"Durchgangsventil,Flansch,PN40,DN15,0.3"
+VVF61.11,"Durchgangsventil,Flansch,PN40,DN15,0.45"
+VVF61.12,"Durchgangsventil,Flansch,PN40,DN15,0.7"
+VVF61.12K,"Durchgangsv,F,PN40,DN15,geräuschopt"
+VVF61.13,"Durchgangsventil,Flansch,PN40,DN15,1.2"
+VVF61.13K,"Durchgangsv,F,PN40,DN15,geräuschopt"
+VVF61.14,"Durchgangsventil,Flansch,PN40,DN15,1.9"
+VVF61.14K,"Durchgangsv,F,PN40,DN15,geräuschopt"
+VVF61.15,"Durchgangsventil,Flansch,PN40,DN15,3"
+VVF61.15K,"Durchgangsv,F,PN40,DN15,geräuschopt"
+VVF61.24,"Durchgangsventil,Flansch,PN40,DN25,5"
+VVF61.24K,"Durchgangsv,F,PN40,DN25,geräuschopt"
+VVF61.25,"Durchgangsventil,Flansch,PN40,DN25,7.5"
+VVF61.25K,"Durchgangsv,F,PN40,DN25,geräuschopt"
+VVF61.39,"Durchgangsventil,Flansch,PN40,DN40,12"
+VVF61.40,"Durchgangsventil,Flansch,PN40,DN40,19"
+VVF61.50,"Durchgangsventil,Flansch,PN40,DN50,31"
+VVF61.65,"Durchgangsventil,Flansch,PN40,DN65,49"
+VVF61.80,"Durchgangsventil,Flansch,PN40,DN80.78"
+VVF61.90,"Durchgangsventil,Flansch,PN40,DN100,124"
+VVF61.91,"Durchgangsventil,Flansch,PN40,DN125,200"
+VVF61.92,"Durchgangsventil,Flansch,PN40,DN150,300"
+VVG41.11,"Durchgangsventil, PN16,DN15, AG, 0.63"
+VVG41.12,"Durchgangsventil, PN16,DN15, AG, 1"
+VVG41.13,"Durchgangsventil, PN16,DN15, AG, 1.6"
+VVG41.14,"Durchgangsventil, PN16,DN15, AG, 2.5"
+VVG41.15,"Durchgangsventil, PN16,DN15, AG, 4"
+VVG41.20,"Durchgangsventil, PN16,DN20, AG, 6.3"
+VVG41.25,"Durchgangsventil, PN16,DN25, AG, 10"
+VVG41.32,"Durchgangsventil, PN16,DN32, AG, 16"
+VVG41.40,"Durchgangsventil, PN16,DN40, AG, 25"
+VVG41.50,"Durchgangsventil, PN16,DN50, AG, 40"
+VVG44.15-0.25,"Durchgangsventil, PN16, DN15, AG, 0.25"
+VVG44.15-0.4,"Durchgangsventil, PN16, DN15, AG, 0.4"
+VVG44.15-0.63,"Durchgangsventil, PN16, DN15, AG, 0.63"
+VVG44.15-1,"Durchgangsventil, PN16, DN15, AG, 1"
+VVG44.15-1.6,"Durchgangsventil, PN16, DN15, AG, 1.6"
+VVG44.15-2.5,"Durchgangsventil, PN16, DN15, AG, 2.5"
+VVG44.15-4,"Durchgangsventil, PN16, DN15, AG, 4"
+VVG44.20-6.3,"Durchgangsventil, PN16, DN20, AG, 6.3"
+VVG44.25-10,"Durchgangsventil, PN16, DN25, AG, 10"
+VVG44.32-16,"Durchgangsventil, PN16, DN32, AG, 16"
+VVG44.40-25,"Durchgangsventil, PN16, DN40, AG, 25"
+VVI46.15/2,"Durchgangsventil, DN15, IG, 2"
+VVI46.25/2,"Durchgangsventil, DN25, IG, 5"
+VVP45.10-0.25,"Durchgangsventil, PN16,DN10,AG, 0.25"
+VVP45.10-0.4,"Durchgangsventil, PN16,DN10,AG, 0.4"
+VVP45.10-0.63,"Durchgangsventil, PN16,DN10,AG, 0.63"
+VVP45.10-1,"Durchgangsventil, PN16,DN10,AG, 1"
+VVP45.10-1.6,"Durchgangsventil, PN16,DN10,AG, 1.6"
+VVP45.15-2.5,"Durchgangsventil, PN16,DN15,AG, 2.5"
+VVP45.20-4,"Durchgangsventil, PN16,DN20,AG, 4"
+VVP45.25-10,"Durchgangsventil, PN16,DN25,AG, 10"
+VVP45.25-6.3,"Durchgangsventil, PN16,DN25,AG, 6.3"
+VVP45.32-16,"Durchgangsventil, PN16,DN32,AG, 16"
+VVP45.40-25,"Durchgangsventil, PN16,DN40,AG, 25"
+VVP47.10-0.25,"Durchgangsventil, PN16,DN10,AG, 0.25"
+VVP47.10-0.4,"Durchgangsventil, PN16,DN10,AG, 0.4"
+VVP47.10-0.63,"Durchgangsventil, PN16,DN10,AG, 0.63"
+VVP47.10-1,"Durchgangsventil, PN16,DN10,AG, 1"
+VVP47.10-1.6,"Durchgangsventil, PN16,DN10,AG, 1.6"
+VVP47.15-2.5,"Durchgangsventil, PN16,DN15,AG, 2.5"
+VVP47.20-4,"Durchgangsventil, PN16,DN20,AG, 4"
+VWG41.10-0.25-0.4,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/0.4"
+VWG41.10-0.25-0.4,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/0.4"
+VWG41.10-0.25-0.65,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/0.65"
+VWG41.10-0.25-0.65,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/0.65"
+VWG41.10-0.25-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.0"
+VWG41.10-0.25-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.0"
+VWG41.10-0.25-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.3"
+VWG41.10-0.25-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.3"
+VWG41.10-0.25-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.6"
+VWG41.10-0.25-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.6"
+VWG41.10-0.25-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.9"
+VWG41.10-0.25-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.25/1.9"
+VWG41.10-0.4-0.4,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/0.4"
+VWG41.10-0.4-0.4,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/0.4"
+VWG41.10-0.4-0.65,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/0.65"
+VWG41.10-0.4-0.65,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/0.65"
+VWG41.10-0.4-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.0"
+VWG41.10-0.4-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.0"
+VWG41.10-0.4-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.3"
+VWG41.10-0.4-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.3"
+VWG41.10-0.4-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.6"
+VWG41.10-0.4-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.6"
+VWG41.10-0.4-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.9"
+VWG41.10-0.4-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.4/1.9"
+VWG41.10-0.65-0.65,"6-Weg-Kugelhahn,DN10,1/2'',0.65/0.65"
+VWG41.10-0.65-0.65,"6-Weg-Kugelhahn,DN10,1/2'',0.65/0.65"
+VWG41.10-0.65-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.0"
+VWG41.10-0.65-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.0"
+VWG41.10-0.65-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.3"
+VWG41.10-0.65-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.3"
+VWG41.10-0.65-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.6"
+VWG41.10-0.65-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.6"
+VWG41.10-0.65-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.9"
+VWG41.10-0.65-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',0.65/1.9"
+VWG41.10-1.0-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.0"
+VWG41.10-1.0-1.0,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.0"
+VWG41.10-1.0-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.3"
+VWG41.10-1.0-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.3"
+VWG41.10-1.0-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.6"
+VWG41.10-1.0-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.6"
+VWG41.10-1.0-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.9"
+VWG41.10-1.0-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.0/1.9"
+VWG41.10-1.3-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.3"
+VWG41.10-1.3-1.3,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.3"
+VWG41.10-1.3-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.6"
+VWG41.10-1.3-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.6"
+VWG41.10-1.3-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.9"
+VWG41.10-1.3-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.3/1.9"
+VWG41.10-1.6-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.6/1.6"
+VWG41.10-1.6-1.6,"6-Weg-Regelkugelhahn,DN10,1/2'',1.6/1.6"
+VWG41.10-1.6-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.6/1.9"
+VWG41.10-1.6-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.6/1.9"
+VWG41.10-1.9-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.9/1.9"
+VWG41.10-1.9-1.9,"6-Weg-Regelkugelhahn,DN10,1/2'',1.9/1.9"
+VWG41.20-0.25-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/2.5"
+VWG41.20-0.25-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/2.5"
+VWG41.20-0.25-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/3.45"
+VWG41.20-0.25-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/3.45"
+VWG41.20-0.25-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/4.25"
+VWG41.20-0.25-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.25/4.25"
+VWG41.20-0.4-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/2.5"
+VWG41.20-0.4-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/2.5"
+VWG41.20-0.4-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/3.45"
+VWG41.20-0.4-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/3.45"
+VWG41.20-0.4-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/4.25"
+VWG41.20-0.4-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.4/4.25"
+VWG41.20-0.65-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 0.65/2.5"
+VWG41.20-0.65-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 0.65/2.5"
+VWG41.20-0.65-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.65/3.45"
+VWG41.20-0.65-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',0.65/3.45"
+VWG41.20-0.65-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.65/4.25"
+VWG41.20-0.65-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',0.65/4.25"
+VWG41.20-1.0-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 1.0/2.5"
+VWG41.20-1.0-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 1.0/2.5"
+VWG41.20-1.0-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',1.0/3.45"
+VWG41.20-1.0-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',1.0/3.45"
+VWG41.20-1.0-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.0/4.25"
+VWG41.20-1.0-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.0/4.25"
+VWG41.20-1.3-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/2.5"
+VWG41.20-1.3-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/2.5"
+VWG41.20-1.3-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/3.45"
+VWG41.20-1.3-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/3.45"
+VWG41.20-1.3-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/4.25"
+VWG41.20-1.3-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.3/4.25"
+VWG41.20-1.6-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 1.6/2.5"
+VWG41.20-1.6-2.5,"6-Weg-Regelkugelhahn, DN20, 1"", 1.6/2.5"
+VWG41.20-1.6-3.45,"6-Weg-Regelkugelhahn, DN20, 1"", 1.6/3.45"
+VWG41.20-1.6-3.45,"6-Weg-Regelkugelhahn, DN20, 1"", 1.6/3.45"
+VWG41.20-1.6-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.6/4.25"
+VWG41.20-1.6-4.25,"6-Weg-Regelkugelhahn,DN20, 1'',1.6/4.25"
+VWG41.20-2.5-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',2.5/2.5"
+VWG41.20-2.5-2.5,"6-Weg-Regelkugelhahn,DN20, 1'',2.5/2.5"
+VWG41.20-2.5-3.45,"6-Weg-Regelkugelhahn, DN20, 1"", 2.5/3.45"
+VWG41.20-2.5-3.45,"6-Weg-Regelkugelhahn, DN20, 1"", 2.5/3.45"
+VWG41.20-2.5-4.25,"6-Weg-Regelkugelhahn, DN20, 1"", 2.5/4.25"
+VWG41.20-2.5-4.25,"6-Weg-Regelkugelhahn, DN20, 1"", 2.5/4.25"
+VWG41.20-3.45-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',3.45/3.45"
+VWG41.20-3.45-3.45,"6-Weg-Regelkugelhahn,DN20, 1'',3.45/3.45"
+VWG41.20-4.25-4.25,"6-Weg-Regelkugelhahn, DN20, 1"",4.25/4.25"
+VWG41.20-4.25-4.25,"6-Weg-Regelkugelhahn, DN20, 1"",4.25/4.25"
+VXF22.100-160,"Dreiwegventil,Flansch,PN6,DN100,160"
+VXF22.25-10,"Dreiwegventil,Flansch,PN6,DN25,10"
+VXF22.25-2.5,"Dreiwegventil,Flansch,PN6,DN25,2.5"
+VXF22.25-4,"Dreiwegventil,Flansch,PN6,DN25,4"
+VXF22.25-6.3,"Dreiwegventil,Flansch,PN6,DN25,6.3"
+VXF22.40-16,"Dreiwegventil,Flansch,PN6,DN40,16"
+VXF22.40-25,"Dreiwegventil,Flansch,PN6,DN40,25"
+VXF22.50-40,"Dreiwegventil,Flansch,PN6,DN50,40"
+VXF22.65-63,"Dreiwegventil,Flansch,PN6,DN65,63"
+VXF22.80-100,"Dreiwegventil,Flansch,PN6,DN80,100"
+VXF42.100-125,"Dreiwegventil,Flansch,PN16,DN100,125"
+VXF42.100-160,"Dreiwegventil,Flansch,PN16,DN100,160"
+VXF42.125-200,"Dreiwegventil,Flansch,PN16,DN125,200"
+VXF42.125-250,"Dreiwegventil,Flansch,PN16,DN125,250"
+VXF42.150-315,"Dreiwegventil,Flansch,PN16,DN150,315"
+VXF42.150-400,"Dreiwegventil,Flansch,PN16,DN150,400"
+VXF42.15-1.6,"Dreiwegventil,Flansch,PN16,DN15,1.6"
+VXF42.15-2.5,"Dreiwegventil,Flansch,PN16,DN15,2.5"
+VXF42.15-4,"Dreiwegventil,Flansch,PN16,DN15,4"
+VXF42.20-6.3,"Dreiwegventil,Flansch,PN16,DN20,6.3"
+VXF42.25-10,"Dreiwegventil,Flansch,PN16,DN25,10"
+VXF42.25-6.3,"Dreiwegventil,Flansch,PN16,DN25,6.3"
+VXF42.32-16,"Dreiwegventil,Flansch,PN16,DN32,16"
+VXF42.40-16,"Dreiwegventil,Flansch,PN16,DN40,16"
+VXF42.40-25,"Dreiwegventil,Flansch,PN16,DN40,25"
+VXF42.50-31.5,"Dreiwegventil,Flansch,PN16,DN50,31.5"
+VXF42.50-40,"Dreiwegventil,Flansch,PN16,DN50,40"
+VXF42.65-50,"Dreiwegventil,Flansch,PN16,DN65,50"
+VXF42.65-63,"Dreiwegventil,Flansch,PN16,DN65.63"
+VXF42.80-100,"Dreiwegventil,Flansch,PN16,DN80,100"
+VXF42.80-80,"Dreiwegventil,Flansch,PN16,DN80,80"
+VXF43.100-125,"Dreiwegventil,Flansch,PN16,DN100,125"
+VXF43.100-160,"Dreiwegventil,Flansch,PN16,DN100,160"
+VXF43.125-200,"Dreiwegventil,Flansch,PN16,DN125,200"
+VXF43.125-250,"Dreiwegventil,Flansch,PN16,DN125,250"
+VXF43.150-315,"Dreiwegventil,Flansch,PN16,DN150,315"
+VXF43.150-400,"Dreiwegventil,Flansch,PN16,DN150,400"
+VXF43.65-50,"Dreiwegventil,Flansch,PN16,DN65,50"
+VXF43.65-63,"Dreiwegventil,Flansch,PN16,DN65,63"
+VXF43.80-100,"Dreiwegventil,Flansch,PN16,DN80,100"
+VXF43.80-80,"Dreiwegventil,Flansch,PN16,DN80,80"
+VXF53.100-160,"Dreiwegventil,Flansch,PN25,DN100,160"
+VXF53.125-250,"Dreiwegventil,Flansch,PN25,DN125,250"
+VXF53.150-400,"Dreiwegventil,Flansch,PN25,DN150,400"
+VXF53.15-1.6,"Dreiwegventil,Flansch,PN25,DN15,1.6"
+VXF53.15-2.5,"Dreiwegventil,Flansch,PN25,DN15,2.5"
+VXF53.15-4,"Dreiwegventil,Flansch,PN25,DN15,4"
+VXF53.20-6.3,"Dreiwegventil,Flansch,PN25,DN20,6.3"
+VXF53.25-10,"Dreiwegventil,Flansch,PN25,DN25,10"
+VXF53.25-6.3,"Dreiwegventil,Flansch,PN25,DN25,6.3"
+VXF53.32-16,"Dreiwegventil,Flansch,PN25,DN32,16"
+VXF53.40-16,"Dreiwegventil,Flansch,PN25,DN40,16"
+VXF53.40-25,"Dreiwegventil,Flansch,PN25,DN40,25"
+VXF53.50-40,"Dreiwegventil,Flansch,PN25,DN50,40"
+VXF53.65-63,"Dreiwegventil,Flansch,PN25,DN65,63"
+VXF53.80-100,"Dreiwegventil,Flansch,PN25,DN80,100"
+VXF61.14,"Dreiwegventil,Flansch,PN40,DN15,1.9"
+VXF61.15,"Dreiwegventil,Flansch,PN40,DN15,3"
+VXF61.24,"Dreiwegventil,Flansch,PN40,DN25,5"
+VXF61.25,"Dreiwegventil,Flansch,PN40,DN25,7.5"
+VXF61.39,"Dreiwegventil,Flansch,PN40,DN40,12"
+VXF61.40,"Dreiwegventil,Flansch,PN40,DN40,19"
+VXF61.50,"Dreiwegventil,Flansch,PN40,DN50,31"
+VXF61.65,"Dreiwegventil,Flansch,PN40,DN65,49"
+VXF61.80,"Dreiwegventil,Flansch,PN40,DN80,78"
+VXF61.90,"Dreiwegventil,Flansch,PN40,DN100,124"
+VXF61.91,"Dreiwegventil,Flansch,PN40,DN125,200"
+VXF61.92,"Dreiwegventil,Flansch,PN40,DN150,300"
+VXG41.1301,"Dreiwegventil, PN16,DN15, AG, 1.6,dByp"
+VXG41.1401,"Dreiwegventil, PN16,DN15, AG, 2.5,dByp"
+VXG41.15,"Dreiwegventil, PN16,DN15, AG, 4"
+VXG41.1501,"Dreiwegventil, PN16,DN15, AG, 4,dByp"
+VXG41.20,"Dreiwegventil, PN16,DN20, AG, 6.3"
+VXG41.2001,"Dreiwegventil, PN16,DN20, AG, 6.3,dByp"
+VXG41.25,"Dreiwegventil, PN16,DN25, AG, 10"
+VXG41.2501,"Dreiwegventil, PN16,DN25, AG, 10,dByp"
+VXG41.32,"Dreiwegventil, PN16,DN32, AG, 16"
+VXG41.3201,"Dreiwegventil, PN16,DN32, AG, 16,dByp"
+VXG41.40,"Dreiwegventil, PN16,DN40, AG, 25"
+VXG41.4001,"Dreiwegventil, PN16,DN40, AG, 25,dByp"
+VXG41.50,"Dreiwegventil, PN16,DN50, AG, 40"
+VXG41.5001,"Dreiwegventil, PN16,DN50, AG, 40,dByp"
+VXG44.15-0.25,"Dreiwegventil, PN16, DN15, AG, 0.25"
+VXG44.15-0.4,"Dreiwegventil, PN16, DN15, AG, 0.4"
+VXG44.15-0.63,"Dreiwegventil, PN16, DN15, AG, 0.63"
+VXG44.15-1,"Dreiwegventil, PN16, DN15, AG, 1"
+VXG44.15-1.6,"Dreiwegventil, PN16, DN15, AG, 1.6"
+VXG44.15-2.5,"Dreiwegventil, PN16, DN15, AG, 2.5"
+VXG44.15-4,"Dreiwegventil, PN16, DN15, AG, 4"
+VXG44.20-6.3,"Dreiwegventil, PN16, DN20, AG, 6.3"
+VXG44.25-10,"Dreiwegventil, PN16, DN25, AG, 10"
+VXG44.32-16,"Dreiwegventil, PN16, DN32, AG, 16"
+VXG44.40-25,"Dreiwegventil, PN16, DN40, AG, 25"
+VXI46.15/2,"Dreiwegventil, DN15, IG, 2"
+VXI46.20/2,"Dreiwegventil, DN20, IG, 3.5"
+VXI46.25/2,"Dreiwegventil, DN25, IG, 5"
+VXI46.25T,"Dreiwegventil, DN25, IG, 5.5"
+VXP45.10-0.25,"Dreiwegventil, PN16,DN10,AG, 0.25"
+VXP45.10-0.4,"Dreiwegventil, PN16,DN10,AG, 0.4"
+VXP45.10-0.63,"Dreiwegventil, PN16,DN10,AG, 0.63"
+VXP45.10-1,"Dreiwegventil, PN16,DN10,AG, 1"
+VXP45.10-1.6,"Dreiwegventil, PN16,DN10,AG, 1.6"
+VXP45.15-2.5,"Dreiwegventil, PN16,DN15,AG, 2.5"
+VXP45.20-4,"Dreiwegventil, PN16,DN20,AG, 4"
+VXP45.25-10,"Dreiwegventil, PN16,DN25,AG, 10"
+VXP45.25-6.3,"Dreiwegventil, PN16,DN25,AG, 6.3"
+VXP45.32-16,"Dreiwegventil, PN16,DN32,AG, 16"
+VXP45.40-25,"Dreiwegventil, PN16,DN40,AG, 25"
+VXP47.10-0.25,"Dreiwegventil, PN16,DN10,AG, 0.25"
+VXP47.10-0.4,"Dreiwegventil, PN16,DN10,AG, 0.4"
+VXP47.10-0.63,"Dreiwegventil, PN16,DN10,AG, 0.63"
+VXP47.10-1,"Dreiwegventil, PN16,DN10,AG, 1"
+VXP47.10-1.6,"Dreiwegventil, PN16,DN10,AG, 1, MV"
+VXP47.15-2.5,"Dreiwegventil, PN16,DN15,AG, 2.5"
+VXP47.20-4,"Dreiwegventil, PN16,DN20,AG, 4"
+W,W&T ComServer 3 Port (58633)
+WFK30.D080,"Mech Kaltwasserzähler 2.5m3/h,80 mm,3/4"""
+WFK30.D110,"Mech Kaltwasserzähler 2.5m3/h,110 mm,3/4"""
+WFK40.D080,"Mech Kaltwasserzähler 2.5m3/h,80 mm,3/4"""
+WFK40.D110,"Mech Kaltwasserzähler 2.5m3/h,110 mm,3/4"""
+WFK40.E130,"Mech Kaltwasserzähler 4m3/h,130 mm,1"""
+WFM501-E000H0,"Wärmezähler 0.6m3/h,110 mm,3/4"""
+WFM502-E000H0,"Wärmezähler 1.5m3/h,110 mm,3/4"""
+WFM503-J000H0,"Wärmezähler 2.5m3/h,130 mm,1"""
+WFM541-G000H0,"Wärmez 0.6m3/h,110 mm,3/4'',MBus,2xI,splt"
+WFM542-C000H0,"Wärmez 1.5m3/h,80 mm,3/4'',MBus,2xI,splt"
+WFM542-G000H0,"Wärmez 1.5m3/h,110 mm,3/4'',MBus,2xI,splt"
+WFM543-L000H0,"Wärmez 2.5m3/h,130 mm,1'',MBus,2xI,splt"
+WFN541-G000H0,"Kombiz 0.6m3/h,3/4'',110 mm,MBus,2xI,splt"
+WFN542-G000H0,"Kombiz 1.5m3/h,3/4"",110 mm,MBus,2xI,splt"
+WFN543-L000H0,"Kombiz 2.5m3/h,1'',130 mm,MBus,2xI,splt"
+WFW30.D080,"Mech Warmwasserzähler 2.5m3/h,80 mm,3/4"""
+WFW30.D110,"Mech Warmwasserzähler 2.5m3/h,110 mm,3/4"""
+WFW30.E130,"Mech Warmwasserzähler 4m3/h,130 mm,1"""
+WFW40.D080,"Mech Warmwasserzähler 2.5m3/h,80 mm,3/4"""
+WFW40.D110,"Mech Warmwasserzähler 2.5m3/h,110 mm,3/4"""
+WFW40.E130,"Mech Warmwasserzähler 4m3/h,130 mm,1"""
+WFZ.R2,"Verschraubungen AG ½"", Überwurfmutter ¾"""
+WFZ.R2-1,Verschraubungen AG ¾
+WFZ31,M-Bus-Aufsatzmodul zu Wasserzähler
+WFZ34,"Impulsmodul, 10 l pro Impuls"
+WFZ43,"Impulsmodul, Reed-Kontakt und NAMUR"
+WFZ44,"Impulsmodul, Reed-Kontakt"
+WFZ51,M-Bus Aufsatzmodul für WF..5.. Wärmez.
+WIN2012-TSCAL,Windows 2012 RDS User CAL Hersteller Mic
+WINPRODVDPLYBK,"Microsoft DVD Playback,"
+WME.L18/H,"Einrohranschlussteil,2"",AG3/4,110 mm,Set"
+WMK10.D,"Messkapsel Kaltwasserzähler, 1,5m³/h"
+WMW10.D,"Messkapsel Warmwasserzähler, 1,5m³/h"
+WRI982,Verbrauchsdaten-Interface
+WSM506-0E,"Wärmezähler 0.6m3/h,3/4"",110 mm"
+WSM506-BE,"Wärmez. 0.6m3/h,3/4"",110 mm,M-Bus"
+WSM515-0E,"Wärmezähler 1.5m3/h,3/4"",110 mm"
+WSM515-BE,"Wärmez. 1.5m3/h,3/4"",110 mm,M-Bus"
+WSM525-0E,"Wärmezähler 2.5m3/h,1"",130 mm"
+WSM525-BE,"Wärmezähler 2.5m3/h,1"",130 mm,M-Bus"
+WSM606-BE,"Wärmez. 0.6m3/h,3/4'',110 mm,M-Bus"
+WSM615-BE,"Wärmez. 1.5m3/h,3/4'',110 mm,M-Bus"
+WSM625-BE,"Wärmezähler 2.5m3/h,1'',130 mm,M-Bus"
+WSN606-BE,"Kombizähler 0.6m3/h,3/4'',110 mm,M-Bus"
+WSN615-BE,"Kombizähler 1.5m3/h,3/4'',110 mm,M-Bus"
+WSN625-BE,"Kombizähler 2.5m3/h,1'',130 mm,M-Bus"
+WTV531-GA5060,M-Bus Pegelwandler für 60 Geräte
+WTV676-HB6035,M-Bus-Zentrale/Webserver für 20 Geräte
+WUNHY-WA,Wasser Detektor 24V AC\DC
+WZM-E1,"Verschraubung IG 1"" / AG 3/4"""
+WZM-E34,Verschraubung IG G3/4'' / AG R1/2''
+WZM-E34,Verschraubung IG G3/4'' / AG R1/2''
+WZM-E54,"Verschraubung IG 5/4"" / AG 1"""
+WZM-F260,"Zählerersatzstück DN25, 260 mm, PN25"
+WZM-F270,"Zählerersatzstück DN50, 270 mm, PN16"
+WZM-F300,"Zählerersatzstück DN40, 300 mm, PN16"
+WZM-F300.65,"Zählerersatzstück DN65, 300 mm, PN25"
+WZM-F300.80,"Zählerersatzstück DN80, 300 mm, PN16"
+WZM-F360.100-25,"Zählerersatzstück DN100, 360 mm,PN25"
+WZM-G110,"Zählerersatzstück 3/4'', 110 mm"
+WZM-G130,"Zählerersatzstück 1'', 130 mm"
+WZM-G190,"Zählerersatzstück 1'', 190 mm"
+WZM-G260,"Zählerersatzstück 11/4'', 260 mm"
+WZM-QP150-25,"Volumenmessteil, PN25,150m3/h,DN150,Set"
+WZM-QP150-AP,"Abdeckungs- und Dichtset, PN16, PN25"
+WZM-V130,"Verlängerung 110 auf 130 mm G3/4B"",G3/4B"""
+WZM-V130,"Verlängerung 110 auf 130 mm G3/4B"",G3/4B"""
+WZM-V130.G1,"Verlängerung 110 auf 130 mm G3/4B"", G1B"""
+WZM-V130.G1,"Verlängerung 110 auf 130 mm G3/4B"", G1B"""
+WZM-V190,"Verlängerung 110 auf 190 mm G3/4B"", G1B"""
+WZM-V190,"Verlängerung 110 auf 190 mm G3/4B"", G1B"""
+WZT-A12,S55563-F116 /WZT-A12 Adapter 1/2Z
+WZT-A34,Adapter G3/4B'' für Fühler M10x1
+WZT-A38,Adapter G3/8B'' für Fühler M10x1
+WZT-G10,Einschweissmuffe für Fühler M10x1
+WZT-G12,"Einschweissmuffe für Fühler G1/2'', 45°"
+WZT-GLG,"Einschweissmuffe für Fühler G1/2'', 90°"
+WZT-K1,"Kugelhahn 1"", für Fühler M10x1, 28 mm"
+WZT-K1-1,Kugelhahn R1'' mit Überwurfmutter G1''
+WZT-K12,"Kugelhahn Rp1/2"" für Fühler M10x1, 28 mm"
+WZT-K12-34,Kugelhahn R1/2'' mit Überwurfmutter G3/4''
+WZT-K34,Kugelhahn Rp3/4
+WZT-K34-1,Kugelhahn R3/4'' mit Überwurfmutter G1''
+WZT-K34-34,Kugelhahn R3/4'' mit Überwurfmutter G3/4''
+WZT-M35,"Tauchhülse G1/2B'', für Fühler 5,2x45 mm"
+WZT-S100,"Tauchhülse G1/2B''/1/4'',100 mm,Fühler 6 mm"
+WZT-S150,"Tauchhülse G1/2B''/1/4'',150 mm,Fühler 6 mm"
+WZT-S43V,"Tauchhülse G1/2B"", für Fühler 5,2x37 mm"
+WZU-485E-BAC,"BACnet-Modul für UH50..,UC50.."
+WZU-485E-MOD,"MODbus-Modul,RS485 für UH50..,UC50.."
+WZU5-1020,"Temperaturfühler 100 mm,Pt500,2m,Ø6"
+WZU5-1050,"Temperaturfühler 100 mm,Pt500,5m,Ø6"
+WZU5-1520,"Temperaturfühler 150 mm,Pt500,2m,Ø6"
+WZU5-1550,"Temperaturfühler 150 mm,Pt500,5m,Ø6"
+WZU5-2825,"Temperaturfühler 27.5 mm,Pt500,2.5m,M10x1"
+WZU5-3815,"Temperaturfühler 38 mm,Pt500,1.5m,M10x1"
+WZU5-3825,"Temperaturfühler 38 mm,Pt500,2.5m,M10x1"
+WZU5-4515,"Temperaturfühler 45 mm,Pt500,1.5m,Ø5.2"
+WZU5-4550,"Temperaturfühler 45 mm,Pt500,5m,Ø5.2"
+WZU5-6050,ZZT:727337/WZU5-6050
+WZU-AC110/230-15,"Netzteil AC 230 V, 1.5 m Kabel"
+WZU-ACDC24-50,S55563-F156 /WZU-ACDC24-50 Netzmodul AC/
+WZU-AM,Analogmodul
+WZU-ANT-MAG,"Antenne 868MHz,Magnetfuss,1.5m,SMA/M"
+WZU-ANT-WALL,"Antenne 868MHz,für Wand,IP66,1.5m,SMA/M"
+WZU-BDS,"Batterie 16 Jahre, UH50.."
+WZU-LORA,"LoRa Modul für UH50.., UC50.."
+WZU-LORA-EXT,"LoRa Modul für UH50.., UC50.., ext.Ant."
+WZU-MB G4,M-Bus-Modul (Generation 4)
+WZU-MI,M-Bus-Modul mit 2 Impulseingänge
+WZU-NE24,Netzteil AC230V für Analogmodul WZU-AM
+WZU-P2,Impulsmodul
+WZU-WA,Wandhalterung für UH50../UC50..
+Z155/100,"Blindflansch für M3P, DN100"
+Z155/15F,"Blindflansch für MXF461, DN15"
+Z155/20F,"Blindflansch für MXF461, DN20"
+Z155/25F,"Blindflansch für MXF461, DN25"
+Z155/32F,"Blindflansch für MXF461, DN32"
+Z155/40,"Blindflansch für MXF461, DN40"
+Z155/50,"Blindflansch für MXF461, DN50"
+Z155/65,"Blindflansch für MXF461, DN65"
+Z155/80,"Blindflansch für M3P, DN80"
+Z366,Stösselheizung für MXF461B und MVF461H
+ZM100/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM101/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM110,"Anschlussgehäuse,0-20VPhs"
+ZM111,"Anschlussgehäuse,0-20VPhs"
+ZM120/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM121/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM150,"Anschlussgehäuse,0-10V,4-20mA,"
+ZM200/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM220/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM250,"Anschlussgehäuse,AC24V,0-10V,4-20mA"
+Z-QAP,Zugentlastung und Kältesperre
+VXG41.50,"Dreiwegventil, PN16,DN50, AG, 40"
+VXG41.5001,"Dreiwegventil, PN16,DN50, AG, 40,dByp"
+VXG44.15-0.25,"Dreiwegventil, PN16, DN15, AG, 0.25"
+VXG44.15-0.4,"Dreiwegventil, PN16, DN15, AG, 0.4"
+VXG44.15-0.63,"Dreiwegventil, PN16, DN15, AG, 0.63"
+VXG44.15-1,"Dreiwegventil, PN16, DN15, AG, 1"
+VXG44.15-1.6,"Dreiwegventil, PN16, DN15, AG, 1.6"
+VXG44.15-2.5,"Dreiwegventil, PN16, DN15, AG, 2.5"
+VXG44.15-4,"Dreiwegventil, PN16, DN15, AG, 4"
+VXG44.20-6.3,"Dreiwegventil, PN16, DN20, AG, 6.3"
+VXG44.25-10,"Dreiwegventil, PN16, DN25, AG, 10"
+VXG44.32-16,"Dreiwegventil, PN16, DN32, AG, 16"
+VXG44.40-25,"Dreiwegventil, PN16, DN40, AG, 25"
+VXI46.15,"Dreiwegventil, DN15, IG, 2"
+VXI46.20,"Dreiwegventil, DN20, IG, 3.5"
+VXI46.25,"Dreiwegventil, DN25, IG, 5"
+VXI46.25T,"Dreiwegventil, DN25, IG, 5"
+VXP45.10-0.25,"Dreiwegventil, PN16,DN10,AG, 0.25"
+VXP45.10-0.4,"Dreiwegventil, PN16,DN10,AG, 0.4"
+VXP45.10-0.63,"Dreiwegventil, PN16,DN10,AG, 0.63"
+VXP45.10-1,"Dreiwegventil, PN16,DN10,AG, 1"
+VXP45.10-1.6,"Dreiwegventil, PN16,DN10,AG, 1.6"
+VXP45.15-2.5,"Dreiwegventil, PN16,DN15,AG, 2.5"
+VXP45.20-4,"Dreiwegventil, PN16,DN20,AG, 4"
+VXP45.25-10,"Dreiwegventil, PN16,DN25,AG, 10"
+VXP45.25-6.3,"Dreiwegventil, PN16,DN25,AG, 6.3"
+VXP45.32-16,"Dreiwegventil, PN16,DN32,AG, 16"
+VXP45.40-25,"Dreiwegventil, PN16,DN40,AG, 25"
+VXP47.10-0.25,"Dreiwegventil, PN16,DN10,AG, 0.25"
+VXP47.10-0.4,"Dreiwegventil, PN16,DN10,AG, 0.4"
+VXP47.10-0.63,"Dreiwegventil, PN16,DN10,AG, 0.63"
+VXP47.10-1,"Dreiwegventil, PN16,DN10,AG, 1"
+VXP47.10-1.6,"Dreiwegventil, PN16,DN10,AG, 1, MV"
+VXP47.15-2.5,"Dreiwegventil, PN16,DN15,AG, 2.5"
+VXP47.20-4,"Dreiwegventil, PN16,DN20,AG, 4"
+W&T COMSERVER 3P,W&T ComServer 3 Port (58633)
+WEBLOG250,M-Bus-Zentrale/Webserver für 250 Geräte
+WFK30.D080,"Mech Kaltwasserzähler 2.5m3/h,80mm,3/4"""
+WFK30.D110,"Mech Kaltwasserzähler 2.5m3/h,110mm,3/4"""
+WFK30.E130,"Mech Kaltwasserzähler 4m3/h,130mm,1"""
+WFK40.D080,"Mech Kaltwasserzähler 2.5m3/h,80mm,3/4"""
+WFK40.D110,"Mech Kaltwasserzähler 2.5m3/h,110mm,3/4"""
+WFK40.E130,"Mech Kaltwasserzähler 4m3/h,130mm,1"""
+WFM501-E000H0,"Wärmezähler 0.6m3/h,110mm,3/4"""
+WFM502-E000H0,"Wärmezähler 1.5m3/h,110mm,3/4"""
+WFM503-J000H0,"Wärmezähler 2.5m3/h,130mm,1"""
+WFM541-G000H0,"Wärmez 0.6m3/h,110mm,3/4'',MBus,2xI,splt"
+WFM542-C000H0,"Wärmez 1.5m3/h,80mm,3/4'',MBus,2xI,splt"
+WFM542-G000H0,"Wärmez 1.5m3/h,110mm,3/4'',MBus,2xI,splt"
+WFM543-L000H0,"Wärmez 2.5m3/h,130mm,1'',MBus,2xI,splt"
+WFN541-G000H0,"Kombiz 0.6m3/h,3/4'',110mm,MBus,2xI,splt"
+WFN542-G000H0,"Kombiz 1.5m3/h,3/4"",110mm,MBus,2xI,splt"
+WFN543-L000H0,"Kombiz 2.5m3/h,1'',130mm,MBus,2xI,splt"
+WFW30.D080,"Mech Warmwasserzähler 2.5m3/h,80mm,3/4"""
+WFW30.D110,"Mech Warmwasserzähler 2.5m3/h,110mm,3/4"""
+WFW30.E130,"Mech Warmwasserzähler 4m3/h,130mm,1"""
+WFW40.D080,"Mech Warmwasserzähler 2.5m3/h,80mm,3/4"""
+WFW40.D110,"Mech Warmwasserzähler 2.5m3/h,110mm,3/4"""
+WFW40.E130,"Mech Warmwasserzähler 4m3/h,130mm,1"""
+WFZ.B6-1,Blendensatz Unterputz
+WFZ.IRDA-USB,Infrarot-Lesekopf mit USB-Schnittstelle
+WFZ.MBM-USB,Programmierkabel für M-Bus
+WFZ.MBUSSET,M-Bus Anschlussset
+WFZ.R110,"Zählerersatzstück 3/4'', 110mm"
+WFZ.R130,"Zählerersatzstück 1'', 130mm"
+WFZ.R2,"Verschraubungen AG ½"", Überwurfmutter ¾"""
+WFZ.R2-1,Verschraubungen AG ¾
+WFZ.R80,"Zählerersatzstück 3/4'', 80mm"
+WFZ31,M-Bus-Aufsatzmodul zu Wasserzähler
+WFZ34,"Impulsmodul, 10 l pro Impuls"
+WFZ43,"Impulsmodul, Reed-Kontakt und NAMUR"
+WFZ44,"Impulsmodul, Reed-Kontakt"
+WFZ51,M-Bus Aufsatzmodul für WF..5.. Wärmez.
+WIN2012-TSCAL,Windows 2012 RDS User CAL Hersteller Mic
+WINPRODVDPLYBK,"Microsoft DVD Playback,"
+WME.EINPUTZ1,Einputzhilfe für Messkapselwasserzähler
+WME.L18/H,"Einrohranschlussteil,2"",AG3/4,110mm,Set"
+WMK10.D,"Messkapsel Kaltwasserzähler, 1,5m³/h"
+WMW10.D,"Messkapsel Warmwasserzähler, 1,5m³/h"
+WMZ.K4,Montageschlüssel für Messkapselzähler
+WRI982,Verbrauchsdaten-Interface
+WSM506-0E,"Wärmezähler 0.6m3/h,3/4"",110mm"
+WSM506-BE,"Wärmez. 0.6m3/h,3/4"",110mm,M-Bus"
+WSM515-0E,"Wärmezähler 1.5m3/h,3/4"",110mm"
+WSM515-BE,"Wärmez. 1.5m3/h,3/4"",110mm,M-Bus"
+WSM525-0E,"Wärmezähler 2.5m3/h,1"",130mm"
+WSM525-BE,"Wärmezähler 2.5m3/h,1"",130mm,M-Bus"
+WSM606-BE,"Wärmez. 0.6m3/h,3/4'',110mm,M-Bus"
+WSM615-BE,"Wärmez. 1.5m3/h,3/4'',110mm,M-Bus"
+WSM625-BE,"Wärmezähler 2.5m3/h,1'',130mm,M-Bus"
+WTV531-GA5060,M-Bus Pegelwandler für 60 Geräte
+WTV676-HB6035,WTV676-HB6035 M-Bus Web-Ser
+WZC-P250,M-Bus Pegelwandler für 250 Geräte
+WZC-P60,M-Bus Pegelwandler für 60 Geräte
+WZC-R250,M-Bus-Repeater für 250 Geräte
+WZC-S250,"M-Bus-Zentrale, 250 Geräte, Web"
+WZM-E1,"Verschraubung IG 1"" / AG 3/4"""
+WZM-E34,Verschraubung IG G3/4'' / AG R1/2''
+WZM-E54,"Verschraubung IG 5/4"" / AG 1"""
+WZM-F260,"Zählerersatzstück DN25, 260 mm, PN25"
+WZM-F270,"Zählerersatzstück DN50, 270 mm, PN16"
+WZM-F300,"Zählerersatzstück DN40, 300 mm, PN16"
+WZM-F300.65,"Zählerersatzstück DN65, 300 mm, PN25"
+WZM-F300.80,"Zählerersatzstück DN80, 300 mm, PN16"
+WZM-F360.100-25,"Zählerersatzstück DN100, 360 mm,PN25"
+WZM-G110,"Zählerersatzstück 3/4'', 110 mm"
+WZM-G130,"Zählerersatzstück 1'', 130 mm"
+WZM-G190,"Zählerersatzstück 1'', 190 mm"
+WZM-G260,"Zählerersatzstück 11/4'', 260 mm"
+WZM-QP150-25,"Volumenmessteil, PN25,150m3/h,DN150,Set"
+WZM-QP150-AP,"Abdeckungs- und Dichtset, PN16, PN25"
+WZM-V110,"Verlängerung 80 auf 110mm G3/4B"", G1B"""
+WZM-V130,"Verlängerung 110 auf 130mm G3/4B"",G3/4B"""
+WZM-V130.G1,"Verlängerung 110 auf 130mm G3/4B"", G1B"""
+WZM-V190,"Verlängerung 110 auf 190mm G3/4B"", G1B"""
+WZT-A12,Adapter G1/2B'' für Fühler M10x1
+WZT-A34,Adapter G3/4B'' für Fühler M10x1
+WZT-A38,Adapter G3/8B'' für Fühler M10x1
+WZT-G10,Einschweissmuffe für Fühler M10x1
+WZT-G12,"Einschweissmuffe für Fühler G1/2'', 45°"
+WZT-GLG,"Einschweissmuffe für Fühler G1/2'', 90°"
+WZT-K1,"Kugelhahn 1"", für Fühler M10x1, 28mm"
+WZT-K1-1,Kugelhahn R1'' mit Überwurfmutter G1''
+WZT-K12,"Kugelhahn Rp1/2"" für Fühler M10x1, 28mm"
+WZT-K12-34,Kugelhahn R1/2'' mit Überwurfmutter G3/4''
+WZT-K34,Kugelhahn Rp3/4
+WZT-K34-1,Kugelhahn R3/4'' mit Überwurfmutter G1''
+WZT-K34-34,Kugelhahn R3/4'' mit Überwurfmutter G3/4''
+WZT-M35,"Tauchhülse G1/2B'', für Fühler 5,2x45mm"
+WZT-S100,"Tauchhülse G1/2B''/1/4'',100mm,Fühler 6mm"
+WZT-S150,"Tauchhülse G1/2B''/1/4'',150mm,Fühler 6mm"
+WZT-S43V,"Tauchhülse G1/2B"", für Fühler 5,2x37mm"
+WZU-485E-BAC,"BACnet-Modul für UH50..,UC50.."
+WZU-485E-MOD,"MODbus-Modul,RS485 für UH50..,UC50.."
+WZU5-1020,"Temperaturfühler 100mm,Pt500,2m,Ø6"
+WZU5-1050,"Temperaturfühler 100mm,Pt500,5m,Ø6"
+WZU5-1520,"Temperaturfühler 150mm,Pt500,2m,Ø6"
+WZU5-1550,"Temperaturfühler 150mm,Pt500,5m,Ø6"
+WZU5-2815,"Temperaturfühler 27.5mm,Pt500,1.5m,M10x1"
+WZU5-2825,"Temperaturfühler 27.5mm,Pt500,2.5m,M10x1"
+WZU5-3815,"Temperaturfühler 38mm,Pt500,1.5m,M10x1"
+WZU5-3825,"Temperaturfühler 38mm,Pt500,2.5m,M10x1"
+WZU5-4515,"Temperaturfühler 45mm,Pt500,1.5m,Ø5.2"
+WZU5-4550,"Temperaturfühler 45mm,Pt500,5m,Ø5.2"
+WZU-AC110/230-15,Netzmodul AC 110/230 V für UH50..
+WZU-ACDC24-00,Netzteil 24 V
+WZU-AM,Analogmodul
+WZU-BDS,"Batterie 16 Jahre, UH50.."
+WZU-MB-G4,M-Bus-Modul (Generation 4)
+WZU-MI,M-Bus-Modul mit 2 Impulseingänge
+WZU-NE24,WZU-NE24
+WZU-P2,Impulsmodul
+WZU-WA,Wandhalterung für UH50../UC50..
+X108POE,"Scalance XB108PoE Switch,8x RJ45 -10/10"
+XB004-1,"Scalance XB004-1 Switch,4x RJ45 -10/100"
+XB004-1,XB004-1
+XB004-2,"Scalance XB004-2 Switch,4x RJ45 -10/100"
+XB004-2,XB004-2
+XB005,DIN Switch 5 Port 10/100TX 24AC/DC
+XB005,XB005
+XB008,"Scalance XB008 Switch,8x RJ45 -10/100TX"
+XB008,XB008
+XB108POE,XB108PoE
+XB205-3,"Scalance XB205-3 Switch,5x RJ45 -10/100"
+XB205-3,XB205-3
+XB208,"Scalance XB208 Switch,8x RJ45 -10/100TX"
+XB208,XB208
+XB213-3,"Scalance XB213-3 Switch,13x RJ45 -10/10"
+XB213-3,XB213-3
+XR324-12M,XB324-12M
+Z155/100,"Blindflansch für M3P, DN100"
+Z155/15F,"Blindflansch für MXF461, DN15"
+Z155/20F,"Blindflansch für MXF461, DN20"
+Z155/25F,"Blindflansch für MXF461, DN25"
+Z155/32F,"Blindflansch für MXF461, DN32"
+Z155/40,"Blindflansch für MXF461, DN40"
+Z155/50,"Blindflansch für MXF461, DN50"
+Z155/65,"Blindflansch für MXF461, DN65"
+Z155/80,"Blindflansch für M3P, DN80"
+Z366,Stösselheizung für MXF461B und MVF461H
+ZM100/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM101/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM110,"Anschlussgehäuse,0-20VPhs"
+ZM111,"Anschlussgehäuse,0-20VPhs"
+ZM120/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM121/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM150,"Anschlussgehäuse,0-10V,4-20mA,"
+ZM200/A,"Anschlussgehäuse,AC24V,0-10V,0-20VPhs"
+ZM210,"Anschlussgehäuse,0-20VPhs"
+ZM220/A,"Anschlussgehäuse,AC24V,4-20mA,0-20VPhs"
+ZM250,"Anschlussgehäuse,AC24V,0-10V,4-20mA"
+Z-QAP,Zugentlastung und Kältesperre
+ZZ6:FPD,Steuerleitungen  (Fremdmaterial)
+ZZ6:FPM,LWL/Innen/Aussenkabel(Fremdmaterial)
+ZZ6:JDD,Klemmkaesten (Fremdmaterial)
+ZZ6:KIQ,Ueberspannungsschutzgeraete (Fremdmat)
+ZZ6:MNA,"Leuchtmittel, sonstige (Fremdmaterial)"
+ZZ6:MOA,"Beleuchtungstechnik, sonstige (Fremdmat)"
+ZZ6:MOB,Innenleuchten (Fremdmaterial)
+ZZ6:MOD,Notleuchten (Fremdmaterial)
+ZZ6:MOI,Elektr Vorschaltgerät für Leuch (Fremd)
+ZZ6:MRF,Komponenten Gebäudeautomation
+ZZ6:NNA,"Tablet, PC, Notebook (Fremdmaterial)"
+ZZ6:NNF,"Server, Bladesys, Racks (Fremdmat)"
+ZZ6:NO1,"Flachbildschirme, sonstige"
+ZZ6:NOY,IT Bildschirme (Fremdmaterial)
+ZZ6:NRA,"Netzwerkprodukte, sonstige (Fremdmat)"
+ZZ6:NSA,"Sensoren, sonstige (Eigenmaterial)"
+ZZ6:OFA,Mechanische Zählsystem
+ZZ6:QZA, 
+Kältemaschine BACnet,Kältemschine mit BACnet Signal

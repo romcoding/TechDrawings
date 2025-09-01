@@ -4,7 +4,23 @@ import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
 import { ChatState, Message } from './types';
 
-const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical drawings and documents using GPT-5. I can help identify components like valves, pipes, electrical systems, and other technical elements in your drawings, PDFs, or Word documents. Upload a file and I'll provide a comprehensive analysis with detailed component information.`;
+const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical drawings and documents using GPT-4o with expert engineering knowledge. I can provide comprehensive analysis of technical drawings according to international standards (VDI 3814, ISO 16484, ISO 14617, IEC 60617, DIN EN 81346).
+
+🔧 **What I can analyze:**
+• HVAC systems, building automation, and industrial control systems
+• Valves, pumps, sensors, actuators, and control equipment
+• Electrical systems, wiring, and instrumentation
+• Piping systems, fittings, and mechanical components
+• Safety systems and emergency equipment
+
+📊 **Analysis includes:**
+• Detailed Bill of Materials (BOM) with quantities
+• Component specifications, ratings, and materials
+• Signal types and communication protocols
+• System locations and technical standards
+• Downloadable CSV report for procurement
+
+Upload a technical drawing and I'll provide a professional engineering analysis!`;
 
 // Use relative API paths since frontend is served from the same server
 const API_URL = '';
@@ -233,7 +249,7 @@ function App() {
                 <Brain className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Technical Drawing Analyzer</h1>
-              <p className="text-gray-600">Powered by GPT-5 AI</p>
+              <p className="text-gray-600">Powered by GPT-4o • Expert Engineering Analysis</p>
             </div>
 
             {loginError && (
@@ -317,7 +333,7 @@ function App() {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">Technical Drawing Analyzer</h1>
-                <p className="text-sm text-gray-600">Powered by GPT-5 AI</p>
+                <p className="text-sm text-gray-600">Powered by GPT-4o • Expert Engineering Analysis</p>
               </div>
             </div>
             
@@ -356,6 +372,26 @@ function App() {
 
           <div className="border-t border-gray-100 p-6 space-y-4 bg-gray-50">
             <FileUpload onFileSelect={handleFileSelect} />
+            
+            {/* Download Section */}
+            {chatState.messages.some(msg => msg.role === 'assistant' && msg.content.includes('Total components identified:')) && (
+              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
+                <div className="flex items-center gap-3">
+                  <Download className="w-5 h-5 text-blue-600" />
+                  <div>
+                    <h3 className="font-medium text-blue-900">Analysis Complete!</h3>
+                    <p className="text-sm text-blue-700">Download the detailed Bill of Materials (BOM) as CSV</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => window.open('/api/download', '_blank')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Download CSV
+                </button>
+              </div>
+            )}
             
             <form onSubmit={handleSubmit} className="flex gap-3">
               <input

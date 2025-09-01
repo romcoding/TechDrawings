@@ -9,7 +9,7 @@ class Config:
     
     # OpenAI Configuration
     OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-    OPENAI_MODEL = 'gpt-5o-mini'  # Using GPT-5 for superior analysis
+    OPENAI_MODEL = 'gpt-4o'  # Using GPT-4o for superior analysis
     
     # Flask Configuration
     SECRET_KEY = os.getenv('FLASK_SECRET_KEY', 'your-secret-key-here')

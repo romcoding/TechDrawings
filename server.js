@@ -2,23 +2,106 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
+import session from 'express-session';
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONTEND_URL || '*',
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
+
+// Session configuration for Vercel
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// Authentication middleware
+const requireAuth = (req, res, next) => {
+  if (req.session && req.session.loggedIn) {
+    return next();
+  } else {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+};
+
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok' });
+  res.status(200).json({ 
+    status: 'ok',
+    authenticated: req.session && req.session.loggedIn || false
+  });
 });
 
-app.post('/api/analyze', async (req, res) => {
+// Login endpoint
+app.post('/api/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+    
+    const validUsername = process.env.APP_USERNAME || 'admin';
+    const validPassword = process.env.APP_PASSWORD || 'admin';
+    
+    if (username === validUsername && password === validPassword) {
+      req.session.loggedIn = true;
+      req.session.username = username;
+      res.json({ 
+        success: true, 
+        message: 'Login successful',
+        username: username
+      });
+    } else {
+      res.status(401).json({ 
+        success: false, 
+        message: 'Invalid credentials' 
+      });
+    }
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Login failed' 
+    });
+  }
+});
+
+// Logout endpoint
+app.post('/api/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Logout failed' 
+      });
+    }
+    res.json({ 
+      success: true, 
+      message: 'Logout successful' 
+    });
+  });
+});
+
+// Check authentication status
+app.get('/api/auth-status', (req, res) => {
+  res.json({ 
+    authenticated: req.session && req.session.loggedIn || false,
+    username: req.session && req.session.username || null
+  });
+});
+
+app.post('/api/analyze', requireAuth, async (req, res) => {
   try {
     const { file, message } = req.body;
 
@@ -59,7 +142,7 @@ app.post('/api/analyze', async (req, res) => {
   }
 });
 
-app.post('/api/chat', async (req, res) => {
+app.post('/api/chat', requireAuth, async (req, res) => {
   try {
     const { message, context } = req.body;
 

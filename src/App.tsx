@@ -47,24 +47,39 @@ function App() {
   const checkServerStatus = async () => {
     try {
       console.log('Checking server status...');
-      const response = await fetch(`${API_URL}/health`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
+      
+      // Try multiple endpoints to determine server status
+      const endpoints = ['/health', '/ping', '/test'];
+      let serverOnline = false;
+      
+      for (const endpoint of endpoints) {
+        try {
+          console.log(`Trying endpoint: ${endpoint}`);
+          const response = await fetch(`${API_URL}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            timeout: 5000 // 5 second timeout
+          });
+          
+          console.log(`${endpoint} response:`, response.status, response.statusText);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log(`${endpoint} data:`, data);
+            serverOnline = true;
+            break; // If any endpoint works, server is online
+          }
+        } catch (endpointError) {
+          console.log(`${endpoint} failed:`, endpointError);
+          continue; // Try next endpoint
         }
-      });
-      
-      console.log('Health check response:', response.status, response.statusText);
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Health check data:', data);
-        setServerStatus('online');
-      } else {
-        console.log('Health check failed:', response.status);
-        setServerStatus('offline');
       }
+      
+      setServerStatus(serverOnline ? 'online' : 'offline');
+      
     } catch (error) {
       console.error('Server connection error:', error);
       setServerStatus('offline');
@@ -95,6 +110,8 @@ function App() {
         setIsAuthenticated(true);
         setShowLogin(false);
         setLoginCredentials({ username: '', password: '' });
+        // If login works, server is definitely online
+        setServerStatus('online');
       } else {
         setLoginError(data.message || 'Login failed');
       }
@@ -253,6 +270,9 @@ function App() {
           messages: [...prev.messages, aiResponse],
           isLoading: false
         }));
+        
+        // If file analysis works, server is definitely online
+        setServerStatus('online');
       } catch (error) {
         console.error('Error:', error);
         setChatState(prev => ({

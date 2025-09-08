@@ -46,15 +46,28 @@ function App() {
 
   const checkServerStatus = async () => {
     try {
-      const response = await fetch(`${API_URL}/health`);
+      console.log('Checking server status...');
+      const response = await fetch(`${API_URL}/health`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      console.log('Health check response:', response.status, response.statusText);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('Health check data:', data);
         setServerStatus('online');
       } else {
+        console.log('Health check failed:', response.status);
         setServerStatus('offline');
       }
     } catch (error) {
-      setServerStatus('offline');
       console.error('Server connection error:', error);
+      setServerStatus('offline');
     }
   };
 
@@ -157,15 +170,33 @@ function App() {
   };
 
   const handleFileSelect = async (file: File) => {
-    if (serverStatus === 'offline' || !isAuthenticated) {
+    // Check authentication first
+    if (!isAuthenticated) {
       setChatState(prev => ({
         ...prev,
         messages: [...prev.messages, {
           role: 'assistant',
-          content: 'Please ensure you are logged in and the server is running before uploading files.'
+          content: 'Please log in first before uploading files.'
         }],
       }));
       return;
+    }
+
+    // Check server status and retry if needed
+    if (serverStatus === 'offline') {
+      console.log('Server appears offline, retrying health check...');
+      await checkServerStatus();
+      
+      if (serverStatus === 'offline') {
+        setChatState(prev => ({
+          ...prev,
+          messages: [...prev.messages, {
+            role: 'assistant',
+            content: 'Server appears to be offline. Please check your connection and try again. If the problem persists, the server may be experiencing issues.'
+          }],
+        }));
+        return;
+      }
     }
 
     const reader = new FileReader();
@@ -349,6 +380,14 @@ function App() {
                   <span>Offline</span>
                 </div>
               )}
+              
+              <button
+                onClick={checkServerStatus}
+                className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm"
+                title="Refresh server status"
+              >
+                Refresh
+              </button>
               
               <button
                 onClick={handleLogout}

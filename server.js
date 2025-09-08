@@ -40,10 +40,18 @@ const requireAuth = (req, res, next) => {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
+  console.log('Health check requested');
   res.status(200).json({ 
     status: 'ok',
-    authenticated: req.session && req.session.loggedIn || false
+    authenticated: req.session && req.session.loggedIn || false,
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
   });
+});
+
+// Also add a simple ping endpoint
+app.get('/ping', (req, res) => {
+  res.status(200).json({ message: 'pong' });
 });
 
 // Login endpoint

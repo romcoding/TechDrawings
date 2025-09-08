@@ -19,6 +19,14 @@
       "dest": "/server.js"
     },
     {
+      "src": "/health",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/ping",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/$1"
     }

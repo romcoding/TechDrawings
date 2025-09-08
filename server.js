@@ -8,8 +8,10 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*',
-  credentials: true
+  origin: process.env.FRONTEND_URL || true, // Allow all origins in development
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }));
 app.use(express.json({ limit: '10mb' }));
 
@@ -52,6 +54,16 @@ app.get('/health', (req, res) => {
 // Also add a simple ping endpoint
 app.get('/ping', (req, res) => {
   res.status(200).json({ message: 'pong' });
+});
+
+// Test endpoint to verify server is working
+app.get('/test', (req, res) => {
+  res.status(200).json({ 
+    message: 'Server is working!',
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development',
+    vercel: process.env.VERCEL === '1' ? 'Yes' : 'No'
+  });
 });
 
 // Login endpoint

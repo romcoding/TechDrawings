@@ -43,7 +43,16 @@ function App() {
   useEffect(() => {
     checkServerStatus();
     checkAuthStatus();
-  }, []);
+    
+    // Set up periodic authentication check every 5 minutes
+    const authInterval = setInterval(() => {
+      if (isAuthenticated) {
+        checkAuthStatus();
+      }
+    }, 5 * 60 * 1000); // 5 minutes
+    
+    return () => clearInterval(authInterval);
+  }, [isAuthenticated]);
 
   const checkAuthStatus = async () => {
     try {
@@ -225,21 +234,43 @@ function App() {
       return;
     }
 
-    // Check server status and retry if needed
-    if (serverStatus === 'offline') {
-      console.log('Server appears offline, retrying health check...');
-      await checkServerStatus();
+    // Verify authentication is still valid before proceeding
+    try {
+      const authResponse = await fetch(`${API_URL}/api/auth-status`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
       
-      if (serverStatus === 'offline') {
-        setChatState(prev => ({
-          ...prev,
-          messages: [...prev.messages, {
-            role: 'assistant',
-            content: 'Server appears to be offline. Please check your connection and try again. If the problem persists, the server may be experiencing issues.'
-          }],
-        }));
-        return;
+      if (authResponse.ok) {
+        const authData = await authResponse.json();
+        if (!authData.authenticated) {
+          setIsAuthenticated(false);
+          setChatState(prev => ({
+            ...prev,
+            messages: [...prev.messages, {
+              role: 'assistant',
+              content: 'Your session has expired. Please log in again.'
+            }],
+          }));
+          return;
+        }
+      } else {
+        throw new Error('Auth check failed');
       }
+    } catch (error) {
+      console.error('Auth verification failed:', error);
+      setIsAuthenticated(false);
+      setChatState(prev => ({
+        ...prev,
+        messages: [...prev.messages, {
+          role: 'assistant',
+          content: 'Authentication verification failed. Please log in again.'
+        }],
+      }));
+      return;
     }
 
     const reader = new FileReader();
@@ -283,7 +314,12 @@ function App() {
 
         if (!response.ok) {
           if (response.status === 401) {
+            console.log('401 error - user not authenticated');
+            setIsAuthenticated(false);
             throw new Error('401: Authentication required');
+          }
+          if (response.status === 503) {
+            throw new Error('503: AI service unavailable');
           }
           throw new Error(await response.text());
         }
@@ -309,8 +345,10 @@ function App() {
         
         // Check if it's an authentication error
         if (error.message && error.message.includes('401')) {
-          errorMessage = 'Authentication required. Please log in first before analyzing files.';
+          errorMessage = 'Your session has expired. Please log in again to analyze files.';
           setIsAuthenticated(false);
+        } else if (error.message && error.message.includes('503')) {
+          errorMessage = 'AI service is currently unavailable. Please try again later.';
         }
         
         setChatState(prev => ({

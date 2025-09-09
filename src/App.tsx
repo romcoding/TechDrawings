@@ -22,8 +22,8 @@ const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical
 
 Upload a technical drawing and I'll provide a professional engineering analysis!`;
 
-// Use relative API paths since frontend is served from the same server
-const API_URL = '';
+// Define the API URL. In a production environment, this should be set via environment variables.
+const API_URL = 'https://techdrawings-1.onrender.com';
 
 function App() {
   const [chatState, setChatState] = useState<ChatState>({
@@ -60,8 +60,7 @@ function App() {
             credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
-            },
-            timeout: 5000 // 5 second timeout
+            }
           });
           
           console.log(`${endpoint} response:`, response.status, response.statusText);
@@ -442,29 +441,29 @@ function App() {
                     <p className="text-sm text-blue-700">Download the detailed Bill of Materials (BOM) as CSV</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => window.open('/api/download', '_blank')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Download CSV
-                </button>
+                 <button
+                   onClick={() => window.open(`${API_URL}/api/download`, '_blank')}
+                   className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                 >
+                   <Download className="w-4 h-4 mr-2" />
+                   Download BOM
+                 </button>
               </div>
             )}
-            
-            <form onSubmit={handleSubmit} className="flex gap-3">
+
+            <form onSubmit={handleSubmit} className="flex items-center gap-4">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask a question about the document..."
-                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
-                disabled={chatState.isLoading}
+                placeholder={serverStatus === 'offline' ? 'Server is offline. Cannot send messages.' : 'Type your message or upload a file...'}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                disabled={chatState.isLoading || serverStatus === 'offline' || !isAuthenticated}
               />
               <button
                 type="submit"
-                disabled={chatState.isLoading}
-                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="inline-flex items-center justify-center p-3 border border-transparent text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-lg shadow-sm transition-all transform hover:scale-[1.02]"
+                disabled={chatState.isLoading || serverStatus === 'offline' || !isAuthenticated}
               >
                 {chatState.isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -476,6 +475,10 @@ function App() {
           </div>
         </div>
       </main>
+
+      <footer className="bg-gray-800 text-white text-center p-4 text-sm">
+        <p>&copy; {new Date().getFullYear()} Technical Drawing Analyzer. All rights reserved.</p>
+      </footer>
     </div>
   );
 }

@@ -42,7 +42,29 @@ function App() {
 
   useEffect(() => {
     checkServerStatus();
+    checkAuthStatus();
   }, []);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/auth-status`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setIsAuthenticated(data.authenticated);
+        console.log('Auth status:', data);
+      }
+    } catch (error) {
+      console.error('Auth check error:', error);
+      setIsAuthenticated(false);
+    }
+  };
 
   const checkServerStatus = async () => {
     try {
@@ -260,6 +282,9 @@ function App() {
         });
 
         if (!response.ok) {
+          if (response.status === 401) {
+            throw new Error('401: Authentication required');
+          }
           throw new Error(await response.text());
         }
 
@@ -279,11 +304,20 @@ function App() {
         setServerStatus('online');
       } catch (error) {
         console.error('Error:', error);
+        
+        let errorMessage = 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.';
+        
+        // Check if it's an authentication error
+        if (error.message && error.message.includes('401')) {
+          errorMessage = 'Authentication required. Please log in first before analyzing files.';
+          setIsAuthenticated(false);
+        }
+        
         setChatState(prev => ({
           ...prev,
           messages: [...prev.messages, {
             role: 'assistant',
-            content: 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.'
+            content: errorMessage
           }],
           isLoading: false
         }));

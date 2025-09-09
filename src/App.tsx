@@ -47,40 +47,35 @@ function App() {
   const checkServerStatus = async () => {
     try {
       console.log('Checking server status...');
+      console.log('API_URL:', API_URL);
+      console.log('Full health URL:', `${API_URL}/health`);
       
-      // Try multiple endpoints to determine server status
-      const endpoints = ['/health', '/ping', '/test'];
-      let serverOnline = false;
-      
-      for (const endpoint of endpoints) {
-        try {
-          console.log(`Trying endpoint: ${endpoint}`);
-          const response = await fetch(`${API_URL}${endpoint}`, {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            }
-          });
-          
-          console.log(`${endpoint} response:`, response.status, response.statusText);
-          
-          if (response.ok) {
-            const data = await response.json();
-            console.log(`${endpoint} data:`, data);
-            serverOnline = true;
-            break; // If any endpoint works, server is online
-          }
-        } catch (endpointError) {
-          console.log(`${endpoint} failed:`, endpointError);
-          continue; // Try next endpoint
+      // Check server status using health endpoint
+      const response = await fetch(`${API_URL}/health`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
         }
-      }
+      });
       
-      setServerStatus(serverOnline ? 'online' : 'offline');
+      console.log('Health response status:', response.status);
+      console.log('Health response headers:', Object.fromEntries(response.headers.entries()));
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Health data:', data);
+        setServerStatus('online');
+      } else {
+        console.log('Health check failed with status:', response.status);
+        const errorText = await response.text();
+        console.log('Error response:', errorText);
+        setServerStatus('offline');
+      }
       
     } catch (error) {
       console.error('Server connection error:', error);
+      console.error('Error details:', error.message);
       setServerStatus('offline');
     }
   };

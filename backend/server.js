@@ -28,8 +28,9 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
   resave: false,
   saveUninitialized: false,
+  proxy: true,
   cookie: {
-    secure: false, // Set to false for Render compatibility
+    secure: process.env.NODE_ENV === 'production', // Set to true in production for HTTPS, false for local HTTP
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: 'none' // Required for cross-origin requests

@@ -29,9 +29,10 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
+    secure: false, // Set to false for Render compatibility
     httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: 'none' // Required for cross-origin requests
   }
 }));
 
@@ -41,9 +42,15 @@ const openai = new OpenAI({
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
+  console.log('RequireAuth check - Session ID:', req.sessionID);
+  console.log('RequireAuth check - Session:', req.session);
+  console.log('RequireAuth check - Headers:', req.headers);
+  
   if (req.session && req.session.loggedIn) {
+    console.log('Authentication successful');
     return next();
   } else {
+    console.log('Authentication failed - no valid session');
     return res.status(401).json({ error: 'Authentication required' });
   }
 };
@@ -81,18 +88,26 @@ app.post('/api/login', (req, res) => {
   try {
     const { username, password } = req.body;
     
+    console.log('Login attempt:', { username, password: '***' });
+    console.log('Session before login:', req.session);
+    
     const validUsername = process.env.APP_USERNAME || 'admin';
     const validPassword = process.env.APP_PASSWORD || 'admin';
     
     if (username === validUsername && password === validPassword) {
       req.session.loggedIn = true;
       req.session.username = username;
+      
+      console.log('Login successful, session after login:', req.session);
+      console.log('Session ID:', req.sessionID);
+      
       res.json({ 
         success: true, 
         message: 'Login successful',
         username: username
       });
     } else {
+      console.log('Invalid credentials');
       res.status(401).json({ 
         success: false, 
         message: 'Invalid credentials' 
@@ -125,9 +140,18 @@ app.post('/api/logout', (req, res) => {
 
 // Check authentication status
 app.get('/api/auth-status', (req, res) => {
+  console.log('Auth status check - Session ID:', req.sessionID);
+  console.log('Auth status check - Session:', req.session);
+  console.log('Auth status check - Headers:', req.headers);
+  
+  const authenticated = req.session && req.session.loggedIn || false;
+  const username = req.session && req.session.username || null;
+  
+  console.log('Auth status result:', { authenticated, username });
+  
   res.json({ 
-    authenticated: req.session && req.session.loggedIn || false,
-    username: req.session && req.session.username || null
+    authenticated,
+    username
   });
 });
 

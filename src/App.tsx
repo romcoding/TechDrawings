@@ -22,8 +22,8 @@ const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical
 
 Upload a technical drawing and I'll provide a professional engineering analysis!`;
 
-// Define the API URL. In a production environment, this should be set via environment variables.
-const API_URL = 'https://techdrawings-1.onrender.com';
+// Get API URL from environment variables
+const API_URL = import.meta.env.VITE_API_URL || 'https://techdrawings-1.onrender.com';
 
 function App() {
   const [chatState, setChatState] = useState<ChatState>({

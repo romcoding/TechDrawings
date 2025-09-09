@@ -1,0 +1,30 @@
+{
+  "name": "techdrawings-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Technical Drawing Analyzer",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "openai": "^4.20.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "technical-drawings",
+    "ai",
+    "gpt-4",
+    "engineering",
+    "api"
+  ],
+  "author": "Technical Drawing Analyzer Team",
+  "license": "MIT"
+}

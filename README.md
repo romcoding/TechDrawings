@@ -1,14 +1,22 @@
-# Technical Drawing Analyzer
+# Technical Drawing Analyzer - Frontend
 
-A modern, **complete web application** for analyzing technical drawings and documents using **GPT-5 Vision API**. This tool provides comprehensive component identification, Bill of Materials (BOM) generation, and detailed technical analysis for engineering drawings, schematics, and technical documents.
+A modern React frontend for analyzing technical drawings and documents using **GPT-4o Vision API**. This tool provides comprehensive component identification, Bill of Materials (BOM) generation, and detailed technical analysis for engineering drawings, schematics, and technical documents.
+
+## 🏗️ Architecture
+
+This repository contains the **frontend only**. The application uses a microservices architecture:
+
+- **Frontend (This Repo)**: React + TypeScript + Vite, deployed on Vercel
+- **Backend**: Node.js + Express API, deployed on Render
+- **AI Service**: OpenAI GPT-4o Vision API
 
 ## 🌟 What Makes This Special
 
-- **Complete Web Application**: Single server deployment with integrated frontend and backend
-- **GPT-5 Powered Analysis**: Utilizes the latest GPT-5 Vision API for superior technical drawing interpretation
-- **Modern UI/UX**: Beautiful, responsive React frontend with drag-and-drop file upload
-- **Production Ready**: Includes deployment guides for various hosting environments
-- **Secure & Scalable**: Built with Flask backend, authentication, and proper security measures
+- **Modern Frontend**: React 18 + TypeScript + Vite for optimal performance
+- **GPT-4o Powered Analysis**: Utilizes the latest GPT-4o Vision API for superior technical drawing interpretation
+- **Beautiful UI/UX**: Responsive design with drag-and-drop file upload
+- **Production Ready**: Optimized for Vercel deployment
+- **Secure**: Environment-based configuration and secure API communication
 
 ## ✨ Features
 
@@ -28,51 +36,57 @@ A modern, **complete web application** for analyzing technical drawings and docu
 
 ## 🚀 Technology Stack
 
-### Frontend
+### Frontend (This Repository)
 - **React 18** with TypeScript
+- **Vite** for fast development and building
 - **Tailwind CSS** for modern, responsive design
 - **Lucide React** for beautiful icons
 - **React Dropzone** for file uploads
 
-### Backend
-- **Flask 3.1** with Python
-- **OpenAI GPT-5 Vision API** for document analysis
-- **Flask-CORS** for cross-origin requests
-- **Pandas** for data processing
-- **PDF2Image** for PDF conversion
+### Backend (Separate Repository)
+- **Node.js** with Express
+- **OpenAI GPT-4o Vision API** for document analysis
+- **Express-Session** for authentication
+- **CORS** for secure cross-origin requests
 
 ### Deployment
-- **Integrated Frontend Serving**: Flask serves React build files
-- **Production Ready**: Includes Nginx, Docker, and cloud deployment options
-- **SSL Support**: HTTPS configuration for production environments
+- **Frontend**: Vercel (static hosting)
+- **Backend**: Render (Node.js hosting)
+- **Environment Variables**: Secure configuration management
 
 ## 📋 Prerequisites
 
-- Python 3.8+
 - Node.js 18+
-- OpenAI API key with GPT-5 access
-- Poppler (for PDF processing)
+- npm or yarn
+- Backend API running (see backend repository)
 
 ## 🛠️ Quick Start
 
 ### 1. Clone and Setup
 ```bash
 git clone <repository-url>
-cd TechDrawings-3
+cd TechDrawings-4
 ```
 
-### 2. Run the Web App
+### 2. Install Dependencies
 ```bash
-# On macOS/Linux
-./start.sh
-
-# On Windows
-start.bat
+npm install
 ```
 
-### 3. Access the Web Application
-- Open your browser and go to: **http://localhost:10000**
-- Login with: `admin` / `admin`
+### 3. Environment Configuration
+```bash
+cp env.example .env.local
+# Edit .env.local with your backend API URL
+```
+
+### 4. Run Development Server
+```bash
+npm run dev
+```
+
+### 5. Access the Application
+- Open your browser and go to: **http://localhost:5173**
+- Login with your backend credentials
 - Start analyzing technical drawings!
 
 ## 🌐 Production Deployment

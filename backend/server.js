@@ -7,16 +7,23 @@ import session from 'express-session';
 dotenv.config();
 
 const app = express();
+
+// CORS configuration for frontend
 app.use(cors({
-  origin: ['https://tech-drawings.vercel.app', 'http://localhost:3000', 'http://localhost:5173'],
+  origin: [
+    'https://tech-drawings.vercel.app',
+    'http://localhost:3000', 
+    'http://localhost:5173'
+  ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
   optionsSuccessStatus: 200
 }));
+
 app.use(express.json({ limit: '10mb' }));
 
-// Session configuration for Vercel
+// Session configuration
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
   resave: false,
@@ -44,12 +51,18 @@ const requireAuth = (req, res, next) => {
 // Health check endpoint
 app.get('/health', (req, res) => {
   console.log('Health check requested from:', req.headers['user-agent']);
-  console.log('Health check headers:', req.headers);
   
   try {
     res.status(200).json({ 
-      status: 'ok',
-      authenticated: req.session && req.session.loggedIn || false,
+      status: 'healthy',
+      model: 'gpt-4o',
+      standards: [
+        'VDI 3814',
+        'ISO 16484', 
+        'ISO 14617',
+        'IEC 60617',
+        'DIN EN 81346'
+      ],
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV || 'development',
       vercel: process.env.VERCEL === '1' ? 'Yes' : 'No'
@@ -61,21 +74,6 @@ app.get('/health', (req, res) => {
       message: error.message 
     });
   }
-});
-
-// Also add a simple ping endpoint
-app.get('/ping', (req, res) => {
-  res.status(200).json({ message: 'pong' });
-});
-
-// Test endpoint to verify server is working
-app.get('/test', (req, res) => {
-  res.status(200).json({ 
-    message: 'Server is working!',
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development',
-    vercel: process.env.VERCEL === '1' ? 'Yes' : 'No'
-  });
 });
 
 // Login endpoint
@@ -133,6 +131,7 @@ app.get('/api/auth-status', (req, res) => {
   });
 });
 
+// File analysis endpoint
 app.post('/api/analyze', requireAuth, async (req, res) => {
   try {
     const { file, message } = req.body;
@@ -174,6 +173,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
   }
 });
 
+// Chat endpoint
 app.post('/api/chat', requireAuth, async (req, res) => {
   try {
     const { message, context } = req.body;
@@ -216,14 +216,11 @@ app.options('*', (req, res) => {
   res.sendStatus(200);
 });
 
-// Export the app for Vercel
-export default app;
-
-// Start server for Render and local development
+// Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Vercel: ${process.env.VERCEL === '1' ? 'Yes' : 'No'}`);
-  console.log(`Render: ${process.env.RENDER ? 'Yes' : 'No'}`);
+  console.log(`🚀 Backend server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔗 CORS enabled for: https://tech-drawings.vercel.app`);
+  console.log(`🔑 Authentication: ${process.env.APP_USERNAME || 'admin'}`);
 });

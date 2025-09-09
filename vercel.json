@@ -14,5 +14,8 @@
       "src": "/(.*)",
       "dest": "/dist/$1"
     }
-  ]
+  ],
+  "env": {
+    "VITE_API_URL": "https://techdrawings-1.onrender.com"
+  }
 }

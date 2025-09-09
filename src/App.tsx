@@ -300,6 +300,11 @@ function App() {
               </div>
               <h1 className="text-2xl font-bold text-gray-900 mb-2">Technical Drawing Analyzer</h1>
               <p className="text-gray-600">Powered by GPT-4o • Expert Engineering Analysis</p>
+              <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>Default Login:</strong> techadmin / TechDrawings2025%
+                </p>
+              </div>
             </div>
 
             {loginError && (
@@ -320,7 +325,7 @@ function App() {
                   value={loginCredentials.username}
                   onChange={(e) => setLoginCredentials(prev => ({ ...prev, username: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter username"
+                  placeholder="techadmin"
                   required
                 />
               </div>
@@ -334,7 +339,7 @@ function App() {
                   value={loginCredentials.password}
                   onChange={(e) => setLoginCredentials(prev => ({ ...prev, password: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter password"
+                  placeholder="TechDrawings2025%"
                   required
                 />
               </div>

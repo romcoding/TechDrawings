@@ -375,6 +375,9 @@ function App() {
           if (response.status === 429) {
             throw new Error('429: Rate limit exceeded');
           }
+          if (response.status === 404) {
+            throw new Error('404: AI model not available');
+          }
           if (response.status === 503) {
             throw new Error('503: AI service unavailable');
           }
@@ -410,6 +413,8 @@ function App() {
           errorMessage = 'Request timed out. Please try again with a smaller file.';
         } else if (error.message && error.message.includes('429')) {
           errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
+        } else if (error.message && error.message.includes('404')) {
+          errorMessage = 'AI model is not available. Please try again later.';
         } else if (error.message && error.message.includes('503')) {
           errorMessage = 'AI service is currently unavailable. Please try again later.';
         }

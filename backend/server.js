@@ -204,7 +204,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     console.log('Starting OpenAI analysis...');
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
+      model: "gpt-4o",
       messages: [
         {
           role: "system",
@@ -246,6 +246,9 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     } else if (error.code === 'invalid_api_key') {
       errorMessage = 'OpenAI API key is invalid. Please check configuration.';
       statusCode = 401;
+    } else if (error.code === 'model_not_found') {
+      errorMessage = 'AI model not available. Please try again later.';
+      statusCode = 404;
     } else if (error.status === 429) {
       errorMessage = 'Rate limit exceeded. Please try again in a moment.';
       statusCode = 429;

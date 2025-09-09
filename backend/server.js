@@ -202,18 +202,68 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     }
 
     console.log('Starting OpenAI analysis...');
+    console.log('File type:', file.type);
+    console.log('File name:', file.name);
+
+    // Check if it's an image or PDF
+    const isImage = file.type && file.type.startsWith('image/');
+    const isPDF = file.type === 'application/pdf';
+
+    if (isPDF) {
+      // For PDFs, we'll analyze the file metadata and provide guidance
+      console.log('PDF file detected - providing analysis guidance');
+      const pdfAnalysis = {
+        response: `📄 **PDF Document Analysis**
+
+**File Information:**
+- **Filename:** ${file.name}
+- **Type:** PDF Document
+- **Size:** ${(file.size / 1024).toFixed(1)} KB
+
+**Analysis Note:**
+This appears to be a PDF document. For detailed technical drawing analysis, please:
+
+1. **Convert to Image Format:** Export the PDF as PNG or JPG images
+2. **Upload Images:** Upload the converted images for detailed analysis
+3. **Multiple Pages:** If the PDF has multiple pages, convert each page separately
+
+**Recommended Tools for PDF to Image Conversion:**
+- Adobe Acrobat (Export as Images)
+- Online converters (PDF to PNG/JPG)
+- Preview (macOS) - Export as Images
+- Browser print to PDF then screenshot
+
+**What I Can Analyze:**
+- Technical drawings (PNG, JPG, JPEG)
+- Engineering schematics
+- Component specifications
+- Bill of Materials (BOM)
+- System diagrams
+
+Please convert your PDF to image format and upload again for detailed technical analysis! 🔧`
+      };
+      
+      res.json(pdfAnalysis);
+      return;
+    }
+
+    if (!isImage) {
+      return res.status(400).json({ 
+        error: 'Unsupported file type. Please upload images (PNG, JPG, JPEG) or PDF files.' 
+      });
+    }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are an expert in analyzing technical drawings, PDFs, and documents. Focus on identifying and explaining technical components, specifications, and important details from the provided files. Provide detailed, professional analysis."
+          content: "You are an expert in analyzing technical drawings and engineering documents. Focus on identifying and explaining technical components, specifications, and important details from the provided images. Provide detailed, professional analysis including component identification, specifications, and technical standards."
         },
         {
           role: "user",
           content: [
-            { type: "text", text: message || "Please analyze this file." },
+            { type: "text", text: message || "Please analyze this technical drawing." },
             {
               type: "image_url",
               image_url: {
@@ -223,7 +273,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           ]
         }
       ],
-      max_tokens: 500,
+      max_tokens: 1000,
     });
 
     console.log('OpenAI analysis completed successfully');
@@ -249,6 +299,9 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     } else if (error.code === 'model_not_found') {
       errorMessage = 'AI model not available. Please try again later.';
       statusCode = 404;
+    } else if (error.code === 'invalid_image_format') {
+      errorMessage = 'Invalid image format. Please upload PNG, JPG, or JPEG images.';
+      statusCode = 400;
     } else if (error.status === 429) {
       errorMessage = 'Rate limit exceeded. Please try again in a moment.';
       statusCode = 429;

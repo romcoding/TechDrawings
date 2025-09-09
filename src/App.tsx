@@ -361,6 +361,9 @@ function App() {
         });
 
         if (!response.ok) {
+          if (response.status === 400) {
+            throw new Error('400: Invalid file format');
+          }
           if (response.status === 401) {
             console.log('401 error - user not authenticated');
             setIsAuthenticated(false);
@@ -404,7 +407,9 @@ function App() {
         let errorMessage = 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.';
         
         // Check for specific error types
-        if (error.message && error.message.includes('401')) {
+        if (error.message && error.message.includes('400')) {
+          errorMessage = 'Invalid file format. Please upload images (PNG, JPG, JPEG) or PDF files.';
+        } else if (error.message && error.message.includes('401')) {
           errorMessage = 'Your session has expired. Please log in again to analyze files.';
           setIsAuthenticated(false);
         } else if (error.message && error.message.includes('402')) {

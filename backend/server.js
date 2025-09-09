@@ -182,17 +182,26 @@ app.get('/api/auth-status', (req, res) => {
 // File analysis endpoint
 app.post('/api/analyze', requireAuth, async (req, res) => {
   try {
+    console.log('File analysis request received');
+    console.log('Request body keys:', Object.keys(req.body));
+    console.log('File data present:', !!req.body.file);
+    console.log('Message:', req.body.message);
+    
     const { file, message } = req.body;
 
     if (!file || !file.data) {
+      console.log('No file data provided');
       return res.status(400).json({ error: 'No file data provided' });
     }
 
     if (!openai) {
+      console.log('OpenAI not available - API key missing');
       return res.status(503).json({ 
         error: 'AI service unavailable - OpenAI API key not configured' 
       });
     }
+
+    console.log('Starting OpenAI analysis...');
 
     const response = await openai.chat.completions.create({
       model: "gpt-4-vision-preview",
@@ -217,11 +226,36 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       max_tokens: 500,
     });
 
+    console.log('OpenAI analysis completed successfully');
     res.json({ response: response.choices[0].message.content });
   } catch (error) {
     console.error('Error in /api/analyze:', error);
-    res.status(500).json({ 
-      error: 'Failed to analyze file',
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      status: error.status,
+      code: error.code
+    });
+    
+    let errorMessage = 'Failed to analyze file';
+    let statusCode = 500;
+    
+    if (error.code === 'insufficient_quota') {
+      errorMessage = 'OpenAI API quota exceeded. Please check your billing.';
+      statusCode = 402;
+    } else if (error.code === 'invalid_api_key') {
+      errorMessage = 'OpenAI API key is invalid. Please check configuration.';
+      statusCode = 401;
+    } else if (error.status === 429) {
+      errorMessage = 'Rate limit exceeded. Please try again in a moment.';
+      statusCode = 429;
+    } else if (error.message.includes('timeout')) {
+      errorMessage = 'Request timed out. Please try again.';
+      statusCode = 408;
+    }
+    
+    res.status(statusCode).json({ 
+      error: errorMessage,
       details: error.message 
     });
   }

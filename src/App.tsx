@@ -366,6 +366,15 @@ function App() {
             setIsAuthenticated(false);
             throw new Error('401: Authentication required');
           }
+          if (response.status === 402) {
+            throw new Error('402: OpenAI quota exceeded');
+          }
+          if (response.status === 408) {
+            throw new Error('408: Request timeout');
+          }
+          if (response.status === 429) {
+            throw new Error('429: Rate limit exceeded');
+          }
           if (response.status === 503) {
             throw new Error('503: AI service unavailable');
           }
@@ -391,10 +400,16 @@ function App() {
         
         let errorMessage = 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.';
         
-        // Check if it's an authentication error
+        // Check for specific error types
         if (error.message && error.message.includes('401')) {
           errorMessage = 'Your session has expired. Please log in again to analyze files.';
           setIsAuthenticated(false);
+        } else if (error.message && error.message.includes('402')) {
+          errorMessage = 'OpenAI API quota exceeded. Please check your billing or try again later.';
+        } else if (error.message && error.message.includes('408')) {
+          errorMessage = 'Request timed out. Please try again with a smaller file.';
+        } else if (error.message && error.message.includes('429')) {
+          errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
         } else if (error.message && error.message.includes('503')) {
           errorMessage = 'AI service is currently unavailable. Please try again later.';
         }

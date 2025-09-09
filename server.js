@@ -8,10 +8,11 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: process.env.FRONTEND_URL || true, // Allow all origins in development
+  origin: ['https://tech-drawings.vercel.app', 'http://localhost:3000', 'http://localhost:5173'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 }));
 app.use(express.json({ limit: '10mb' }));
 
@@ -204,6 +205,15 @@ app.post('/api/chat', requireAuth, async (req, res) => {
       details: error.message 
     });
   }
+});
+
+// Handle preflight requests
+app.options('*', (req, res) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Cookie, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.sendStatus(200);
 });
 
 // Export the app for Vercel

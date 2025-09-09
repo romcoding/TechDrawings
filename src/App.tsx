@@ -44,15 +44,15 @@ function App() {
     checkServerStatus();
     checkAuthStatus();
     
-    // Set up periodic authentication check every 5 minutes
+    // Set up periodic authentication check every 10 minutes (less frequent)
     const authInterval = setInterval(() => {
       if (isAuthenticated) {
         checkAuthStatus();
       }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 10 * 60 * 1000); // 10 minutes
     
     return () => clearInterval(authInterval);
-  }, [isAuthenticated]);
+  }, []); // Remove isAuthenticated dependency to prevent loops
 
   const checkAuthStatus = async () => {
     try {
@@ -75,7 +75,28 @@ function App() {
     }
   };
 
-  const checkServerStatus = async () => {
+  const wakeUpBackend = async () => {
+    try {
+      console.log('Attempting to wake up backend...');
+      const response = await fetch(`${API_URL}/ping`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Backend wake-up successful:', data);
+        return true;
+      }
+    } catch (error) {
+      console.log('Backend wake-up failed:', error.message);
+    }
+    return false;
+  };
+
+  const checkServerStatus = async (retryCount = 0) => {
     try {
       console.log('Checking server status...');
       console.log('API_URL:', API_URL);
@@ -102,12 +123,26 @@ function App() {
         const errorText = await response.text();
         console.log('Error response:', errorText);
         setServerStatus('offline');
+        
+        // If server is down and we haven't retried too many times, try to wake it up
+        if (retryCount < 3) {
+          console.log(`Attempting to wake up backend (attempt ${retryCount + 1}/3)...`);
+          await wakeUpBackend();
+          setTimeout(() => checkServerStatus(retryCount + 1), 3000);
+        }
       }
       
     } catch (error) {
       console.error('Server connection error:', error);
       console.error('Error details:', error.message);
       setServerStatus('offline');
+      
+      // If connection failed and we haven't retried too many times, try to wake it up
+      if (retryCount < 3) {
+        console.log(`Attempting to wake up backend (attempt ${retryCount + 1}/3)...`);
+        await wakeUpBackend();
+        setTimeout(() => checkServerStatus(retryCount + 1), 3000);
+      }
     }
   };
 
@@ -125,6 +160,14 @@ function App() {
       console.log('Login URL:', `${API_URL}/api/login`);
       console.log('Credentials:', { username: loginCredentials.username, password: '***' });
       
+      // First, try to wake up the backend if it's sleeping
+      if (serverStatus === 'offline') {
+        console.log('Backend appears offline, attempting to wake up...');
+        await checkServerStatus();
+        // Wait a moment for the backend to start up
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+      
       const response = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: {
@@ -137,6 +180,10 @@ function App() {
       console.log('Login response status:', response.status);
       console.log('Login response headers:', Object.fromEntries(response.headers.entries()));
 
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
       const data = await response.json();
       console.log('Login response data:', data);
       
@@ -146,6 +193,7 @@ function App() {
         setLoginCredentials({ username: '', password: '' });
         // If login works, server is definitely online
         setServerStatus('online');
+        console.log('Login successful, user authenticated');
       } else {
         setLoginError(data.message || 'Login failed');
       }
@@ -475,6 +523,15 @@ function App() {
                   <AlertCircle className="w-4 h-4" />
                   <span>Offline</span>
                 </div>
+              )}
+              
+              {serverStatus === 'offline' && (
+                <button
+                  onClick={wakeUpBackend}
+                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+                >
+                  Wake Up Backend
+                </button>
               )}
               
               <button

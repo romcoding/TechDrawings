@@ -96,6 +96,16 @@ app.get('/health', (req, res) => {
   }
 });
 
+// Wake-up ping endpoint for Render spin-up
+app.get('/ping', (req, res) => {
+  console.log('Ping requested from:', req.headers['user-agent']);
+  res.status(200).json({ 
+    status: 'awake',
+    timestamp: new Date().toISOString(),
+    message: 'Backend is awake and ready'
+  });
+});
+
 // Login endpoint
 app.post('/api/login', (req, res) => {
   try {

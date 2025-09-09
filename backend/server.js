@@ -36,9 +36,22 @@ app.use(session({
   }
 }));
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI with error handling
+let openai;
+try {
+  if (!process.env.OPENAI_API_KEY) {
+    console.warn('⚠️  OPENAI_API_KEY not set - AI features will be disabled');
+    openai = null;
+  } else {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+    console.log('✅ OpenAI client initialized');
+  }
+} catch (error) {
+  console.error('❌ OpenAI initialization failed:', error.message);
+  openai = null;
+}
 
 // Authentication middleware
 const requireAuth = (req, res, next) => {
@@ -164,6 +177,12 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'No file data provided' });
     }
 
+    if (!openai) {
+      return res.status(503).json({ 
+        error: 'AI service unavailable - OpenAI API key not configured' 
+      });
+    }
+
     const response = await openai.chat.completions.create({
       model: "gpt-4-vision-preview",
       messages: [
@@ -206,6 +225,12 @@ app.post('/api/chat', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'No message provided' });
     }
 
+    if (!openai) {
+      return res.status(503).json({ 
+        error: 'AI service unavailable - OpenAI API key not configured' 
+      });
+    }
+
     const messages = [
       {
         role: "system",
@@ -242,9 +267,20 @@ app.options('*', (req, res) => {
 
 // Start server
 const PORT = process.env.PORT || 3000;
+
+console.log('🚀 Starting Technical Drawing Analyzer Backend...');
+console.log('📋 Environment Variables:');
+console.log(`  - NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
+console.log(`  - PORT: ${PORT}`);
+console.log(`  - APP_USERNAME: ${process.env.APP_USERNAME || 'admin'}`);
+console.log(`  - SESSION_SECRET: ${process.env.SESSION_SECRET ? '✅ Set' : '❌ Missing'}`);
+console.log(`  - OPENAI_API_KEY: ${process.env.OPENAI_API_KEY ? '✅ Set' : '❌ Missing'}`);
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Backend server running on port ${PORT}`);
+  console.log(`✅ Backend server running on port ${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 CORS enabled for: https://tech-drawings.vercel.app`);
   console.log(`🔑 Authentication: ${process.env.APP_USERNAME || 'admin'}`);
+  console.log(`🤖 AI Service: ${openai ? '✅ Available' : '❌ Disabled'}`);
+  console.log('🎉 Server startup complete!');
 });

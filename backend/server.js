@@ -3,7 +3,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import session from 'express-session';
-import pdf from 'pdf-poppler';
 
 dotenv.config();
 
@@ -70,69 +69,14 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-// PDF to image conversion function
-const convertPdfToImages = async (pdfBuffer, filename) => {
-  try {
-    console.log('Converting PDF to images...');
-    
-    // Create temporary directory for conversion
-    const tempDir = path.join(process.cwd(), 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
-    
-    // Write PDF buffer to temporary file
-    const tempPdfPath = path.join(tempDir, `${filename}.pdf`);
-    fs.writeFileSync(tempPdfPath, pdfBuffer);
-    
-    // Convert PDF to images
-    const options = {
-      format: 'png',
-      out_dir: tempDir,
-      out_prefix: filename,
-      page: null // Convert all pages
-    };
-    
-    const result = await pdf.convert(tempPdfPath, options);
-    console.log('PDF conversion result:', result);
-    
-    // Read the first page image
-    const imageFiles = fs.readdirSync(tempDir).filter(file => 
-      file.startsWith(filename) && file.endsWith('.png')
-    );
-    
-    if (imageFiles.length === 0) {
-      throw new Error('No images generated from PDF');
-    }
-    
-    // Get the first page image
-    const firstImagePath = path.join(tempDir, imageFiles[0]);
-    const imageBuffer = fs.readFileSync(firstImagePath);
-    const base64Image = imageBuffer.toString('base64');
-    const dataUrl = `data:image/png;base64,${base64Image}`;
-    
-    // Clean up temporary files
-    fs.unlinkSync(tempPdfPath);
-    imageFiles.forEach(file => {
-      fs.unlinkSync(path.join(tempDir, file));
-    });
-    
-    console.log(`PDF converted successfully. Pages: ${imageFiles.length}`);
-    
-    return {
-      success: true,
-      imageData: dataUrl,
-      pageCount: imageFiles.length,
-      message: `PDF converted to ${imageFiles.length} page(s). Analyzing first page.`
-    };
-    
-  } catch (error) {
-    console.error('PDF conversion error:', error);
-    return {
-      success: false,
-      error: error.message
-    };
-  }
+// PDF analysis helper function
+const analyzePdfMetadata = (file) => {
+  return {
+    filename: file.name,
+    size: (file.size / 1024).toFixed(1) + ' KB',
+    type: 'PDF Document',
+    pages: 'Unknown (requires conversion to analyze)'
+  };
 };
 
 // Health check endpoint
@@ -276,66 +220,69 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     const isPDF = file.type === 'application/pdf';
 
     if (isPDF) {
-      // Convert PDF to images and analyze
-      console.log('PDF file detected - converting to images for analysis');
+      // Provide comprehensive PDF analysis guidance
+      console.log('PDF file detected - providing conversion guidance');
       
-      try {
-        // Extract base64 data from the file
-        const base64Data = file.data.split(',')[1]; // Remove data:application/pdf;base64, prefix
-        const pdfBuffer = Buffer.from(base64Data, 'base64');
-        
-        // Convert PDF to images
-        const conversionResult = await convertPdfToImages(pdfBuffer, file.name.replace('.pdf', ''));
-        
-        if (!conversionResult.success) {
-          console.log('PDF conversion failed:', conversionResult.error);
-          return res.status(400).json({ 
-            error: `PDF conversion failed: ${conversionResult.error}` 
-          });
-        }
-        
-        console.log('PDF converted successfully, analyzing image...');
-        
-        // Analyze the converted image
-        const response = await openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system",
-              content: `You are an expert in analyzing technical drawings and engineering documents. Focus on identifying and explaining technical components, specifications, and important details from the provided images. Provide detailed, professional analysis including component identification, specifications, and technical standards.
+      const pdfInfo = analyzePdfMetadata(file);
+      
+      const pdfAnalysis = {
+        response: `📄 **PDF Document Analysis**
 
-This image was converted from a PDF document. Please provide comprehensive analysis of the technical content.`
-            },
-            {
-              role: "user",
-              content: [
-                { type: "text", text: `${message || "Please analyze this technical drawing."} 
+**File Information:**
+- **Filename:** ${pdfInfo.filename}
+- **Type:** ${pdfInfo.type}
+- **Size:** ${pdfInfo.size}
+- **Status:** Ready for analysis (requires conversion)
 
-📄 **Document Info:** This is page 1 of ${conversionResult.pageCount} from PDF "${file.name}"` },
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: conversionResult.imageData,
-                  }
-                }
-              ]
-            }
-          ],
-          max_tokens: 1000,
-        });
-        
-        console.log('OpenAI analysis completed successfully for PDF');
-        res.json({ 
-          response: `${conversionResult.message}\n\n${response.choices[0].message.content}` 
-        });
-        return;
-        
-      } catch (error) {
-        console.error('PDF processing error:', error);
-        return res.status(500).json({ 
-          error: `PDF processing failed: ${error.message}` 
-        });
-      }
+**🔧 PDF to Image Conversion Required**
+
+To analyze this PDF document, please convert it to image format first:
+
+**📱 Quick Conversion Methods:**
+
+**1. Browser Method (Easiest):**
+- Open the PDF in your browser
+- Right-click → "Print" → "Save as PDF" → Choose "Save as Image"
+- Or use browser screenshot tools
+
+**2. Desktop Applications:**
+- **Adobe Acrobat:** File → Export To → Image → PNG/JPEG
+- **Preview (macOS):** File → Export → Format: PNG/JPEG
+- **Windows:** Print to PDF → Convert to image
+
+**3. Online Converters:**
+- SmallPDF (smallpdf.com)
+- ILovePDF (ilovepdf.com)
+- PDF24 (pdf24.org)
+
+**4. Mobile Apps:**
+- Adobe Scan
+- CamScanner
+- Microsoft Office Lens
+
+**📋 Conversion Tips:**
+- **High Quality:** Use 300 DPI or higher for technical drawings
+- **Format:** PNG preferred for technical drawings (better quality)
+- **Multiple Pages:** Convert each page separately for detailed analysis
+- **File Size:** Keep under 20MB for optimal processing
+
+**🎯 What I Can Analyze After Conversion:**
+- Technical drawings and schematics
+- Engineering specifications
+- Component identification
+- Bill of Materials (BOM)
+- System diagrams and layouts
+- Dimension annotations
+- Technical standards compliance
+
+**✨ Ready to Analyze:**
+Once converted to PNG/JPG format, upload the image(s) for comprehensive technical analysis!
+
+**Need Help?** Try the browser method first - it's the quickest way to get started! 🚀`
+      };
+      
+      res.json(pdfAnalysis);
+      return;
     }
 
     if (!isImage) {

@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import session from 'express-session';
-import pdf from 'pdf-parse';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
 
 dotenv.config();
 
@@ -70,23 +70,58 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-// PDF text extraction function
+// PDF text extraction function using pdfjs-dist
 const extractPdfText = async (pdfBuffer) => {
   try {
-    console.log('Extracting text from PDF...');
-    const data = await pdf(pdfBuffer);
+    console.log('Extracting text from PDF using pdfjs-dist...');
+    
+    // Load the PDF document
+    const loadingTask = pdfjsLib.getDocument({
+      data: pdfBuffer,
+      useSystemFonts: true
+    });
+    
+    const pdfDocument = await loadingTask.promise;
+    console.log('PDF loaded, pages:', pdfDocument.numPages);
+    
+    let fullText = '';
+    const metadata = {
+      title: 'Untitled',
+      author: 'Unknown',
+      creator: 'Unknown',
+      producer: 'Unknown'
+    };
+    
+    // Extract metadata
+    if (pdfDocument.info) {
+      metadata.title = pdfDocument.info.Title || 'Untitled';
+      metadata.author = pdfDocument.info.Author || 'Unknown';
+      metadata.creator = pdfDocument.info.Creator || 'Unknown';
+      metadata.producer = pdfDocument.info.Producer || 'Unknown';
+    }
+    
+    // Extract text from all pages
+    for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
+      const page = await pdfDocument.getPage(pageNum);
+      const textContent = await page.getTextContent();
+      
+      const pageText = textContent.items
+        .map(item => item.str)
+        .join(' ')
+        .trim();
+      
+      if (pageText) {
+        fullText += `\n--- Page ${pageNum} ---\n${pageText}\n`;
+      }
+    }
+    
+    console.log('Text extraction completed, length:', fullText.length);
     
     return {
       success: true,
-      text: data.text,
-      pages: data.numpages,
-      info: data.info,
-      metadata: {
-        title: data.info?.Title || 'Untitled',
-        author: data.info?.Author || 'Unknown',
-        creator: data.info?.Creator || 'Unknown',
-        producer: data.info?.Producer || 'Unknown'
-      }
+      text: fullText,
+      pages: pdfDocument.numPages,
+      metadata: metadata
     };
   } catch (error) {
     console.error('PDF text extraction error:', error);

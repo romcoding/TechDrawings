@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Upload, Download, Brain, FileText, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, Download, Brain, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
 import { ChatState, Message } from './types';
@@ -22,8 +22,8 @@ const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical
 
 Upload a technical drawing and I'll provide a professional engineering analysis!`;
 
-// Get API URL from environment variables
-const API_URL = import.meta.env.VITE_API_URL || 'https://techdrawings-1.onrender.com';
+// Define the API URL. In a production environment, this should be set via environment variables.
+const API_URL = 'https://techdrawings-1.onrender.com';
 
 function App() {
   const [chatState, setChatState] = useState<ChatState>({
@@ -35,114 +35,52 @@ function App() {
   const [serverStatus, setServerStatus] = useState<'checking' | 'online' | 'offline'>('checking');
   const [input, setInput] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showLogin, setShowLogin] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     checkServerStatus();
-    checkAuthStatus();
-    
-    // Set up periodic authentication check every 10 minutes (less frequent)
-    const authInterval = setInterval(() => {
-      if (isAuthenticated) {
-        checkAuthStatus();
-      }
-    }, 10 * 60 * 1000); // 10 minutes
-    
-    return () => clearInterval(authInterval);
-  }, []); // Remove isAuthenticated dependency to prevent loops
+  }, []);
 
-  const checkAuthStatus = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/auth-status`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        setIsAuthenticated(data.authenticated);
-        console.log('Auth status:', data);
-      }
-    } catch (error) {
-      console.error('Auth check error:', error);
-      setIsAuthenticated(false);
-    }
-  };
-
-  const wakeUpBackend = async () => {
-    try {
-      console.log('Attempting to wake up backend...');
-      const response = await fetch(`${API_URL}/ping`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Backend wake-up successful:', data);
-        return true;
-      }
-    } catch (error) {
-      console.log('Backend wake-up failed:', error.message);
-    }
-    return false;
-  };
-
-  const checkServerStatus = async (retryCount = 0) => {
+  const checkServerStatus = async () => {
     try {
       console.log('Checking server status...');
-      console.log('API_URL:', API_URL);
-      console.log('Full health URL:', `${API_URL}/health`);
       
-      // Check server status using health endpoint
-      const response = await fetch(`${API_URL}/health`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+      // Try multiple endpoints to determine server status
+      const endpoints = ['/health', '/ping', '/test'];
+      let serverOnline = false;
       
-      console.log('Health response status:', response.status);
-      console.log('Health response headers:', Object.fromEntries(response.headers.entries()));
-      
-      if (response.ok) {
-        const data = await response.json();
-        console.log('Health data:', data);
-        setServerStatus('online');
-      } else {
-        console.log('Health check failed with status:', response.status);
-        const errorText = await response.text();
-        console.log('Error response:', errorText);
-        setServerStatus('offline');
-        
-        // If server is down and we haven't retried too many times, try to wake it up
-        if (retryCount < 3) {
-          console.log(`Attempting to wake up backend (attempt ${retryCount + 1}/3)...`);
-          await wakeUpBackend();
-          setTimeout(() => checkServerStatus(retryCount + 1), 3000);
+      for (const endpoint of endpoints) {
+        try {
+          console.log(`Trying endpoint: ${endpoint}`);
+          const response = await fetch(`${API_URL}${endpoint}`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          
+          console.log(`${endpoint} response:`, response.status, response.statusText);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log(`${endpoint} data:`, data);
+            serverOnline = true;
+            break; // If any endpoint works, server is online
+          }
+        } catch (endpointError) {
+          console.log(`${endpoint} failed:`, endpointError);
+          continue; // Try next endpoint
         }
       }
+      
+      setServerStatus(serverOnline ? 'online' : 'offline');
       
     } catch (error) {
       console.error('Server connection error:', error);
-      console.error('Error details:', error.message);
       setServerStatus('offline');
-      
-      // If connection failed and we haven't retried too many times, try to wake it up
-      if (retryCount < 3) {
-        console.log(`Attempting to wake up backend (attempt ${retryCount + 1}/3)...`);
-        await wakeUpBackend();
-        setTimeout(() => checkServerStatus(retryCount + 1), 3000);
-      }
     }
   };
 
@@ -155,19 +93,6 @@ function App() {
     setLoginError('');
     
     try {
-      console.log('Attempting login...');
-      console.log('API_URL:', API_URL);
-      console.log('Login URL:', `${API_URL}/api/login`);
-      console.log('Credentials:', { username: loginCredentials.username, password: '***' });
-      
-      // First, try to wake up the backend if it's sleeping
-      if (serverStatus === 'offline') {
-        console.log('Backend appears offline, attempting to wake up...');
-        await checkServerStatus();
-        // Wait a moment for the backend to start up
-        await new Promise(resolve => setTimeout(resolve, 3000));
-      }
-      
       const response = await fetch(`${API_URL}/api/login`, {
         method: 'POST',
         headers: {
@@ -177,28 +102,17 @@ function App() {
         credentials: 'include'
       });
 
-      console.log('Login response status:', response.status);
-      console.log('Login response headers:', Object.fromEntries(response.headers.entries()));
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
       const data = await response.json();
-      console.log('Login response data:', data);
       
       if (data.success) {
         setIsAuthenticated(true);
-        setShowLogin(false);
         setLoginCredentials({ username: '', password: '' });
         // If login works, server is definitely online
         setServerStatus('online');
-        console.log('Login successful, user authenticated');
       } else {
         setLoginError(data.message || 'Login failed');
       }
     } catch (error) {
-      console.error('Login error:', error);
       setLoginError('Connection error. Please try again.');
     }
   };
@@ -221,7 +135,7 @@ function App() {
     if (!input.trim() || serverStatus === 'offline' || !isAuthenticated) return;
 
     const newMessage: Message = { role: 'user', content: input };
-    setChatState(prev => ({
+    setChatState((prev: ChatState) => ({
       ...prev,
       messages: [...prev.messages, newMessage],
       isLoading: true
@@ -236,7 +150,7 @@ function App() {
         },
         body: JSON.stringify({
           message: input,
-          context: chatState.messages.map(({ role, content }) => ({ role, content }))
+          context: chatState.messages.map(({ role, content }: { role: string; content: string }) => ({ role, content }))
         }),
         credentials: 'include'
       });
@@ -249,14 +163,14 @@ function App() {
         content: data.response
       };
 
-      setChatState(prev => ({
+      setChatState((prev: ChatState) => ({
         ...prev,
         messages: [...prev.messages, aiResponse],
         isLoading: false
       }));
     } catch (error) {
       console.error('Error:', error);
-      setChatState(prev => ({
+      setChatState((prev: ChatState) => ({
         ...prev,
         messages: [...prev.messages, {
           role: 'assistant',
@@ -272,7 +186,7 @@ function App() {
   const handleFileSelect = async (file: File) => {
     // Check authentication first
     if (!isAuthenticated) {
-      setChatState(prev => ({
+      setChatState((prev: ChatState) => ({
         ...prev,
         messages: [...prev.messages, {
           role: 'assistant',
@@ -282,43 +196,21 @@ function App() {
       return;
     }
 
-    // Verify authentication is still valid before proceeding
-    try {
-      const authResponse = await fetch(`${API_URL}/api/auth-status`, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
+    // Check server status and retry if needed
+    if (serverStatus === 'offline') {
+      console.log('Server appears offline, retrying health check...');
+      await checkServerStatus();
       
-      if (authResponse.ok) {
-        const authData = await authResponse.json();
-        if (!authData.authenticated) {
-          setIsAuthenticated(false);
-          setChatState(prev => ({
-            ...prev,
-            messages: [...prev.messages, {
-              role: 'assistant',
-              content: 'Your session has expired. Please log in again.'
-            }],
-          }));
-          return;
-        }
-      } else {
-        throw new Error('Auth check failed');
+      if (serverStatus === 'offline') {
+        setChatState((prev: ChatState) => ({
+          ...prev,
+          messages: [...prev.messages, {
+            role: 'assistant',
+            content: 'Server appears to be offline. Please check your connection and try again. If the problem persists, the server may be experiencing issues.'
+          }],
+        }));
+        return;
       }
-    } catch (error) {
-      console.error('Auth verification failed:', error);
-      setIsAuthenticated(false);
-      setChatState(prev => ({
-        ...prev,
-        messages: [...prev.messages, {
-          role: 'assistant',
-          content: 'Authentication verification failed. Please log in again.'
-        }],
-      }));
-      return;
     }
 
     const reader = new FileReader();
@@ -337,7 +229,7 @@ function App() {
         }
       };
       
-      setChatState(prev => ({
+      setChatState((prev: ChatState) => ({
         ...prev,
         messages: [...prev.messages, newMessage],
         isLoading: true
@@ -361,29 +253,6 @@ function App() {
         });
 
         if (!response.ok) {
-          if (response.status === 400) {
-            throw new Error('400: Invalid file format');
-          }
-          if (response.status === 401) {
-            console.log('401 error - user not authenticated');
-            setIsAuthenticated(false);
-            throw new Error('401: Authentication required');
-          }
-          if (response.status === 402) {
-            throw new Error('402: OpenAI quota exceeded');
-          }
-          if (response.status === 408) {
-            throw new Error('408: Request timeout');
-          }
-          if (response.status === 429) {
-            throw new Error('429: Rate limit exceeded');
-          }
-          if (response.status === 404) {
-            throw new Error('404: AI model not available');
-          }
-          if (response.status === 503) {
-            throw new Error('503: AI service unavailable');
-          }
           throw new Error(await response.text());
         }
 
@@ -393,7 +262,7 @@ function App() {
           content: data.response
         };
 
-        setChatState(prev => ({
+        setChatState((prev: ChatState) => ({
           ...prev,
           messages: [...prev.messages, aiResponse],
           isLoading: false
@@ -403,32 +272,11 @@ function App() {
         setServerStatus('online');
       } catch (error) {
         console.error('Error:', error);
-        
-        let errorMessage = 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.';
-        
-        // Check for specific error types
-        if (error.message && error.message.includes('400')) {
-          errorMessage = 'Invalid file format. Please upload images (PNG, JPG, JPEG) or PDF files.';
-        } else if (error.message && error.message.includes('401')) {
-          errorMessage = 'Your session has expired. Please log in again to analyze files.';
-          setIsAuthenticated(false);
-        } else if (error.message && error.message.includes('402')) {
-          errorMessage = 'OpenAI API quota exceeded. Please check your billing or try again later.';
-        } else if (error.message && error.message.includes('408')) {
-          errorMessage = 'Request timed out. Please try again with a smaller file.';
-        } else if (error.message && error.message.includes('429')) {
-          errorMessage = 'Rate limit exceeded. Please wait a moment and try again.';
-        } else if (error.message && error.message.includes('404')) {
-          errorMessage = 'AI model is not available. Please try again later.';
-        } else if (error.message && error.message.includes('503')) {
-          errorMessage = 'AI service is currently unavailable. Please try again later.';
-        }
-        
-        setChatState(prev => ({
+        setChatState((prev: ChatState) => ({
           ...prev,
           messages: [...prev.messages, {
             role: 'assistant',
-            content: errorMessage
+            content: 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.'
           }],
           isLoading: false
         }));
@@ -468,7 +316,7 @@ function App() {
                   type="text"
                   id="username"
                   value={loginCredentials.username}
-                  onChange={(e) => setLoginCredentials(prev => ({ ...prev, username: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginCredentials((prev: { username: string; password: string }) => ({ ...prev, username: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   placeholder="Enter username"
                   required
@@ -482,7 +330,7 @@ function App() {
                   type="password"
                   id="password"
                   value={loginCredentials.password}
-                  onChange={(e) => setLoginCredentials(prev => ({ ...prev, password: e.target.value }))}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginCredentials((prev: { username: string; password: string }) => ({ ...prev, password: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                   placeholder="Enter password"
                   required
@@ -550,15 +398,6 @@ function App() {
                 </div>
               )}
               
-              {serverStatus === 'offline' && (
-                <button
-                  onClick={wakeUpBackend}
-                  className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                >
-                  Wake Up Backend
-                </button>
-              )}
-              
               <button
                 onClick={checkServerStatus}
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm"
@@ -581,7 +420,7 @@ function App() {
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 h-[700px] flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            {chatState.messages.map((message, index) => (
+            {chatState.messages.map((message: Message, index: number) => (
               <ChatMessage key={index} message={message} />
             ))}
             <div ref={messagesEndRef} />
@@ -591,7 +430,7 @@ function App() {
             <FileUpload onFileSelect={handleFileSelect} />
             
             {/* Download Section */}
-            {chatState.messages.some(msg => msg.role === 'assistant' && msg.content.includes('Total components identified:')) && (
+            {chatState.messages.some((msg: Message) => msg.role === 'assistant' && msg.content.includes('Total components identified:')) && (
               <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
                 <div className="flex items-center gap-3">
                   <Download className="w-5 h-5 text-blue-600" />
@@ -600,29 +439,29 @@ function App() {
                     <p className="text-sm text-blue-700">Download the detailed Bill of Materials (BOM) as CSV</p>
                   </div>
                 </div>
-                 <button
-                   onClick={() => window.open(`${API_URL}/api/download`, '_blank')}
-                   className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                 >
-                   <Download className="w-4 h-4 mr-2" />
-                   Download BOM
-                 </button>
+                <button
+                  onClick={() => window.open('/api/download', '_blank')}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Download CSV
+                </button>
               </div>
             )}
-
-            <form onSubmit={handleSubmit} className="flex items-center gap-4">
+            
+            <form onSubmit={handleSubmit} className="flex gap-3">
               <input
                 type="text"
                 value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={serverStatus === 'offline' ? 'Server is offline. Cannot send messages.' : 'Type your message or upload a file...'}
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                disabled={chatState.isLoading || serverStatus === 'offline' || !isAuthenticated}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
+                placeholder="Ask a question about the document..."
+                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
+                disabled={chatState.isLoading}
               />
               <button
                 type="submit"
-                className="inline-flex items-center justify-center p-3 border border-transparent text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 rounded-lg shadow-sm transition-all transform hover:scale-[1.02]"
-                disabled={chatState.isLoading || serverStatus === 'offline' || !isAuthenticated}
+                disabled={chatState.isLoading}
+                className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-600 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
               >
                 {chatState.isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -634,10 +473,6 @@ function App() {
           </div>
         </div>
       </main>
-
-      <footer className="bg-gray-800 text-white text-center p-4 text-sm">
-        <p>&copy; {new Date().getFullYear()} Technical Drawing Analyzer. All rights reserved.</p>
-      </footer>
     </div>
   );
 }

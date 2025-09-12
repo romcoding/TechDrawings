@@ -4,6 +4,32 @@ import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import session from 'express-session';
+import xlsx from 'xlsx';
+
+let componentCategories = {};
+
+// Function to load categorization data from Excel
+const loadCategories = () => {
+  try {
+    const workbook = xlsx.readFile('./Elemente_Kategorisierung.xlsx');
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+    const data = xlsx.utils.sheet_to_json(worksheet);
+
+    componentCategories = data.reduce((acc, row) => {
+      if (row['Komponente'] && row['Kategorie']) {
+        acc[row['Komponente'].toLowerCase()] = row['Kategorie'];
+      }
+      return acc;
+    }, {});
+    console.log(`✅ Loaded ${Object.keys(componentCategories).length} component categories from Excel.`);
+  } catch (error) {
+    console.error('❌ Failed to load component categories from Excel:', error);
+  }
+};
+
+// Load categories on startup
+loadCategories();
 
 dotenv.config();
 
@@ -295,7 +321,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Focus on identifying and explaining technical components, specifications, and important details from the provided files. Provide detailed, professional analysis.'
+          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files. Identify all components, their types, manufacturers, models, and quantities. Provide the output as a JSON array of objects. Each object should have the following keys: "component_name" (string), "type" (string, e.g., Valve, Pump, Heat Exchanger), "manufacturer" (string, if available), "model" (string, if available), "quantity" (number), "specifications" (string, detailed specs if available). If a quantity is not explicitly stated, assume 1. If no components are found, return an empty JSON array. DO NOT include any other text or explanation outside the JSON array.'
         },
         {
           role: 'user',
@@ -305,8 +331,63 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       max_tokens: 1500,
     });
 
-    console.log('OpenAI analysis completed successfully');
-    res.json({ response: response.choices[0].message.content });
+    console.log("OpenAI analysis completed successfully");
+    
+    let bom = [];
+    try {
+      // Attempt to parse the JSON response from OpenAI
+      const rawResponse = response.choices[0].message.content;
+      const parsedBOM = JSON.parse(rawResponse);
+
+      if (Array.isArray(parsedBOM)) {
+        // Aggregate and categorize components
+        const aggregatedBOM = {};
+
+        for (const item of parsedBOM) {
+          const name = item.component_name || "Unknown Component";
+          const type = item.type || "General";
+          const manufacturer = item.manufacturer || "N/A";
+          const model = item.model || "N/A";
+          const quantity = typeof item.quantity === "number" ? item.quantity : 1;
+          const specifications = item.specifications || "";
+
+          // Categorize using the loaded Excel data
+          let category = type; // Default to type from AI
+          const lowerCaseName = name.toLowerCase();
+          for (const key in componentCategories) {
+            if (lowerCaseName.includes(key)) {
+              category = componentCategories[key];
+              break;
+            }
+          }
+
+          const key = `${name}-${type}-${manufacturer}-${model}-${category}`;
+          if (aggregatedBOM[key]) {
+            aggregatedBOM[key].quantity += quantity;
+          } else {
+            aggregatedBOM[key] = {
+              component_name: name,
+              type: type,
+              manufacturer: manufacturer,
+              model: model,
+              quantity: quantity,
+              specifications: specifications,
+              category: category,
+            };
+          }
+        }
+        bom = Object.values(aggregatedBOM);
+        console.log("BOM parsed, categorized, and aggregated successfully.");
+      } else {
+        console.warn("OpenAI response was not a JSON array:", rawResponse);
+        bom = [{ component_name: "Analysis Error", type: "Error", quantity: 1, specifications: "AI did not return a valid BOM format." }];
+      }
+    } catch (parseError) {
+      console.error("Failed to parse OpenAI response as JSON:", parseError);
+      bom = [{ component_name: "Analysis Error", type: "Error", quantity: 1, specifications: "Could not parse AI response as JSON." }];
+    }
+
+    res.json({ response: bom });
   } catch (error) {
     console.error('Error in /api/analyze:', error);
     res.status(500).json({ 
@@ -341,7 +422,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     ];
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4',
       messages: messages,
       max_tokens: 1500,
     });
@@ -384,4 +465,3 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🤖 AI Service: ${openai ? '✅ Available' : '❌ Disabled'}`);
   console.log('🎉 Server startup complete!');
 });
-

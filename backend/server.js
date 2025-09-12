@@ -2,10 +2,33 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import session from 'express-session';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 
 dotenv.config();
+
+// Function to extract text from PDF
+async function extractPdfText(pdfBuffer) {
+  try {
+    console.log('Extracting text from PDF using pdfjs-dist...');
+    const pdfUint8Array = new Uint8Array(pdfBuffer);
+    const pdfDocument = await pdfjs.getDocument({ data: pdfUint8Array }).promise;
+    let fullText = '';
+    
+    for (let i = 1; i <= pdfDocument.numPages; i++) {
+      const page = await pdfDocument.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ');
+      fullText += pageText + '\n';
+    }
+    
+    console.log(`PDF text extraction successful. Extracted ${fullText.length} characters.`);
+    return fullText.trim();
+  } catch (error) {
+    console.error('PDF text extraction error:', error);
+    throw error;
+  }
+}
 
 const app = express();
 
@@ -67,68 +90,6 @@ const requireAuth = (req, res, next) => {
   } else {
     console.log('Authentication failed - no valid session');
     return res.status(401).json({ error: 'Authentication required' });
-  }
-};
-
-// PDF text extraction function using pdfjs-dist
-const extractPdfText = async (pdfBuffer) => {
-  try {
-    console.log('Extracting text from PDF using pdfjs-dist...');
-    
-    // Load the PDF document
-    const loadingTask = pdfjsLib.getDocument({
-      data: pdfBuffer,
-      useSystemFonts: true
-    });
-    
-    const pdfDocument = await loadingTask.promise;
-    console.log('PDF loaded, pages:', pdfDocument.numPages);
-    
-    let fullText = '';
-    const metadata = {
-      title: 'Untitled',
-      author: 'Unknown',
-      creator: 'Unknown',
-      producer: 'Unknown'
-    };
-    
-    // Extract metadata
-    if (pdfDocument.info) {
-      metadata.title = pdfDocument.info.Title || 'Untitled';
-      metadata.author = pdfDocument.info.Author || 'Unknown';
-      metadata.creator = pdfDocument.info.Creator || 'Unknown';
-      metadata.producer = pdfDocument.info.Producer || 'Unknown';
-    }
-    
-    // Extract text from all pages
-    for (let pageNum = 1; pageNum <= pdfDocument.numPages; pageNum++) {
-      const page = await pdfDocument.getPage(pageNum);
-      const textContent = await page.getTextContent();
-      
-      const pageText = textContent.items
-        .map(item => item.str)
-        .join(' ')
-        .trim();
-      
-      if (pageText) {
-        fullText += `\n--- Page ${pageNum} ---\n${pageText}\n`;
-      }
-    }
-    
-    console.log('Text extraction completed, length:', fullText.length);
-    
-    return {
-      success: true,
-      text: fullText,
-      pages: pdfDocument.numPages,
-      metadata: metadata
-    };
-  } catch (error) {
-    console.error('PDF text extraction error:', error);
-    return {
-      success: false,
-      error: error.message
-    };
   }
 };
 
@@ -234,8 +195,6 @@ app.get('/api/auth-status', (req, res) => {
   const authenticated = req.session && req.session.loggedIn || false;
   const username = req.session && req.session.username || null;
   
-  console.log('Auth status result:', { authenticated, username });
-  
   res.json({ 
     authenticated,
     username
@@ -247,8 +206,6 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
   try {
     console.log('File analysis request received');
     console.log('Request body keys:', Object.keys(req.body));
-    console.log('File data present:', !!req.body.file);
-    console.log('Message:', req.body.message);
     
     const { file, message } = req.body;
 
@@ -257,167 +214,103 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'No file data provided' });
     }
 
+    console.log('File data present:', !!file.data);
+    console.log('Message:', message);
+
     if (!openai) {
-      console.log('OpenAI not available - API key missing');
+      console.log('OpenAI not available');
       return res.status(503).json({ 
         error: 'AI service unavailable - OpenAI API key not configured' 
       });
     }
 
     console.log('Starting OpenAI analysis...');
-    console.log('File type:', file.type);
-    console.log('File name:', file.name);
-    console.log('File size:', file.size);
-    console.log('File data prefix:', file.data ? file.data.substring(0, 50) : 'No data');
 
-    // Check if it's an image or PDF
-    const isImage = file.type && file.type.startsWith('image/');
-    const isPDF = file.type === 'application/pdf';
+    // Check if it's a PDF file
+    const fileType = file.type || 'unknown';
+    const fileName = file.name || 'unknown';
+    const fileSize = file.size || 'undefined';
     
-    console.log('File type checks:', { isImage, isPDF, fileType: file.type });
+    console.log('File type:', fileType);
+    console.log('File name:', fileName);
+    console.log('File size:', fileSize);
+    console.log('File data prefix:', file.data.substring(0, 50));
 
+    const isImage = fileType.startsWith('image/');
+    const isPDF = fileType === 'application/pdf' || file.data.startsWith('data:application/pdf');
+    
+    console.log('File type checks:', { isImage, isPDF, fileType });
+
+    let analysisContent = [];
+    
     if (isPDF) {
-      // Extract and analyze PDF text content
       console.log('PDF file detected - extracting text content for analysis');
-      
       try {
-        // Extract base64 data from the file
-        const base64Data = file.data.split(',')[1]; // Remove data:application/pdf;base64, prefix
+        // Extract base64 data from data URL
+        const base64Data = file.data.split(',')[1];
         const pdfBuffer = Buffer.from(base64Data, 'base64');
         
         // Extract text from PDF
-        const extractionResult = await extractPdfText(pdfBuffer);
+        const pdfText = await extractPdfText(pdfBuffer);
+        console.log('PDF text extraction successful, text length:', pdfText.length);
         
-        if (!extractionResult.success) {
-          console.log('PDF text extraction failed:', extractionResult.error);
-          return res.status(400).json({ 
-            error: `PDF text extraction failed: ${extractionResult.error}` 
-          });
-        }
-        
-        console.log('PDF text extracted successfully, analyzing content...');
-        console.log('PDF pages:', extractionResult.pages);
-        console.log('Text length:', extractionResult.text.length);
-        
-        // Analyze the extracted text with GPT-4o
-        const response = await openai.chat.completions.create({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system",
-              content: `You are an expert in analyzing technical documents, engineering specifications, and technical drawings. Focus on identifying and explaining technical components, specifications, and important details from the provided text content. Provide detailed, professional analysis including component identification, specifications, and technical standards.
-
-This text was extracted from a PDF document. Please provide comprehensive analysis of the technical content, including any technical drawings descriptions, component specifications, dimensions, materials, and engineering standards mentioned.`
-            },
-            {
-              role: "user",
-              content: `${message || "Please analyze this technical document."}
-
-📄 **Document Information:**
-- **Filename:** ${file.name}
-- **Pages:** ${extractionResult.pages}
-- **Title:** ${extractionResult.metadata.title}
-- **Author:** ${extractionResult.metadata.author}
-- **Creator:** ${extractionResult.metadata.creator}
-
-**PDF Content:**
-${extractionResult.text}`
+        // Use text-based analysis for PDFs
+        analysisContent = [
+          { 
+            type: 'text', 
+            text: `${message || 'Please analyze this PDF document.'}\n\nPDF Content:\n${pdfText}` 
+          }
+        ];
+      } catch (pdfError) {
+        console.error('PDF text extraction failed:', pdfError.message);
+        // Fallback to image-based analysis if text extraction fails
+        console.log('Falling back to image-based analysis for PDF');
+        analysisContent = [
+          { type: 'text', text: message || 'Please analyze this PDF document (image-based analysis).' },
+          {
+            type: 'image_url',
+            image_url: {
+              url: file.data,
             }
-          ],
-          max_tokens: 1500,
-        });
-        
-        console.log('OpenAI analysis completed successfully for PDF');
-        res.json({ 
-          response: `📄 **PDF Document Analysis Complete**
-
-**Document Details:**
-- **Filename:** ${file.name}
-- **Pages:** ${extractionResult.pages}
-- **Title:** ${extractionResult.metadata.title}
-- **Author:** ${extractionResult.metadata.author}
-- **Creator:** ${extractionResult.metadata.creator}
-
----
-
-${response.choices[0].message.content}`
-        });
-        return;
-        
-      } catch (error) {
-        console.error('PDF processing error:', error);
-        return res.status(500).json({ 
-          error: `PDF processing failed: ${error.message}` 
-        });
+          }
+        ];
       }
+    } else {
+      // For images and other files, use image-based analysis
+      console.log('Using image-based analysis');
+      analysisContent = [
+        { type: 'text', text: message || 'Please analyze this file.' },
+        {
+          type: 'image_url',
+          image_url: {
+            url: file.data,
+          }
+        }
+      ];
     }
 
-    if (!isImage && !isPDF) {
-      console.log('Unsupported file type detected:', file.type);
-      return res.status(400).json({ 
-        error: 'Unsupported file type. Please upload images (PNG, JPG, JPEG) or PDF files.' 
-      });
-    }
-
+    console.log('Sending request to OpenAI...');
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
+      model: 'gpt-4-vision-preview',
       messages: [
         {
-          role: "system",
-          content: "You are an expert in analyzing technical drawings and engineering documents. Focus on identifying and explaining technical components, specifications, and important details from the provided images. Provide detailed, professional analysis including component identification, specifications, and technical standards."
+          role: 'system',
+          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Focus on identifying and explaining technical components, specifications, and important details from the provided files. Provide detailed, professional analysis.'
         },
         {
-          role: "user",
-          content: [
-            { type: "text", text: message || "Please analyze this technical drawing." },
-            {
-              type: "image_url",
-              image_url: {
-                url: file.data,
-              }
-            }
-          ]
+          role: 'user',
+          content: analysisContent
         }
       ],
-      max_tokens: 1000,
+      max_tokens: 1500,
     });
 
     console.log('OpenAI analysis completed successfully');
     res.json({ response: response.choices[0].message.content });
   } catch (error) {
     console.error('Error in /api/analyze:', error);
-    console.error('Error details:', {
-      name: error.name,
-      message: error.message,
-      status: error.status,
-      code: error.code
-    });
-    
-    let errorMessage = 'Failed to analyze file';
-    let statusCode = 500;
-    
-    if (error.code === 'insufficient_quota') {
-      errorMessage = 'OpenAI API quota exceeded. Please check your billing.';
-      statusCode = 402;
-    } else if (error.code === 'invalid_api_key') {
-      errorMessage = 'OpenAI API key is invalid. Please check configuration.';
-      statusCode = 401;
-    } else if (error.code === 'model_not_found') {
-      errorMessage = 'AI model not available. Please try again later.';
-      statusCode = 404;
-    } else if (error.code === 'invalid_image_format') {
-      errorMessage = 'Invalid image format. Please upload PNG, JPG, or JPEG images.';
-      statusCode = 400;
-    } else if (error.status === 429) {
-      errorMessage = 'Rate limit exceeded. Please try again in a moment.';
-      statusCode = 429;
-    } else if (error.message.includes('timeout')) {
-      errorMessage = 'Request timed out. Please try again.';
-      statusCode = 408;
-    }
-    
-    res.status(statusCode).json({ 
-      error: errorMessage,
+    res.status(500).json({ 
+      error: 'Failed to analyze file',
       details: error.message 
     });
   }
@@ -440,17 +333,17 @@ app.post('/api/chat', requireAuth, async (req, res) => {
 
     const messages = [
       {
-        role: "system",
-        content: "You are an expert in technical drawings and documents. Help users understand technical components and answer their questions about specifications, systems, and technical details."
+        role: 'system',
+        content: 'You are an expert in technical drawings and documents. Help users understand technical components and answer their questions about specifications, systems, and technical details.'
       },
       ...context,
-      { role: "user", content: message }
+      { role: 'user', content: message }
     ];
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: 'gpt-4',
       messages: messages,
-      max_tokens: 500,
+      max_tokens: 1500,
     });
 
     res.json({ response: response.choices[0].message.content });
@@ -491,3 +384,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`🤖 AI Service: ${openai ? '✅ Available' : '❌ Disabled'}`);
   console.log('🎉 Server startup complete!');
 });
+

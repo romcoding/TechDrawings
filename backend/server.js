@@ -267,10 +267,14 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     console.log('Starting OpenAI analysis...');
     console.log('File type:', file.type);
     console.log('File name:', file.name);
+    console.log('File size:', file.size);
+    console.log('File data prefix:', file.data ? file.data.substring(0, 50) : 'No data');
 
     // Check if it's an image or PDF
     const isImage = file.type && file.type.startsWith('image/');
     const isPDF = file.type === 'application/pdf';
+    
+    console.log('File type checks:', { isImage, isPDF, fileType: file.type });
 
     if (isPDF) {
       // Extract and analyze PDF text content
@@ -348,7 +352,8 @@ ${response.choices[0].message.content}`
       }
     }
 
-    if (!isImage) {
+    if (!isImage && !isPDF) {
+      console.log('Unsupported file type detected:', file.type);
       return res.status(400).json({ 
         error: 'Unsupported file type. Please upload images (PNG, JPG, JPEG) or PDF files.' 
       });

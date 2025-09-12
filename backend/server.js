@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import session from 'express-session';
+import pdf from 'pdf-parse';
 
 dotenv.config();
 
@@ -69,14 +70,31 @@ const requireAuth = (req, res, next) => {
   }
 };
 
-// PDF analysis helper function
-const analyzePdfMetadata = (file) => {
-  return {
-    filename: file.name,
-    size: (file.size / 1024).toFixed(1) + ' KB',
-    type: 'PDF Document',
-    pages: 'Unknown (requires conversion to analyze)'
-  };
+// PDF text extraction function
+const extractPdfText = async (pdfBuffer) => {
+  try {
+    console.log('Extracting text from PDF...');
+    const data = await pdf(pdfBuffer);
+    
+    return {
+      success: true,
+      text: data.text,
+      pages: data.numpages,
+      info: data.info,
+      metadata: {
+        title: data.info?.Title || 'Untitled',
+        author: data.info?.Author || 'Unknown',
+        creator: data.info?.Creator || 'Unknown',
+        producer: data.info?.Producer || 'Unknown'
+      }
+    };
+  } catch (error) {
+    console.error('PDF text extraction error:', error);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
 };
 
 // Health check endpoint
@@ -220,69 +238,79 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     const isPDF = file.type === 'application/pdf';
 
     if (isPDF) {
-      // Provide comprehensive PDF analysis guidance
-      console.log('PDF file detected - providing conversion guidance');
+      // Extract and analyze PDF text content
+      console.log('PDF file detected - extracting text content for analysis');
       
-      const pdfInfo = analyzePdfMetadata(file);
-      
-      const pdfAnalysis = {
-        response: `📄 **PDF Document Analysis**
+      try {
+        // Extract base64 data from the file
+        const base64Data = file.data.split(',')[1]; // Remove data:application/pdf;base64, prefix
+        const pdfBuffer = Buffer.from(base64Data, 'base64');
+        
+        // Extract text from PDF
+        const extractionResult = await extractPdfText(pdfBuffer);
+        
+        if (!extractionResult.success) {
+          console.log('PDF text extraction failed:', extractionResult.error);
+          return res.status(400).json({ 
+            error: `PDF text extraction failed: ${extractionResult.error}` 
+          });
+        }
+        
+        console.log('PDF text extracted successfully, analyzing content...');
+        console.log('PDF pages:', extractionResult.pages);
+        console.log('Text length:', extractionResult.text.length);
+        
+        // Analyze the extracted text with GPT-4o
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `You are an expert in analyzing technical documents, engineering specifications, and technical drawings. Focus on identifying and explaining technical components, specifications, and important details from the provided text content. Provide detailed, professional analysis including component identification, specifications, and technical standards.
 
-**File Information:**
-- **Filename:** ${pdfInfo.filename}
-- **Type:** ${pdfInfo.type}
-- **Size:** ${pdfInfo.size}
-- **Status:** Ready for analysis (requires conversion)
+This text was extracted from a PDF document. Please provide comprehensive analysis of the technical content, including any technical drawings descriptions, component specifications, dimensions, materials, and engineering standards mentioned.`
+            },
+            {
+              role: "user",
+              content: `${message || "Please analyze this technical document."}
 
-**🔧 PDF to Image Conversion Required**
+📄 **Document Information:**
+- **Filename:** ${file.name}
+- **Pages:** ${extractionResult.pages}
+- **Title:** ${extractionResult.metadata.title}
+- **Author:** ${extractionResult.metadata.author}
+- **Creator:** ${extractionResult.metadata.creator}
 
-To analyze this PDF document, please convert it to image format first:
+**PDF Content:**
+${extractionResult.text}`
+            }
+          ],
+          max_tokens: 1500,
+        });
+        
+        console.log('OpenAI analysis completed successfully for PDF');
+        res.json({ 
+          response: `📄 **PDF Document Analysis Complete**
 
-**📱 Quick Conversion Methods:**
+**Document Details:**
+- **Filename:** ${file.name}
+- **Pages:** ${extractionResult.pages}
+- **Title:** ${extractionResult.metadata.title}
+- **Author:** ${extractionResult.metadata.author}
+- **Creator:** ${extractionResult.metadata.creator}
 
-**1. Browser Method (Easiest):**
-- Open the PDF in your browser
-- Right-click → "Print" → "Save as PDF" → Choose "Save as Image"
-- Or use browser screenshot tools
+---
 
-**2. Desktop Applications:**
-- **Adobe Acrobat:** File → Export To → Image → PNG/JPEG
-- **Preview (macOS):** File → Export → Format: PNG/JPEG
-- **Windows:** Print to PDF → Convert to image
-
-**3. Online Converters:**
-- SmallPDF (smallpdf.com)
-- ILovePDF (ilovepdf.com)
-- PDF24 (pdf24.org)
-
-**4. Mobile Apps:**
-- Adobe Scan
-- CamScanner
-- Microsoft Office Lens
-
-**📋 Conversion Tips:**
-- **High Quality:** Use 300 DPI or higher for technical drawings
-- **Format:** PNG preferred for technical drawings (better quality)
-- **Multiple Pages:** Convert each page separately for detailed analysis
-- **File Size:** Keep under 20MB for optimal processing
-
-**🎯 What I Can Analyze After Conversion:**
-- Technical drawings and schematics
-- Engineering specifications
-- Component identification
-- Bill of Materials (BOM)
-- System diagrams and layouts
-- Dimension annotations
-- Technical standards compliance
-
-**✨ Ready to Analyze:**
-Once converted to PNG/JPG format, upload the image(s) for comprehensive technical analysis!
-
-**Need Help?** Try the browser method first - it's the quickest way to get started! 🚀`
-      };
-      
-      res.json(pdfAnalysis);
-      return;
+${response.choices[0].message.content}`
+        });
+        return;
+        
+      } catch (error) {
+        console.error('PDF processing error:', error);
+        return res.status(500).json({ 
+          error: `PDF processing failed: ${error.message}` 
+        });
+      }
     }
 
     if (!isImage) {

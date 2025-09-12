@@ -291,7 +291,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     console.log('Sending request to OpenAI...');
     const response = await openai.chat.completions.create({
-      model: 'gpt-4-vision-preview',
+      model: 'gpt-4o',
       messages: [
         {
           role: 'system',
@@ -341,7 +341,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     ];
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-4o',
       messages: messages,
       max_tokens: 1500,
     });

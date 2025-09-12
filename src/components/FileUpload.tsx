@@ -13,8 +13,22 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
       const file = acceptedFiles[0];
-      setSelectedFile(file);
-      onFileSelect(file);
+      const allowedTypes = [
+        'image/png',
+        'image/jpeg',
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/msword'
+      ];
+
+      if (allowedTypes.includes(file.type)) {
+        setSelectedFile(file);
+        onFileSelect(file);
+      } else {
+        // Optionally, provide user feedback about unsupported file type
+        console.error('Unsupported file type:', file.type);
+        alert('Invalid file format. Please upload images (PNG, JPG, JPEG) or PDF, DOC, DOCX files.');
+      }
     }
   }, [onFileSelect]);
 

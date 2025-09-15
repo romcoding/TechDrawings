@@ -325,19 +325,29 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     }
 
     console.log('Sending request to OpenAI...');
+    
+    // Multi-pass analysis for comprehensive component detection
+    const analysisPrompts = [
+      {
+        role: 'system',
+        content: 'You are an expert technical drawing analyst specializing in HVAC, electrical, and mechanical systems. Your task is to create a COMPLETE and COMPREHENSIVE Bill of Materials (BOM) from technical drawings. You must identify EVERY SINGLE component, no matter how small or seemingly insignificant. This includes:\n\nCOMPONENT CATEGORIES TO FIND:\n- All valves (gate, globe, check, safety, control, solenoid, butterfly, ball valves)\n- All pumps (circulation, booster, transfer, sump pumps)\n- All motors and drives\n- All sensors and instruments (temperature, pressure, flow, level sensors)\n- All electrical components (switches, relays, contactors, fuses, breakers)\n- All piping and fittings (elbows, tees, reducers, couplings, flanges)\n- All HVAC equipment (heaters, coolers, heat exchangers, fans)\n- All control equipment (controllers, actuators, positioners)\n- All safety equipment (safety valves, relief valves, expansion vessels)\n- All measurement devices (flow meters, pressure gauges, thermometers)\n- All tanks, vessels, and storage equipment\n- All filters, separators, and treatment equipment\n- All electrical connections, terminals, and junction boxes\n- All mounting hardware, brackets, and supports\n\nANALYSIS METHOD:\n1. Scan the ENTIRE drawing systematically, section by section\n2. Look for component symbols, labels, and reference numbers\n3. Count ALL instances of each component type\n4. Extract detailed specifications (power ratings, flow rates, pressures, temperatures)\n5. Identify manufacturer names and model numbers where visible\n6. Note component locations and relationships\n\nOUTPUT FORMAT:\nProvide ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Be extremely thorough. Missing components is unacceptable. If you see multiple identical components, count them all. If specifications are visible, include them all. Return ONLY the JSON array, no other text.'
+      },
+      {
+        role: 'user',
+        content: analysisContent
+      }
+    ];
+
+    // Add a follow-up prompt for verification
+    const verificationPrompt = {
+      role: 'user',
+      content: 'Please double-check your analysis. Look again at the drawing and verify that you have identified ALL components. Pay special attention to:\n1. Small components that might be easily overlooked\n2. Multiple instances of the same component type\n3. Components with abbreviated names or reference numbers\n4. Components in different sections or areas of the drawing\n5. Electrical connections and junction points\n6. Mounting hardware and supports\n\nIf you find any additional components, add them to your JSON array. Ensure your count is accurate for each component type.'
+    };
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
-      messages: [
-        {
-          role: 'system',
-          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files in German format. Identify ALL technical components, parts, devices, equipment, and materials visible in the document. Look for: valves, pumps, motors, sensors, switches, relays, controllers, pipes, fittings, electrical components, HVAC equipment, instrumentation, etc. Provide the output as a VALID JSON array ONLY - no markdown, no explanations, no additional text. Each object must have these exact keys: "anlage" (string, use "Hauptanlage"), "artikel" (string, sequential like "ART-001", "ART-002"), "komponente" (string, component name), "beschreibung" (string, detailed specs), "bemerkung" (string, notes), "stueck" (number, quantity). If quantity not specified, use 1. Return ONLY the JSON array, nothing else.'
-        },
-        {
-          role: 'user',
-          content: analysisContent
-        }
-      ],
-      max_tokens: 1500,
+      messages: [...analysisPrompts, verificationPrompt],
+      max_tokens: 2000, // Increased for more comprehensive analysis
     });
 
     console.log("OpenAI analysis completed successfully");

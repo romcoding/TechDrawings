@@ -334,15 +334,15 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       },
       {
         name: 'Valve and Pump Focus',
-        systemPrompt: 'Focus specifically on identifying ALL valves and pumps in this technical drawing. Look for:\n- Gate valves, globe valves, check valves, safety valves, control valves, solenoid valves, butterfly valves, ball valves\n- Circulation pumps, booster pumps, transfer pumps, sump pumps, main pumps\n- Count each instance separately\n- Extract specifications like pressure ratings, flow rates, sizes, manufacturers\n- Look for reference numbers like H.V.01, H.P.01, etc.\n\nReturn ONLY a valid JSON array with the same format as before.'
+        systemPrompt: 'Focus specifically on identifying ALL valves and pumps in this technical drawing. Look for:\n- Gate valves, globe valves, check valves, safety valves, control valves, solenoid valves, butterfly valves, ball valves\n- Circulation pumps, booster pumps, transfer pumps, sump pumps, main pumps\n- Count each instance separately\n- Extract specifications like pressure ratings, flow rates, sizes, manufacturers\n- Look for reference numbers like H.V.01, H.P.01, etc.\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
       },
       {
         name: 'Electrical and Control Focus',
-        systemPrompt: 'Focus specifically on identifying ALL electrical and control components in this technical drawing. Look for:\n- Electrical switches, relays, contactors, fuses, breakers\n- Control equipment like controllers, actuators, positioners\n- Electrical connections, terminals, junction boxes\n- Sensors and instruments (temperature, pressure, flow, level)\n- Measurement devices (flow meters, pressure gauges, thermometers)\n- Control cabinets and panels\n\nReturn ONLY a valid JSON array with the same format as before.'
+        systemPrompt: 'Focus specifically on identifying ALL electrical and control components in this technical drawing. Look for:\n- Electrical switches, relays, contactors, fuses, breakers\n- Control equipment like controllers, actuators, positioners\n- Electrical connections, terminals, junction boxes\n- Sensors and instruments (temperature, pressure, flow, level)\n- Measurement devices (flow meters, pressure gauges, thermometers)\n- Control cabinets and panels\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
       },
       {
         name: 'HVAC and Mechanical Focus',
-        systemPrompt: 'Focus specifically on identifying ALL HVAC and mechanical components in this technical drawing. Look for:\n- Heat exchangers, heaters, coolers, fans\n- Tanks, vessels, storage equipment\n- Filters, separators, treatment equipment\n- Piping and fittings (elbows, tees, reducers, couplings, flanges)\n- Mounting hardware, brackets, supports\n- Safety equipment (safety valves, relief valves, expansion vessels)\n\nReturn ONLY a valid JSON array with the same format as before.'
+        systemPrompt: 'Focus specifically on identifying ALL HVAC and mechanical components in this technical drawing. Look for:\n- Heat exchangers, heaters, coolers, fans\n- Tanks, vessels, storage equipment\n- Filters, separators, treatment equipment\n- Piping and fittings (elbows, tees, reducers, couplings, flanges)\n- Mounting hardware, brackets, supports\n- Safety equipment (safety valves, relief valves, expansion vessels)\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
       }
     ];
 
@@ -351,14 +351,14 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     for (const query of analysisQueries) {
       try {
         console.log(`Executing ${query.name}...`);
-        const response = await openai.chat.completions.create({
-          model: 'gpt-4o',
-          messages: [
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
-          ],
-          max_tokens: 1500,
-        });
+      ],
+      max_tokens: 1500,
+    });
         allResponses.push({
           name: query.name,
           response: response.choices[0].message.content
@@ -371,6 +371,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     // Combine and deduplicate results
     let combinedBOM = [];
     const seenComponents = new Set();
+    let componentCounter = 1;
 
     for (const result of allResponses) {
       try {
@@ -380,26 +381,115 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         // Clean up markdown formatting
         rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
         
-        // Extract JSON array
-        const jsonMatch = rawResponse.match(/\[[\s\S]*\]/);
+        // Extract JSON array - be more flexible with malformed JSON
+        const jsonMatch = rawResponse.match(/\[[\s\S]*?\]/);
         if (jsonMatch) {
           rawResponse = jsonMatch[0];
         }
         
-        const parsedBOM = JSON.parse(rawResponse);
-        if (Array.isArray(parsedBOM)) {
-          // Add unique components to combined list
+        // Try to fix common JSON issues
+        rawResponse = rawResponse
+          .replace(/,\s*}/g, '}')  // Remove trailing commas before }
+          .replace(/,\s*]/g, ']')  // Remove trailing commas before ]
+          .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2'); // Fix unescaped backslashes
+        
+      const parsedBOM = JSON.parse(rawResponse);
+      if (Array.isArray(parsedBOM)) {
+          // Normalize different response formats to our German BOM format
           parsedBOM.forEach(item => {
-            const key = `${item.komponente}-${item.beschreibung}`;
+            let normalizedItem = {};
+            
+            // Handle different response formats
+            if (item.komponente) {
+              // Already in German format
+              normalizedItem = {
+                anlage: item.anlage || "Hauptanlage",
+                artikel: item.artikel || `ART-${String(componentCounter).padStart(3, '0')}`,
+                komponente: item.komponente,
+                beschreibung: item.beschreibung || "Keine Beschreibung verfügbar",
+                bemerkung: item.bemerkung || "Keine Bemerkungen",
+                stueck: typeof item.stueck === "number" ? item.stueck : 1
+              };
+            } else if (item.type) {
+              // Convert type-based format to German format
+              normalizedItem = {
+                anlage: "Hauptanlage",
+                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
+                komponente: item.type,
+                beschreibung: item.description || item.details || item.specifications ? 
+                  (typeof item.specifications === 'object' ? 
+                    Object.entries(item.specifications).map(([k,v]) => `${k}: ${v}`).join(', ') :
+                    (item.description || item.details || "Keine Beschreibung verfügbar")) : 
+                  "Keine Beschreibung verfügbar",
+                bemerkung: item.manufacturer ? `Hersteller: ${item.manufacturer}` : "Keine Bemerkungen",
+                stueck: typeof item.count === "number" ? item.count : 1
+              };
+            } else if (typeof item === 'string') {
+              // Handle simple string array format
+              normalizedItem = {
+                anlage: "Hauptanlage",
+                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
+                komponente: item,
+                beschreibung: "Komponente aus technischer Zeichnung",
+                bemerkung: "Automatisch erkannt",
+                stueck: 1
+              };
+            } else {
+              // Fallback for other formats
+              normalizedItem = {
+                anlage: "Hauptanlage",
+                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
+                komponente: item.name || item.component || "Unbekannte Komponente",
+                beschreibung: item.description || item.desc || "Keine Beschreibung verfügbar",
+                bemerkung: item.note || item.remark || "Keine Bemerkungen",
+                stueck: typeof item.quantity === "number" ? item.quantity : 1
+              };
+            }
+            
+            // Create a more flexible deduplication key
+            const key = `${normalizedItem.komponente.toLowerCase()}-${normalizedItem.beschreibung.toLowerCase()}`;
             if (!seenComponents.has(key)) {
               seenComponents.add(key);
-              combinedBOM.push(item);
+              combinedBOM.push(normalizedItem);
+              componentCounter++;
             }
           });
-          console.log(`${result.name} found ${parsedBOM.length} components`);
+          console.log(`${result.name} found ${parsedBOM.length} components, added ${parsedBOM.length} to combined list`);
         }
       } catch (parseError) {
         console.error(`Failed to parse ${result.name} response:`, parseError);
+        console.error(`Raw response was:`, rawResponse.substring(0, 500));
+        
+        // Try to extract components from malformed JSON using regex
+        try {
+          const componentMatches = rawResponse.match(/"komponente":\s*"([^"]+)"/g) || 
+                                 rawResponse.match(/"type":\s*"([^"]+)"/g) ||
+                                 rawResponse.match(/"([^"]+)"/g);
+          
+          if (componentMatches && componentMatches.length > 0) {
+            componentMatches.slice(0, 10).forEach(match => {
+              const componentName = match.replace(/["{}]/g, '').replace(/^(komponente|type):\s*/, '');
+              if (componentName && componentName.length > 2) {
+                const key = componentName.toLowerCase();
+                if (!seenComponents.has(key)) {
+                  seenComponents.add(key);
+                  combinedBOM.push({
+                    anlage: "Hauptanlage",
+                    artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
+                    komponente: componentName,
+                    beschreibung: "Komponente aus technischer Zeichnung",
+                    bemerkung: "Automatisch erkannt",
+                    stueck: 1
+                  });
+                  componentCounter++;
+                }
+              }
+            });
+            console.log(`${result.name} extracted ${componentMatches.length} components from malformed JSON`);
+          }
+        } catch (extractError) {
+          console.error(`Failed to extract components from malformed JSON:`, extractError);
+        }
       }
     }
 

@@ -321,7 +321,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files. Identify all components, their types, manufacturers, models, and quantities. Provide the output as a JSON array of objects. Each object should have the following keys: "component_name" (string), "type" (string, e.g., Valve, Pump, Heat Exchanger), "manufacturer" (string, if available), "model" (string, if available), "quantity" (number), "specifications" (string, detailed specs if available). If a quantity is not explicitly stated, assume 1. If no components are found, return an empty JSON array. DO NOT include any other text or explanation outside the JSON array.'
+          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files in German format. Identify all components and provide the output as a JSON array of objects. Each object should have the following keys: "anlage" (string, plant/facility identifier, use "Hauptanlage" if not specified), "artikel" (string, article/item number, generate sequential numbers like "ART-001", "ART-002"), "komponente" (string, component name), "beschreibung" (string, detailed description including specifications), "bemerkung" (string, additional notes or remarks), "stueck" (number, quantity/count). If a quantity is not explicitly stated, assume 1. If no components are found, return an empty JSON array. DO NOT include any other text or explanation outside the JSON array.'
         },
         {
           role: 'user',
@@ -334,60 +334,62 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     console.log("OpenAI analysis completed successfully");
     
     let bom = [];
+    let analysisText = "";
+    
     try {
       // Attempt to parse the JSON response from OpenAI
       const rawResponse = response.choices[0].message.content;
       const parsedBOM = JSON.parse(rawResponse);
 
       if (Array.isArray(parsedBOM)) {
-        // Aggregate and categorize components
-        const aggregatedBOM = {};
-
-        for (const item of parsedBOM) {
-          const name = item.component_name || "Unknown Component";
-          const type = item.type || "General";
-          const manufacturer = item.manufacturer || "N/A";
-          const model = item.model || "N/A";
-          const quantity = typeof item.quantity === "number" ? item.quantity : 1;
-          const specifications = item.specifications || "";
-
-          // Categorize using the loaded Excel data
-          let category = type; // Default to type from AI
-          const lowerCaseName = name.toLowerCase();
-          for (const key in componentCategories) {
-            if (lowerCaseName.includes(key)) {
-              category = componentCategories[key];
-              break;
-            }
-          }
-
-          const key = `${name}-${type}-${manufacturer}-${model}-${category}`;
-          if (aggregatedBOM[key]) {
-            aggregatedBOM[key].quantity += quantity;
-          } else {
-            aggregatedBOM[key] = {
-              component_name: name,
-              type: type,
-              manufacturer: manufacturer,
-              model: model,
-              quantity: quantity,
-              specifications: specifications,
-              category: category,
-            };
-          }
-        }
-        bom = Object.values(aggregatedBOM);
-        console.log("BOM parsed, categorized, and aggregated successfully.");
+        // Process the German BOM format
+        bom = parsedBOM.map((item, index) => ({
+          anlage: item.anlage || "Hauptanlage",
+          artikel: item.artikel || `ART-${String(index + 1).padStart(3, '0')}`,
+          komponente: item.komponente || "Unbekannte Komponente",
+          beschreibung: item.beschreibung || "Keine Beschreibung verfügbar",
+          bemerkung: item.bemerkung || "Keine Bemerkungen",
+          stueck: typeof item.stueck === "number" ? item.stueck : 1
+        }));
+        
+        // Generate analysis text
+        analysisText = `Technische Zeichnung erfolgreich analysiert!\n\n`;
+        analysisText += `Gefundene Komponenten: ${bom.length}\n\n`;
+        analysisText += `Stückliste:\n`;
+        bom.forEach((item, index) => {
+          analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}\n`;
+        });
+        
+        console.log("German BOM parsed successfully.");
       } else {
         console.warn("OpenAI response was not a JSON array:", rawResponse);
-        bom = [{ component_name: "Analysis Error", type: "Error", quantity: 1, specifications: "AI did not return a valid BOM format." }];
+        bom = [{ 
+          anlage: "Fehler", 
+          artikel: "ERR-001", 
+          komponente: "Analysefehler", 
+          beschreibung: "AI hat kein gültiges BOM-Format zurückgegeben.", 
+          bemerkung: "Fehler bei der Analyse", 
+          stueck: 1 
+        }];
+        analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
     } catch (parseError) {
       console.error("Failed to parse OpenAI response as JSON:", parseError);
-      bom = [{ component_name: "Analysis Error", type: "Error", quantity: 1, specifications: "Could not parse AI response as JSON." }];
+      bom = [{ 
+        anlage: "Fehler", 
+        artikel: "ERR-001", 
+        komponente: "Parse-Fehler", 
+        beschreibung: "Konnte AI-Antwort nicht als JSON parsen.", 
+        bemerkung: "Fehler beim Parsen", 
+        stueck: 1 
+      }];
+      analysisText = "Fehler beim Parsen der AI-Antwort.";
     }
 
-    res.json({ response: bom });
+    res.json({ 
+      response: analysisText,
+      bom: bom 
+    });
   } catch (error) {
     console.error('Error in /api/analyze:', error);
     res.status(500).json({ 

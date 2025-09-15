@@ -1,6 +1,7 @@
 import React from 'react';
 import { Message } from '../types';
 import { User, Brain, FileText, Image, File } from 'lucide-react';
+import BomTable from './BOMTable';
 
 interface ChatMessageProps {
   message: Message;
@@ -62,50 +63,15 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           )}
           
           <div className="whitespace-pre-wrap text-sm leading-relaxed">
-            {message.content.includes('Total components identified:') ? (
-              <div className="space-y-3">
-                <div className="text-base font-semibold text-blue-900 mb-3">
-                  🎯 Technical Drawing Analysis Complete
-                </div>
-                <div className="bg-blue-50 rounded-lg p-3 border border-blue-200">
-                  <div className="text-sm text-blue-800">
-                    {message.content.split('\n\n').map((section, index) => {
-                      if (section.includes('Total components identified:')) {
-                        return (
-                          <div key={index} className="font-semibold text-blue-900">
-                            {section}
-                          </div>
-                        );
-                      }
-                      if (section.includes('**') && section.includes('**')) {
-                        // Component header
-                        const componentName = section.replace(/\*\*/g, '');
-                        return (
-                          <div key={index} className="font-medium text-gray-900 mt-3 mb-2">
-                            🔧 {componentName}
-                          </div>
-                        );
-                      }
-                      if (section.includes('  - ')) {
-                        // Component details
-                        return (
-                          <div key={index} className="text-sm text-gray-700 ml-4">
-                            {section}
-                          </div>
-                        );
-                      }
-                      return null;
-                    })}
-                  </div>
-                </div>
-                <div className="text-xs text-blue-600 bg-blue-100 rounded px-2 py-1 inline-block">
-                  💡 Analysis powered by GPT-4o with expert engineering standards
-                </div>
-              </div>
-            ) : (
-              message.content
-            )}
+            {message.content}
           </div>
+          
+          {/* Display BOM Table if BOM data is available */}
+          {message.bom && message.bom.length > 0 && (
+            <div className="mt-4">
+              <BomTable bom={message.bom} />
+            </div>
+          )}
         </div>
         
         <div className={`

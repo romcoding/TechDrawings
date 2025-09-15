@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Download, Brain, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, Brain, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
 import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
 import { ChatState, Message } from './types';
@@ -259,7 +259,8 @@ function App() {
         const data = await response.json();
         const aiResponse: Message = {
           role: 'assistant',
-          content: data.response
+          content: data.response,
+          bom: data.bom || []
         };
 
         setChatState((prev: ChatState) => ({
@@ -429,25 +430,6 @@ function App() {
           <div className="border-t border-gray-100 p-6 space-y-4 bg-gray-50">
             <FileUpload onFileSelect={handleFileSelect} />
             
-            {/* Download Section */}
-            {chatState.messages.some((msg: Message) => msg.role === 'assistant' && msg.content.includes('Total components identified:')) && (
-              <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl border border-blue-200">
-                <div className="flex items-center gap-3">
-                  <Download className="w-5 h-5 text-blue-600" />
-                  <div>
-                    <h3 className="font-medium text-blue-900">Analysis Complete!</h3>
-                    <p className="text-sm text-blue-700">Download the detailed Bill of Materials (BOM) as CSV</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => window.open('/api/download', '_blank')}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-                >
-                  <Download className="w-4 h-4" />
-                  Download CSV
-                </button>
-              </div>
-            )}
             
             <form onSubmit={handleSubmit} className="flex gap-3">
               <input

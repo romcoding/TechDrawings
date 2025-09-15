@@ -4,27 +4,36 @@ import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import session from 'express-session';
-import xlsx from 'xlsx';
+import fs from 'fs';
 
 let componentCategories = {};
 
-// Function to load categorization data from Excel
+// Function to load categorization data from CSV
 const loadCategories = () => {
   try {
-    const workbook = xlsx.readFile('./Elemente_Kategorisierung.xlsx');
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    const data = xlsx.utils.sheet_to_json(worksheet);
-
-    componentCategories = data.reduce((acc, row) => {
-      if (row['Komponente'] && row['Kategorie']) {
-        acc[row['Komponente'].toLowerCase()] = row['Kategorie'];
+    const csvContent = fs.readFileSync('./Elemente_Kategorisierung.csv', 'utf8');
+    const lines = csvContent.split('\n');
+    const headers = lines[0].split(',');
+    
+    componentCategories = {};
+    
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line) {
+        const values = line.split(',');
+        if (values.length >= 2) {
+          const komponente = values[0].trim();
+          const kategorie = values[1].trim();
+          if (komponente && kategorie) {
+            componentCategories[komponente.toLowerCase()] = kategorie;
+          }
+        }
       }
-      return acc;
-    }, {});
-    console.log(`✅ Loaded ${Object.keys(componentCategories).length} component categories from Excel.`);
+    }
+    
+    console.log(`✅ Loaded ${Object.keys(componentCategories).length} component categories from CSV.`);
   } catch (error) {
-    console.error('❌ Failed to load component categories from Excel:', error);
+    console.error('❌ Failed to load component categories from CSV:', error);
   }
 };
 
@@ -321,7 +330,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files in German format. Identify all components and provide the output as a JSON array of objects. Each object should have the following keys: "anlage" (string, plant/facility identifier, use "Hauptanlage" if not specified), "artikel" (string, article/item number, generate sequential numbers like "ART-001", "ART-002"), "komponente" (string, component name), "beschreibung" (string, detailed description including specifications), "bemerkung" (string, additional notes or remarks), "stueck" (number, quantity/count). If a quantity is not explicitly stated, assume 1. If no components are found, return an empty JSON array. DO NOT include any other text or explanation outside the JSON array.'
+          content: 'You are an expert in analyzing technical drawings, PDFs, and documents. Your task is to extract a Bill of Materials (BOM) from the provided files in German format. Identify ALL technical components, parts, devices, equipment, and materials visible in the document. Look for: valves, pumps, motors, sensors, switches, relays, controllers, pipes, fittings, electrical components, HVAC equipment, instrumentation, etc. Provide the output as a VALID JSON array ONLY - no markdown, no explanations, no additional text. Each object must have these exact keys: "anlage" (string, use "Hauptanlage"), "artikel" (string, sequential like "ART-001", "ART-002"), "komponente" (string, component name), "beschreibung" (string, detailed specs), "bemerkung" (string, notes), "stueck" (number, quantity). If quantity not specified, use 1. Return ONLY the JSON array, nothing else.'
         },
         {
           role: 'user',
@@ -338,7 +347,18 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     
     try {
       // Attempt to parse the JSON response from OpenAI
-      const rawResponse = response.choices[0].message.content;
+      let rawResponse = response.choices[0].message.content;
+      console.log("Raw AI response:", rawResponse.substring(0, 200) + "...");
+      
+      // Clean up markdown formatting if present
+      rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+      
+      // Try to extract JSON array from the response
+      const jsonMatch = rawResponse.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        rawResponse = jsonMatch[0];
+      }
+      
       const parsedBOM = JSON.parse(rawResponse);
 
       if (Array.isArray(parsedBOM)) {
@@ -360,7 +380,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}\n`;
         });
         
-        console.log("German BOM parsed successfully.");
+        console.log(`German BOM parsed successfully. Found ${bom.length} components.`);
       } else {
         console.warn("OpenAI response was not a JSON array:", rawResponse);
         bom = [{ 
@@ -375,6 +395,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       }
     } catch (parseError) {
       console.error("Failed to parse OpenAI response as JSON:", parseError);
+      console.error("Raw response was:", rawResponse.substring(0, 500));
       bom = [{ 
         anlage: "Fehler", 
         artikel: "ERR-001", 

@@ -391,7 +391,9 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         rawResponse = rawResponse
           .replace(/,\s*}/g, '}')  // Remove trailing commas before }
           .replace(/,\s*]/g, ']')  // Remove trailing commas before ]
-          .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2'); // Fix unescaped backslashes
+          .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2') // Fix unescaped backslashes
+          .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"') // Fix unescaped quotes in strings
+          .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"'); // Fix more unescaped quotes
         
       const parsedBOM = JSON.parse(rawResponse);
       if (Array.isArray(parsedBOM)) {
@@ -458,13 +460,13 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         }
       } catch (parseError) {
         console.error(`Failed to parse ${result.name} response:`, parseError);
-        console.error(`Raw response was:`, rawResponse.substring(0, 500));
+        console.error(`Raw response was:`, result.response.substring(0, 500));
         
         // Try to extract components from malformed JSON using regex
         try {
-          const componentMatches = rawResponse.match(/"komponente":\s*"([^"]+)"/g) || 
-                                 rawResponse.match(/"type":\s*"([^"]+)"/g) ||
-                                 rawResponse.match(/"([^"]+)"/g);
+          const componentMatches = result.response.match(/"komponente":\s*"([^"]+)"/g) || 
+                                 result.response.match(/"type":\s*"([^"]+)"/g) ||
+                                 result.response.match(/"([^"]+)"/g);
           
           if (componentMatches && componentMatches.length > 0) {
             componentMatches.slice(0, 10).forEach(match => {

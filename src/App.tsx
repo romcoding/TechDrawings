@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Brain, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { Send, Brain, AlertCircle, CheckCircle, Loader2, Globe } from 'lucide-react';
 import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
 import { ChatState, Message } from './types';
+import { useLanguage } from './contexts/LanguageContext';
 
 const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical drawings and documents using GPT-4o with expert engineering knowledge. I can provide comprehensive analysis of technical drawings according to international standards (VDI 3814, ISO 16484, ISO 14617, IEC 60617, DIN EN 81346).
 
@@ -26,9 +27,11 @@ Upload a technical drawing and I'll provide a professional engineering analysis!
 const API_URL = 'https://techdrawings-1.onrender.com';
 
 function App() {
+  const { language, setLanguage, t } = useLanguage();
+  
   const [chatState, setChatState] = useState<ChatState>({
     messages: [
-      { role: 'assistant', content: INITIAL_MESSAGE }
+      { role: 'assistant', content: t('app.initialMessage') }
     ],
     isLoading: false
   });
@@ -297,8 +300,8 @@ function App() {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full mb-4">
                 <Brain className="w-8 h-8 text-white" />
               </div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Technical Drawing Analyzer</h1>
-              <p className="text-gray-600">Powered by GPT-4o • Expert Engineering Analysis</p>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">{t('login.title')}</h1>
+              <p className="text-gray-600">{t('login.subtitle')}</p>
             </div>
 
             {loginError && (
@@ -311,7 +314,7 @@ function App() {
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-                  Username
+                  {t('login.username')}
                 </label>
                 <input
                   type="text"
@@ -319,13 +322,13 @@ function App() {
                   value={loginCredentials.username}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginCredentials((prev: { username: string; password: string }) => ({ ...prev, username: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter username"
+                  placeholder={t('login.usernamePlaceholder')}
                   required
                 />
               </div>
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
+                  {t('login.password')}
                 </label>
                 <input
                   type="password"
@@ -333,7 +336,7 @@ function App() {
                   value={loginCredentials.password}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLoginCredentials((prev: { username: string; password: string }) => ({ ...prev, password: e.target.value }))}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  placeholder="Enter password"
+                  placeholder={t('login.passwordPlaceholder')}
                   required
                 />
               </div>
@@ -341,7 +344,7 @@ function App() {
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-4 rounded-lg font-medium hover:from-blue-600 hover:to-indigo-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all transform hover:scale-[1.02]"
               >
-                Sign In
+                {t('login.signIn')}
               </button>
             </form>
 
@@ -350,17 +353,17 @@ function App() {
                 {serverStatus === 'online' ? (
                   <>
                     <CheckCircle className="w-4 h-4 text-green-500" />
-                    <span>Server Online</span>
+                    <span>{t('login.serverOnline')}</span>
                   </>
                 ) : serverStatus === 'offline' ? (
                   <>
                     <AlertCircle className="w-4 h-4 text-red-500" />
-                    <span>Server Offline</span>
+                    <span>{t('login.serverOffline')}</span>
                   </>
                 ) : (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                    <span>Checking Server...</span>
+                    <span>{t('login.checkingServer')}</span>
                   </>
                 )}
               </div>
@@ -381,21 +384,34 @@ function App() {
                 <Brain className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-gray-900">Technical Drawing Analyzer</h1>
-                <p className="text-sm text-gray-600">Powered by GPT-4o • Expert Engineering Analysis</p>
+                <h1 className="text-xl font-bold text-gray-900">{t('app.title')}</h1>
+                <p className="text-sm text-gray-600">{t('app.subtitle')}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Language Selector */}
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-gray-600" />
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value as 'de' | 'en')}
+                  className="text-sm border border-gray-300 rounded px-2 py-1 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="de">{t('main.languageGerman')}</option>
+                  <option value="en">{t('main.languageEnglish')}</option>
+                </select>
+              </div>
+
               {serverStatus === 'online' ? (
                 <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full">
                   <CheckCircle className="w-4 h-4" />
-                  <span>Online</span>
+                  <span>{t('login.serverOnline')}</span>
                 </div>
               ) : (
                 <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 px-3 py-1 rounded-full">
                   <AlertCircle className="w-4 h-4" />
-                  <span>Offline</span>
+                  <span>{t('login.serverOffline')}</span>
                 </div>
               )}
               
@@ -404,14 +420,14 @@ function App() {
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm"
                 title="Refresh server status"
               >
-                Refresh
+                {t('main.refresh')}
               </button>
               
               <button
                 onClick={handleLogout}
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
-                Sign Out
+                {t('main.signOut')}
               </button>
             </div>
           </div>
@@ -436,7 +452,7 @@ function App() {
                 type="text"
                 value={input}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
-                placeholder="Ask a question about the document..."
+                placeholder={t('main.askQuestion')}
                 className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white"
                 disabled={chatState.isLoading}
               />

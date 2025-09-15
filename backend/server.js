@@ -324,56 +324,96 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       ];
     }
 
-    console.log('Sending request to OpenAI...');
+    console.log('Sending multiple analysis requests to OpenAI...');
     
-    // Multi-pass analysis for comprehensive component detection
-    const analysisPrompts = [
+    // Multiple specialized analysis queries for comprehensive detection
+    const analysisQueries = [
       {
-        role: 'system',
-        content: 'You are an expert technical drawing analyst specializing in HVAC, electrical, and mechanical systems. Your task is to create a COMPLETE and COMPREHENSIVE Bill of Materials (BOM) from technical drawings. You must identify EVERY SINGLE component, no matter how small or seemingly insignificant. This includes:\n\nCOMPONENT CATEGORIES TO FIND:\n- All valves (gate, globe, check, safety, control, solenoid, butterfly, ball valves)\n- All pumps (circulation, booster, transfer, sump pumps)\n- All motors and drives\n- All sensors and instruments (temperature, pressure, flow, level sensors)\n- All electrical components (switches, relays, contactors, fuses, breakers)\n- All piping and fittings (elbows, tees, reducers, couplings, flanges)\n- All HVAC equipment (heaters, coolers, heat exchangers, fans)\n- All control equipment (controllers, actuators, positioners)\n- All safety equipment (safety valves, relief valves, expansion vessels)\n- All measurement devices (flow meters, pressure gauges, thermometers)\n- All tanks, vessels, and storage equipment\n- All filters, separators, and treatment equipment\n- All electrical connections, terminals, and junction boxes\n- All mounting hardware, brackets, and supports\n\nANALYSIS METHOD:\n1. Scan the ENTIRE drawing systematically, section by section\n2. Look for component symbols, labels, and reference numbers\n3. Count ALL instances of each component type\n4. Extract detailed specifications (power ratings, flow rates, pressures, temperatures)\n5. Identify manufacturer names and model numbers where visible\n6. Note component locations and relationships\n\nOUTPUT FORMAT:\nProvide ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Be extremely thorough. Missing components is unacceptable. If you see multiple identical components, count them all. If specifications are visible, include them all. Return ONLY the JSON array, no other text.'
+        name: 'Primary Analysis',
+        systemPrompt: 'You are an expert technical drawing analyst specializing in HVAC, electrical, and mechanical systems. Your task is to create a COMPLETE and COMPREHENSIVE Bill of Materials (BOM) from technical drawings. You must identify EVERY SINGLE component, no matter how small or seemingly insignificant. This includes:\n\nCOMPONENT CATEGORIES TO FIND:\n- All valves (gate, globe, check, safety, control, solenoid, butterfly, ball valves)\n- All pumps (circulation, booster, transfer, sump pumps)\n- All motors and drives\n- All sensors and instruments (temperature, pressure, flow, level sensors)\n- All electrical components (switches, relays, contactors, fuses, breakers)\n- All piping and fittings (elbows, tees, reducers, couplings, flanges)\n- All HVAC equipment (heaters, coolers, heat exchangers, fans)\n- All control equipment (controllers, actuators, positioners)\n- All safety equipment (safety valves, relief valves, expansion vessels)\n- All measurement devices (flow meters, pressure gauges, thermometers)\n- All tanks, vessels, and storage equipment\n- All filters, separators, and treatment equipment\n- All electrical connections, terminals, and junction boxes\n- All mounting hardware, brackets, and supports\n\nANALYSIS METHOD:\n1. Scan the ENTIRE drawing systematically, section by section\n2. Look for component symbols, labels, and reference numbers\n3. Count ALL instances of each component type\n4. Extract detailed specifications (power ratings, flow rates, pressures, temperatures)\n5. Identify manufacturer names and model numbers where visible\n6. Note component locations and relationships\n\nOUTPUT FORMAT:\nProvide ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Be extremely thorough. Missing components is unacceptable. If you see multiple identical components, count them all. If specifications are visible, include them all. Return ONLY the JSON array, no other text.'
       },
       {
-        role: 'user',
-        content: analysisContent
+        name: 'Valve and Pump Focus',
+        systemPrompt: 'Focus specifically on identifying ALL valves and pumps in this technical drawing. Look for:\n- Gate valves, globe valves, check valves, safety valves, control valves, solenoid valves, butterfly valves, ball valves\n- Circulation pumps, booster pumps, transfer pumps, sump pumps, main pumps\n- Count each instance separately\n- Extract specifications like pressure ratings, flow rates, sizes, manufacturers\n- Look for reference numbers like H.V.01, H.P.01, etc.\n\nReturn ONLY a valid JSON array with the same format as before.'
+      },
+      {
+        name: 'Electrical and Control Focus',
+        systemPrompt: 'Focus specifically on identifying ALL electrical and control components in this technical drawing. Look for:\n- Electrical switches, relays, contactors, fuses, breakers\n- Control equipment like controllers, actuators, positioners\n- Electrical connections, terminals, junction boxes\n- Sensors and instruments (temperature, pressure, flow, level)\n- Measurement devices (flow meters, pressure gauges, thermometers)\n- Control cabinets and panels\n\nReturn ONLY a valid JSON array with the same format as before.'
+      },
+      {
+        name: 'HVAC and Mechanical Focus',
+        systemPrompt: 'Focus specifically on identifying ALL HVAC and mechanical components in this technical drawing. Look for:\n- Heat exchangers, heaters, coolers, fans\n- Tanks, vessels, storage equipment\n- Filters, separators, treatment equipment\n- Piping and fittings (elbows, tees, reducers, couplings, flanges)\n- Mounting hardware, brackets, supports\n- Safety equipment (safety valves, relief valves, expansion vessels)\n\nReturn ONLY a valid JSON array with the same format as before.'
       }
     ];
 
-    // Add a follow-up prompt for verification
-    const verificationPrompt = {
-      role: 'user',
-      content: 'Please double-check your analysis. Look again at the drawing and verify that you have identified ALL components. Pay special attention to:\n1. Small components that might be easily overlooked\n2. Multiple instances of the same component type\n3. Components with abbreviated names or reference numbers\n4. Components in different sections or areas of the drawing\n5. Electrical connections and junction points\n6. Mounting hardware and supports\n\nIf you find any additional components, add them to your JSON array. Ensure your count is accurate for each component type.'
-    };
+    // Execute multiple analysis queries
+    const allResponses = [];
+    for (const query of analysisQueries) {
+      try {
+        console.log(`Executing ${query.name}...`);
+        const response = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: query.systemPrompt },
+            { role: 'user', content: analysisContent }
+          ],
+          max_tokens: 1500,
+        });
+        allResponses.push({
+          name: query.name,
+          response: response.choices[0].message.content
+        });
+      } catch (error) {
+        console.error(`Error in ${query.name}:`, error);
+      }
+    }
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [...analysisPrompts, verificationPrompt],
-      max_tokens: 2000, // Increased for more comprehensive analysis
-    });
+    // Combine and deduplicate results
+    let combinedBOM = [];
+    const seenComponents = new Set();
 
-    console.log("OpenAI analysis completed successfully");
+    for (const result of allResponses) {
+      try {
+        let rawResponse = result.response;
+        console.log(`${result.name} response:`, rawResponse.substring(0, 200) + "...");
+        
+        // Clean up markdown formatting
+        rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+        
+        // Extract JSON array
+        const jsonMatch = rawResponse.match(/\[[\s\S]*\]/);
+        if (jsonMatch) {
+          rawResponse = jsonMatch[0];
+        }
+        
+        const parsedBOM = JSON.parse(rawResponse);
+        if (Array.isArray(parsedBOM)) {
+          // Add unique components to combined list
+          parsedBOM.forEach(item => {
+            const key = `${item.komponente}-${item.beschreibung}`;
+            if (!seenComponents.has(key)) {
+              seenComponents.add(key);
+              combinedBOM.push(item);
+            }
+          });
+          console.log(`${result.name} found ${parsedBOM.length} components`);
+        }
+      } catch (parseError) {
+        console.error(`Failed to parse ${result.name} response:`, parseError);
+      }
+    }
+
+    console.log(`Combined analysis found ${combinedBOM.length} unique components`);
+
+    console.log("Multiple AI analysis completed successfully");
     
     let bom = [];
     let analysisText = "";
     
     try {
-      // Attempt to parse the JSON response from OpenAI
-      let rawResponse = response.choices[0].message.content;
-      console.log("Raw AI response:", rawResponse.substring(0, 200) + "...");
-      
-      // Clean up markdown formatting if present
-      rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-      
-      // Try to extract JSON array from the response
-      const jsonMatch = rawResponse.match(/\[[\s\S]*\]/);
-      if (jsonMatch) {
-        rawResponse = jsonMatch[0];
-      }
-      
-      const parsedBOM = JSON.parse(rawResponse);
-
-      if (Array.isArray(parsedBOM)) {
-        // Process the German BOM format
-        bom = parsedBOM.map((item, index) => ({
+      if (combinedBOM.length > 0) {
+        // Process the combined German BOM format
+        bom = combinedBOM.map((item, index) => ({
           anlage: item.anlage || "Hauptanlage",
           artikel: item.artikel || `ART-${String(index + 1).padStart(3, '0')}`,
           komponente: item.komponente || "Unbekannte Komponente",
@@ -390,31 +430,30 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}\n`;
         });
         
-        console.log(`German BOM parsed successfully. Found ${bom.length} components.`);
+        console.log(`Combined German BOM parsed successfully. Found ${bom.length} components.`);
       } else {
-        console.warn("OpenAI response was not a JSON array:", rawResponse);
+        console.warn("No components found in combined analysis");
         bom = [{ 
           anlage: "Fehler", 
           artikel: "ERR-001", 
           komponente: "Analysefehler", 
-          beschreibung: "AI hat kein gültiges BOM-Format zurückgegeben.", 
+          beschreibung: "Keine Komponenten in der kombinierten Analyse gefunden.", 
           bemerkung: "Fehler bei der Analyse", 
           stueck: 1 
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
     } catch (parseError) {
-      console.error("Failed to parse OpenAI response as JSON:", parseError);
-      console.error("Raw response was:", rawResponse.substring(0, 500));
+      console.error("Failed to process combined BOM:", parseError);
       bom = [{ 
         anlage: "Fehler", 
         artikel: "ERR-001", 
         komponente: "Parse-Fehler", 
-        beschreibung: "Konnte AI-Antwort nicht als JSON parsen.", 
+        beschreibung: "Konnte kombinierte AI-Antworten nicht verarbeiten.", 
         bemerkung: "Fehler beim Parsen", 
         stueck: 1 
       }];
-      analysisText = "Fehler beim Parsen der AI-Antwort.";
+      analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }
 
     res.json({ 

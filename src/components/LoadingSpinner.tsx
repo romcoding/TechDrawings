@@ -3,7 +3,7 @@ import { Loader2, FileText, Brain, Cog, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface LoadingSpinnerProps {
-  stage: 'uploading' | 'extracting' | 'analyzing' | 'primary' | 'valves' | 'electrical' | 'hvac' | 'combining' | 'finalizing';
+  stage: 'uploading' | 'extracting' | 'analyzing' | 'primary' | 'valves' | 'electrical' | 'hvac' | 'combining' | 'finalizing' | 'primary_analysis' | 'valve_and_pump_focus' | 'electrical_and_control_focus' | 'hvac_and_mechanical_focus' | 'completed' | 'idle';
   progress?: number;
 }
 
@@ -21,11 +21,18 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
       case 'valves':
       case 'electrical':
       case 'hvac':
+      case 'primary_analysis':
+      case 'valve_and_pump_focus':
+      case 'electrical_and_control_focus':
+      case 'hvac_and_mechanical_focus':
         return <Brain className="w-6 h-6 text-purple-500" />;
       case 'combining':
         return <Cog className="w-6 h-6 text-green-500" />;
       case 'finalizing':
+      case 'completed':
         return <CheckCircle className="w-6 h-6 text-green-500" />;
+      case 'idle':
+        return <Loader2 className="w-6 h-6 text-gray-500" />;
       default:
         return <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />;
     }
@@ -40,17 +47,25 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
       case 'analyzing':
         return t('loading.analyzing');
       case 'primary':
+      case 'primary_analysis':
         return t('loading.primary');
       case 'valves':
+      case 'valve_and_pump_focus':
         return t('loading.valves');
       case 'electrical':
+      case 'electrical_and_control_focus':
         return t('loading.electrical');
       case 'hvac':
+      case 'hvac_and_mechanical_focus':
         return t('loading.hvac');
       case 'combining':
         return t('loading.combining');
       case 'finalizing':
         return t('loading.finalizing');
+      case 'completed':
+        return 'Analysis Complete!';
+      case 'idle':
+        return 'Ready';
       default:
         return t('main.loading');
     }
@@ -67,11 +82,18 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
       case 'valves':
       case 'electrical':
       case 'hvac':
+      case 'primary_analysis':
+      case 'valve_and_pump_focus':
+      case 'electrical_and_control_focus':
+      case 'hvac_and_mechanical_focus':
         return 'bg-purple-500';
       case 'combining':
         return 'bg-green-500';
       case 'finalizing':
+      case 'completed':
         return 'bg-green-600';
+      case 'idle':
+        return 'bg-gray-500';
       default:
         return 'bg-blue-500';
     }

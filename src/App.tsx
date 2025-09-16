@@ -245,46 +245,26 @@ function App() {
       setLoadingStage('uploading');
       setLoadingProgress(10);
 
-      // Simulate progress for different stages
-      setTimeout(() => {
-        setLoadingStage('extracting');
-        setLoadingProgress(25);
-      }, 500);
-
-      setTimeout(() => {
-        setLoadingStage('analyzing');
-        setLoadingProgress(40);
-      }, 1000);
-
-      setTimeout(() => {
-        setLoadingStage('primary');
-        setLoadingProgress(60);
-      }, 1500);
-
-      setTimeout(() => {
-        setLoadingStage('valves');
-        setLoadingProgress(70);
-      }, 2000);
-
-      setTimeout(() => {
-        setLoadingStage('electrical');
-        setLoadingProgress(80);
-      }, 2500);
-
-      setTimeout(() => {
-        setLoadingStage('hvac');
-        setLoadingProgress(85);
-      }, 3000);
-
-      setTimeout(() => {
-        setLoadingStage('combining');
-        setLoadingProgress(90);
-      }, 3500);
-
-      setTimeout(() => {
-        setLoadingStage('finalizing');
-        setLoadingProgress(95);
-      }, 4000);
+      // Start polling for real progress
+      const progressInterval = setInterval(async () => {
+        try {
+          const progressResponse = await fetch(`${API_URL}/api/progress`, {
+            credentials: 'include'
+          });
+          if (progressResponse.ok) {
+            const progressData = await progressResponse.json();
+            setLoadingStage(progressData.stage);
+            setLoadingProgress(progressData.progress);
+            
+            // Stop polling when analysis is complete
+            if (progressData.stage === 'completed' || progressData.stage === 'idle') {
+              clearInterval(progressInterval);
+            }
+          }
+        } catch (error) {
+          console.error('Progress polling error:', error);
+        }
+      }, 1000); // Poll every second
 
       try {
         const response = await fetch(`${API_URL}/api/analyze`, {
@@ -314,6 +294,8 @@ function App() {
           bom: data.bom || []
         };
 
+        // Clear progress interval and reset loading state
+        clearInterval(progressInterval);
         setLoadingProgress(100);
         setTimeout(() => {
           setLoadingStage(null);
@@ -331,6 +313,8 @@ function App() {
       } catch (error) {
         console.error('Error:', error);
         
+        // Clear progress interval and reset loading state
+        clearInterval(progressInterval);
         setLoadingStage(null);
         setLoadingProgress(0);
         

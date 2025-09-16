@@ -156,6 +156,19 @@ app.get('/health', (req, res) => {
   }
 });
 
+// Progress tracking endpoint
+app.get('/api/progress', requireAuth, (req, res) => {
+  const sessionId = req.sessionID || 'default';
+  const progress = global.analysisProgress?.[sessionId] || {
+    stage: 'idle',
+    progress: 0,
+    message: 'No analysis in progress',
+    timestamp: Date.now()
+  };
+  
+  res.json(progress);
+});
+
 // Wake-up ping endpoint for Render spin-up
 app.get('/ping', (req, res) => {
   console.log('Ping requested from:', req.headers['user-agent']);
@@ -326,6 +339,16 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     console.log('Sending multiple analysis requests to OpenAI...');
     
+    // Store progress for this analysis session
+    const sessionId = req.sessionID || 'default';
+    global.analysisProgress = global.analysisProgress || {};
+    global.analysisProgress[sessionId] = {
+      stage: 'starting',
+      progress: 0,
+      message: 'Starting analysis...',
+      timestamp: Date.now()
+    };
+    
     // Multiple specialized analysis queries for comprehensive detection
     const analysisQueries = [
       {
@@ -348,10 +371,20 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     // Execute multiple analysis queries
     const allResponses = [];
-    for (const query of analysisQueries) {
+    for (let i = 0; i < analysisQueries.length; i++) {
+      const query = analysisQueries[i];
       try {
         console.log(`Executing ${query.name}...`);
-    const response = await openai.chat.completions.create({
+        
+        // Update progress
+        global.analysisProgress[sessionId] = {
+          stage: query.name.toLowerCase().replace(/\s+/g, '_'),
+          progress: Math.round((i / analysisQueries.length) * 80) + 10, // 10-90%
+          message: `Executing ${query.name}...`,
+          timestamp: Date.now()
+        };
+        
+        const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
             { role: 'system', content: query.systemPrompt },
@@ -497,6 +530,14 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     console.log(`Combined analysis found ${combinedBOM.length} unique components`);
 
+    // Update progress for combining phase
+    global.analysisProgress[sessionId] = {
+      stage: 'combining',
+      progress: 90,
+      message: `Combining results... Found ${combinedBOM.length} components`,
+      timestamp: Date.now()
+    };
+
     console.log("Multiple AI analysis completed successfully");
     
     let bom = [];
@@ -523,6 +564,14 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         });
         
         console.log(`Combined German BOM parsed successfully. Found ${bom.length} components.`);
+        
+        // Update progress for finalizing
+        global.analysisProgress[sessionId] = {
+          stage: 'finalizing',
+          progress: 95,
+          message: `Creating BOM... Found ${bom.length} components`,
+          timestamp: Date.now()
+        };
       } else {
         console.warn("No components found in combined analysis");
         bom = [{ 
@@ -547,6 +596,14 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }
+
+    // Final progress update
+    global.analysisProgress[sessionId] = {
+      stage: 'completed',
+      progress: 100,
+      message: `Analysis complete! Found ${bom.length} components`,
+      timestamp: Date.now()
+    };
 
     res.json({ 
       response: analysisText,

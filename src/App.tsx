@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Brain, AlertCircle, CheckCircle, Loader2, Globe } from 'lucide-react';
 import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
+import LoadingSpinner from './components/LoadingSpinner';
 import { ChatState, Message } from './types';
 import { useLanguage } from './contexts/LanguageContext';
 
@@ -40,6 +41,8 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
+  const [loadingStage, setLoadingStage] = useState<'uploading' | 'extracting' | 'analyzing' | 'primary' | 'valves' | 'electrical' | 'hvac' | 'combining' | 'finalizing' | null>(null);
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -238,6 +241,51 @@ function App() {
         isLoading: true
       }));
 
+      // Start loading sequence
+      setLoadingStage('uploading');
+      setLoadingProgress(10);
+
+      // Simulate progress for different stages
+      setTimeout(() => {
+        setLoadingStage('extracting');
+        setLoadingProgress(25);
+      }, 500);
+
+      setTimeout(() => {
+        setLoadingStage('analyzing');
+        setLoadingProgress(40);
+      }, 1000);
+
+      setTimeout(() => {
+        setLoadingStage('primary');
+        setLoadingProgress(60);
+      }, 1500);
+
+      setTimeout(() => {
+        setLoadingStage('valves');
+        setLoadingProgress(70);
+      }, 2000);
+
+      setTimeout(() => {
+        setLoadingStage('electrical');
+        setLoadingProgress(80);
+      }, 2500);
+
+      setTimeout(() => {
+        setLoadingStage('hvac');
+        setLoadingProgress(85);
+      }, 3000);
+
+      setTimeout(() => {
+        setLoadingStage('combining');
+        setLoadingProgress(90);
+      }, 3500);
+
+      setTimeout(() => {
+        setLoadingStage('finalizing');
+        setLoadingProgress(95);
+      }, 4000);
+
       try {
         const response = await fetch(`${API_URL}/api/analyze`, {
           method: 'POST',
@@ -266,6 +314,12 @@ function App() {
           bom: data.bom || []
         };
 
+        setLoadingProgress(100);
+        setTimeout(() => {
+          setLoadingStage(null);
+          setLoadingProgress(0);
+        }, 500);
+
         setChatState((prev: ChatState) => ({
           ...prev,
           messages: [...prev.messages, aiResponse],
@@ -276,6 +330,10 @@ function App() {
         setServerStatus('online');
       } catch (error) {
         console.error('Error:', error);
+        
+        setLoadingStage(null);
+        setLoadingProgress(0);
+        
         setChatState((prev: ChatState) => ({
           ...prev,
           messages: [...prev.messages, {
@@ -440,6 +498,14 @@ function App() {
             {chatState.messages.map((message: Message, index: number) => (
               <ChatMessage key={index} message={message} />
             ))}
+            
+            {/* Loading Spinner */}
+            {loadingStage && (
+              <div className="flex justify-center mb-6">
+                <LoadingSpinner stage={loadingStage} progress={loadingProgress} />
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
 

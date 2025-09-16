@@ -59,6 +59,16 @@ const translations = {
     'main.language': 'Sprache',
     'main.languageGerman': 'Deutsch',
     'main.languageEnglish': 'English',
+    'loading.uploading': 'Datei wird hochgeladen...',
+    'loading.extracting': 'PDF wird analysiert...',
+    'loading.analyzing': 'AI analysiert die Zeichnung...',
+    'loading.primary': 'Hauptanalyse läuft...',
+    'loading.valves': 'Ventile und Pumpen werden erkannt...',
+    'loading.electrical': 'Elektrische Komponenten werden erkannt...',
+    'loading.hvac': 'HLK-Komponenten werden erkannt...',
+    'loading.combining': 'Ergebnisse werden kombiniert...',
+    'loading.finalizing': 'Stückliste wird erstellt...',
+    'loading.progress': 'Fortschritt',
   },
   en: {
     // App.tsx
@@ -110,6 +120,16 @@ const translations = {
     'main.language': 'Language',
     'main.languageGerman': 'Deutsch',
     'main.languageEnglish': 'English',
+    'loading.uploading': 'Uploading file...',
+    'loading.extracting': 'Analyzing PDF...',
+    'loading.analyzing': 'AI analyzing drawing...',
+    'loading.primary': 'Primary analysis running...',
+    'loading.valves': 'Detecting valves and pumps...',
+    'loading.electrical': 'Detecting electrical components...',
+    'loading.hvac': 'Detecting HVAC components...',
+    'loading.combining': 'Combining results...',
+    'loading.finalizing': 'Creating BOM...',
+    'loading.progress': 'Progress',
   }
 };
 

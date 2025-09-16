@@ -149,7 +149,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
       
       <div className="text-center">
         <p className="text-xs text-gray-500">
-          Maximum file size: 20MB • Supported formats: PNG, JPG, PDF, DOC, DOCX
+          Maximale Datei Grösse: 20MB • Unterstützte Formate: PNG, JPG, PDF, DOC, DOCX
         </p>
       </div>
     </div>

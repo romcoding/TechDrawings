@@ -224,7 +224,7 @@ function App() {
         role: 'user',
         content: `Please analyze this ${fileType === 'application/pdf' ? 'PDF' : 
                   fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'Word document' : 
-                  'technical drawing'} using GPT-5.`,
+                  'technical drawing'} using AI.`,
         file: {
           data: base64Data,
           type: fileType,

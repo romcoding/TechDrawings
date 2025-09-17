@@ -326,8 +326,34 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     } else {
       // For images and other files, use image-based analysis
       console.log('Using image-based analysis');
+      
+      // Validate and format image data for OpenAI Vision API
+      if (!file.data.startsWith('data:')) {
+        console.error('Invalid image data format - missing data: prefix');
+        return res.status(400).json({ error: 'Invalid image data format' });
+      }
+      
+      // Extract the base64 data and validate it
+      const [header, base64Data] = file.data.split(',');
+      if (!base64Data) {
+        console.error('Invalid image data - no base64 content');
+        return res.status(400).json({ error: 'Invalid image data - no base64 content' });
+      }
+      
+      // Validate base64 data
+      try {
+        Buffer.from(base64Data, 'base64');
+      } catch (error) {
+        console.error('Invalid base64 data:', error.message);
+        return res.status(400).json({ error: 'Invalid base64 image data' });
+      }
+      
+      console.log('Image data validated successfully');
+      console.log('Image header:', header);
+      console.log('Base64 data length:', base64Data.length);
+      
       analysisContent = [
-        { type: 'text', text: message || 'Please analyze this file.' },
+        { type: 'text', text: message || 'Please analyze this technical drawing and create a comprehensive Bill of Materials (BOM).' },
         {
           type: 'image_url',
           image_url: {
@@ -384,20 +410,41 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           timestamp: Date.now()
         };
         
+        console.log(`Sending request to OpenAI for ${query.name}...`);
+        console.log('Analysis content type:', analysisContent[0].type);
+        console.log('Analysis content length:', analysisContent[0].text?.length || 'N/A');
+        if (analysisContent[1] && analysisContent[1].type === 'image_url') {
+          console.log('Image URL prefix:', analysisContent[1].image_url.url.substring(0, 50) + '...');
+        }
+        
         const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
+          model: 'gpt-4o',
+          messages: [
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
-      ],
-      max_tokens: 1500,
-    });
+          ],
+          max_tokens: 1500,
+        });
+        
+        console.log(`${query.name} OpenAI response received successfully`);
         allResponses.push({
           name: query.name,
           response: response.choices[0].message.content
         });
       } catch (error) {
         console.error(`Error in ${query.name}:`, error);
+        console.error(`Error details:`, {
+          message: error.message,
+          status: error.status,
+          code: error.code,
+          type: error.type
+        });
+        
+        // Add a fallback response for failed queries
+        allResponses.push({
+          name: query.name,
+          response: `[]` // Empty JSON array as fallback
+        });
       }
     }
 

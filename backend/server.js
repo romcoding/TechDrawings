@@ -375,23 +375,15 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       timestamp: Date.now()
     };
     
-    // Multiple specialized analysis queries for comprehensive detection
+    // Simplified analysis queries to ensure image processing works
     const analysisQueries = [
       {
         name: 'Primary Analysis',
-        systemPrompt: 'You are an expert technical drawing analyst specializing in HVAC, electrical, and mechanical systems. Your task is to create a COMPLETE and COMPREHENSIVE Bill of Materials (BOM) from technical drawings. You must identify EVERY SINGLE component, no matter how small or seemingly insignificant. This includes:\n\nCOMPONENT CATEGORIES TO FIND:\n- All valves (gate, globe, check, safety, control, solenoid, butterfly, ball valves)\n- All pumps (circulation, booster, transfer, sump pumps)\n- All motors and drives\n- All sensors and instruments (temperature, pressure, flow, level sensors)\n- All electrical components (switches, relays, contactors, fuses, breakers)\n- All piping and fittings (elbows, tees, reducers, couplings, flanges)\n- All HVAC equipment (heaters, coolers, heat exchangers, fans)\n- All control equipment (controllers, actuators, positioners)\n- All safety equipment (safety valves, relief valves, expansion vessels)\n- All measurement devices (flow meters, pressure gauges, thermometers)\n- All tanks, vessels, and storage equipment\n- All filters, separators, and treatment equipment\n- All electrical connections, terminals, and junction boxes\n- All mounting hardware, brackets, and supports\n\nANALYSIS METHOD:\n1. Scan the ENTIRE drawing systematically, section by section\n2. Look for component symbols, labels, and reference numbers\n3. Count ALL instances of each component type\n4. Extract detailed specifications (power ratings, flow rates, pressures, temperatures)\n5. Identify manufacturer names and model numbers where visible\n6. Note component locations and relationships\n\nOUTPUT FORMAT:\nProvide ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Be extremely thorough. Missing components is unacceptable. If you see multiple identical components, count them all. If specifications are visible, include them all. Return ONLY the JSON array, no other text.'
+        systemPrompt: 'You are a technical drawing analyst. Analyze the provided image and identify all technical components. Return a JSON array with each component having: anlage (string), artikel (string like "ART-001"), komponente (string), beschreibung (string), bemerkung (string), stueck (number). Return ONLY valid JSON.'
       },
       {
-        name: 'Valve and Pump Focus',
-        systemPrompt: 'Focus specifically on identifying ALL valves and pumps in this technical drawing. Look for:\n- Gate valves, globe valves, check valves, safety valves, control valves, solenoid valves, butterfly valves, ball valves\n- Circulation pumps, booster pumps, transfer pumps, sump pumps, main pumps\n- Count each instance separately\n- Extract specifications like pressure ratings, flow rates, sizes, manufacturers\n- Look for reference numbers like H.V.01, H.P.01, etc.\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
-      },
-      {
-        name: 'Electrical and Control Focus',
-        systemPrompt: 'Focus specifically on identifying ALL electrical and control components in this technical drawing. Look for:\n- Electrical switches, relays, contactors, fuses, breakers\n- Control equipment like controllers, actuators, positioners\n- Electrical connections, terminals, junction boxes\n- Sensors and instruments (temperature, pressure, flow, level)\n- Measurement devices (flow meters, pressure gauges, thermometers)\n- Control cabinets and panels\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
-      },
-      {
-        name: 'HVAC and Mechanical Focus',
-        systemPrompt: 'Focus specifically on identifying ALL HVAC and mechanical components in this technical drawing. Look for:\n- Heat exchangers, heaters, coolers, fans\n- Tanks, vessels, storage equipment\n- Filters, separators, treatment equipment\n- Piping and fittings (elbows, tees, reducers, couplings, flanges)\n- Mounting hardware, brackets, supports\n- Safety equipment (safety valves, relief valves, expansion vessels)\n\nReturn ONLY a valid JSON array. Each object must have:\n- "anlage": "Hauptanlage" (string)\n- "artikel": Sequential like "ART-001", "ART-002" (string)\n- "komponente": Full component name (string)\n- "beschreibung": Detailed specifications including ratings, sizes, materials (string)\n- "bemerkung": Additional notes, location, or special requirements (string)\n- "stueck": Exact quantity/count (number)\n\nCRITICAL: Return ONLY the JSON array, no other text. Ensure all strings are properly escaped.'
+        name: 'Component Focus',
+        systemPrompt: 'Analyze the technical drawing image and identify all valves, pumps, sensors, and electrical components. Return a JSON array with each component having: anlage (string), artikel (string like "ART-001"), komponente (string), beschreibung (string), bemerkung (string), stueck (number). Return ONLY valid JSON.'
       }
     ];
 
@@ -415,17 +407,19 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         console.log('Analysis content length:', analysisContent[0].text?.length || 'N/A');
         if (analysisContent[1] && analysisContent[1].type === 'image_url') {
           console.log('Image URL prefix:', analysisContent[1].image_url.url.substring(0, 50) + '...');
+          console.log('Image URL length:', analysisContent[1].image_url.url.length);
         }
+        console.log('System prompt length:', query.systemPrompt.length);
         
         const response = await openai.chat.completions.create({
-          model: 'gpt-4o',
+          model: 'gpt-4o-mini',
           messages: [
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
-          ],
-          max_tokens: 1500,
-        });
-        
+      ],
+      max_tokens: 1500,
+    });
+
         console.log(`${query.name} OpenAI response received successfully`);
         allResponses.push({
           name: query.name,

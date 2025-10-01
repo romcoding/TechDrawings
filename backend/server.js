@@ -7,6 +7,7 @@ import session from 'express-session';
 import fs from 'fs';
 
 let componentCategories = {};
+let componentDictionary = {};
 
 // Function to load categorization data from CSV
 const loadCategories = () => {
@@ -37,8 +38,59 @@ const loadCategories = () => {
   }
 };
 
-// Load categories on startup
+// Function to load Swiss HVAC component dictionary from List of Items.csv
+const loadComponentDictionary = () => {
+  try {
+    const raw = fs.readFileSync('../List of Items.csv', 'utf8');
+    const lines = raw.split('\n');
+    
+    componentDictionary = {};
+    
+    for (let i = 1; i < lines.length; i++) { // Skip header
+      const line = lines[i].trim();
+      if (line) {
+        const [code, description] = line.split(';').map(s => s.trim());
+        if (code && description) {
+          // Extract nominal size (e.g. DN20)
+          let size = null;
+          const dn = description.match(/DN\s*([0-9]+)/i);
+          if (dn) size = `DN${dn[1]}`;
+          
+          // Extract signal range (e.g. 0…10 V or 4…20 mA)
+          let signal = null;
+          const sig = description.match(/(\d+\s*(?:\.\.\.|–|-)\s*\d+\s*[AV])/i);
+          if (sig) signal = sig[0];
+          
+          // Extract rating/flow coefficient (e.g. kvs)
+          let rating = null;
+          const kv = description.match(/\b(kvs|Kv|kvs)[=:]\s*([0-9,.]+)/i);
+          if (kv) rating = `${kv[1]}=${kv[2]}`;
+          
+          // Extract material (bronze, Edelstahl, etc.)
+          let material = null;
+          const mat = description.match(/\b(bronze|messing|edelstahl|stainless|stahl|plastik)/i);
+          if (mat) material = mat[0];
+          
+          componentDictionary[code.toLowerCase()] = {
+            description,
+            size,
+            signal,
+            rating,
+            material
+          };
+        }
+      }
+    }
+    
+    console.log(`✅ Loaded ${Object.keys(componentDictionary).length} items from List of Items`);
+  } catch (err) {
+    console.error('❌ Failed to load List of Items:', err);
+  }
+};
+
+// Load categories and dictionary on startup
 loadCategories();
+loadComponentDictionary();
 
 dotenv.config();
 
@@ -375,15 +427,53 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
       timestamp: Date.now()
     };
     
-    // Simplified analysis queries to ensure image processing works
+    // Swiss HVAC-focused analysis queries with norm awareness
     const analysisQueries = [
       {
-        name: 'Primary Analysis',
-        systemPrompt: 'You are a technical drawing analyst. Analyze the provided image and identify all technical components. Return a JSON array with each component having: anlage (string), artikel (string like "ART-001"), komponente (string), beschreibung (string), bemerkung (string), stueck (number). Return ONLY valid JSON.'
+        name: 'Detailed Analysis',
+        systemPrompt: `You are an expert in Swiss HVAC and building automation technical drawings. Symbols in these drawings may follow VDI 3814, ISO 14617/16484, SIA standards, and company-specific variations. 
+
+Identify **all** technical components in the provided image including:
+- Valves (control valves, shut-off valves, safety valves, check valves)
+- Pumps (circulation pumps, booster pumps, heat pumps)
+- Sensors (temperature, pressure, flow, humidity, CO2 sensors)
+- Actuators (motorized valves, damper actuators)
+- Regulators and controllers (pressure regulators, temperature controllers)
+- Heat exchangers and cooling units
+- Electrical components (transformers, contactors, relays)
+- Measuring instruments and gauges
+- Piping and ductwork components
+
+For each component, return a JSON object with these fields:
+- anlage: plant/system name (string, use "Hauptanlage" if unknown)
+- artikel: device or article code if visible (string)
+- komponente: component type (string)
+- beschreibung: natural language description (string)
+- bemerkung: remarks/notes (string)
+- stueck: quantity (number)
+- groesse: nominal size/DN (string or null)
+- signal: signal range (string or null)
+- rating: flow coefficient/pressure class (string or null)
+- material: material of the device (string or null)
+
+If any attribute is unknown, set it to null. Return only a JSON array.`
       },
       {
-        name: 'Component Focus',
-        systemPrompt: 'Analyze the technical drawing image and identify all valves, pumps, sensors, and electrical components. Return a JSON array with each component having: anlage (string), artikel (string like "ART-001"), komponente (string), beschreibung (string), bemerkung (string), stueck (number). Return ONLY valid JSON.'
+        name: 'Relationship Analysis',
+        systemPrompt: `Analyze the same Swiss HVAC building automation drawing and identify how components are connected. Symbols may follow VDI 3814, ISO 14617/16484, SIA standards, and company-specific variations.
+
+For each connection, return an object with:
+- source_component: name or code of the upstream component
+- target_component: name or code of the downstream component
+- relationship_type: description of the connection (e.g. "feeds", "controlled_by", "monitors", "regulates")
+
+Focus on identifying:
+- Fluid flow connections (pipes, ducts)
+- Control signal connections (electrical, pneumatic)
+- Mechanical connections (mounting, coupling)
+- Measurement connections (sensor readings)
+
+Return only a JSON array.`
       }
     ];
 
@@ -444,6 +534,7 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     // Combine and deduplicate results
     let combinedBOM = [];
+    let relationships = [];
     const seenComponents = new Set();
     let componentCounter = 1;
 
@@ -469,68 +560,54 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"') // Fix unescaped quotes in strings
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"'); // Fix more unescaped quotes
         
-      const parsedBOM = JSON.parse(rawResponse);
-      if (Array.isArray(parsedBOM)) {
-          // Normalize different response formats to our German BOM format
-          parsedBOM.forEach(item => {
-            let normalizedItem = {};
-            
-            // Handle different response formats
-            if (item.komponente) {
-              // Already in German format
-              normalizedItem = {
-                anlage: item.anlage || "Hauptanlage",
-                artikel: item.artikel || `ART-${String(componentCounter).padStart(3, '0')}`,
-                komponente: item.komponente,
-                beschreibung: item.beschreibung || "Keine Beschreibung verfügbar",
-                bemerkung: item.bemerkung || "Keine Bemerkungen",
-                stueck: typeof item.stueck === "number" ? item.stueck : 1
-              };
-            } else if (item.type) {
-              // Convert type-based format to German format
-              normalizedItem = {
-                anlage: "Hauptanlage",
-                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
-                komponente: item.type,
-                beschreibung: item.description || item.details || item.specifications ? 
-                  (typeof item.specifications === 'object' ? 
-                    Object.entries(item.specifications).map(([k,v]) => `${k}: ${v}`).join(', ') :
-                    (item.description || item.details || "Keine Beschreibung verfügbar")) : 
-                  "Keine Beschreibung verfügbar",
-                bemerkung: item.manufacturer ? `Hersteller: ${item.manufacturer}` : "Keine Bemerkungen",
-                stueck: typeof item.count === "number" ? item.count : 1
-              };
-            } else if (typeof item === 'string') {
-              // Handle simple string array format
-              normalizedItem = {
-                anlage: "Hauptanlage",
-                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
-                komponente: item,
-                beschreibung: "Komponente aus technischer Zeichnung",
-                bemerkung: "Automatisch erkannt",
-                stueck: 1
-              };
-            } else {
-              // Fallback for other formats
-              normalizedItem = {
-                anlage: "Hauptanlage",
-                artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
-                komponente: item.name || item.component || "Unbekannte Komponente",
-                beschreibung: item.description || item.desc || "Keine Beschreibung verfügbar",
-                bemerkung: item.note || item.remark || "Keine Bemerkungen",
-                stueck: typeof item.quantity === "number" ? item.quantity : 1
-              };
+        const parsed = JSON.parse(rawResponse);
+        if (Array.isArray(parsed)) {
+          // Check if this is a relationship array (objects with source_component)
+          if (parsed[0] && parsed[0].source_component) {
+            relationships.push(...parsed);
+            console.log(`${result.name} found ${parsed.length} relationships`);
+            continue;
+          }
+          
+          // Process component arrays
+          parsed.forEach(item => {
+            let normalized = {
+              anlage: item.anlage || 'Hauptanlage',
+              artikel: item.artikel || `ART-${String(componentCounter).padStart(3,'0')}`,
+              komponente: item.komponente || item.type || 'Unbekannte Komponente',
+              beschreibung: item.beschreibung || 'Keine Beschreibung verfügbar',
+              bemerkung: item.bemerkung || 'Keine Bemerkungen',
+              stueck: typeof item.stueck === 'number' ? item.stueck : 1,
+              groesse: item.groesse || item.size || null,
+              signal: item.signal || null,
+              rating: item.rating || null,
+              material: item.material || null
+            };
+
+            // Try to enrich from dictionary
+            const key = normalized.artikel.toLowerCase();
+            const dictEntry = componentDictionary[key];
+            if (dictEntry) {
+              normalized.groesse = normalized.groesse || dictEntry.size;
+              normalized.signal = normalized.signal || dictEntry.signal;
+              normalized.rating = normalized.rating || dictEntry.rating;
+              normalized.material = normalized.material || dictEntry.material;
+              if (
+                (!normalized.beschreibung || normalized.beschreibung === 'Keine Beschreibung verfügbar')
+              ) {
+                normalized.beschreibung = dictEntry.description;
+              }
             }
-            
+
             // Create a more flexible deduplication key
-            const key = `${normalizedItem.komponente.toLowerCase()}-${normalizedItem.beschreibung.toLowerCase()}`;
-            if (!seenComponents.has(key)) {
-              seenComponents.add(key);
-              combinedBOM.push(normalizedItem);
+            const dedupKey = `${normalized.komponente.toLowerCase()}-${normalized.beschreibung.toLowerCase()}`;
+            if (!seenComponents.has(dedupKey)) {
+              seenComponents.add(dedupKey);
+              combinedBOM.push(normalized);
               componentCounter++;
             }
           });
-          console.log(`${result.name} found ${parsedBOM.length} components, added ${parsedBOM.length} to combined list`);
+          console.log(`${result.name} found ${parsed.length} components, added ${parsed.length} to combined list`);
         }
       } catch (parseError) {
         console.error(`Failed to parse ${result.name} response:`, parseError);
@@ -555,7 +632,11 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
                     komponente: componentName,
                     beschreibung: "Komponente aus technischer Zeichnung",
                     bemerkung: "Automatisch erkannt",
-                    stueck: 1
+                    stueck: 1,
+                    groesse: null,
+                    signal: null,
+                    rating: null,
+                    material: null
                   });
                   componentCounter++;
                 }
@@ -586,31 +667,47 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
     
     try {
       if (combinedBOM.length > 0) {
-        // Process the combined German BOM format
+        // Process the combined German BOM format with new fields
         bom = combinedBOM.map((item, index) => ({
           anlage: item.anlage || "Hauptanlage",
           artikel: item.artikel || `ART-${String(index + 1).padStart(3, '0')}`,
           komponente: item.komponente || "Unbekannte Komponente",
           beschreibung: item.beschreibung || "Keine Beschreibung verfügbar",
           bemerkung: item.bemerkung || "Keine Bemerkungen",
-          stueck: typeof item.stueck === "number" ? item.stueck : 1
+          stueck: typeof item.stueck === "number" ? item.stueck : 1,
+          groesse: item.groesse || null,
+          signal: item.signal || null,
+          rating: item.rating || null,
+          material: item.material || null
         }));
         
         // Generate analysis text
-        analysisText = `Technische Zeichnung erfolgreich analysiert!\n\n`;
-        analysisText += `Gefundene Komponenten: ${bom.length}\n\n`;
+        analysisText = `Schweizer HVAC Gebäudeautomation erfolgreich analysiert!\n\n`;
+        analysisText += `Gefundene Komponenten: ${bom.length}\n`;
+        analysisText += `Gefundene Verbindungen: ${relationships.length}\n\n`;
         analysisText += `Stückliste:\n`;
         bom.forEach((item, index) => {
-          analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}\n`;
+          analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}`;
+          if (item.groesse) analysisText += ` [${item.groesse}]`;
+          if (item.signal) analysisText += ` [${item.signal}]`;
+          if (item.material) analysisText += ` [${item.material}]`;
+          analysisText += `\n`;
         });
         
-        console.log(`Combined German BOM parsed successfully. Found ${bom.length} components.`);
+        if (relationships.length > 0) {
+          analysisText += `\nVerbindungen:\n`;
+          relationships.forEach((rel, index) => {
+            analysisText += `${index + 1}. ${rel.source_component} → ${rel.target_component} (${rel.relationship_type})\n`;
+          });
+        }
+        
+        console.log(`Combined German BOM parsed successfully. Found ${bom.length} components and ${relationships.length} relationships.`);
         
         // Update progress for finalizing
         global.analysisProgress[sessionId] = {
           stage: 'finalizing',
           progress: 95,
-          message: `Creating BOM... Found ${bom.length} components`,
+          message: `Creating BOM... Found ${bom.length} components and ${relationships.length} relationships`,
           timestamp: Date.now()
         };
       } else {
@@ -621,7 +718,11 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
           komponente: "Analysefehler", 
           beschreibung: "Keine Komponenten in der kombinierten Analyse gefunden.", 
           bemerkung: "Fehler bei der Analyse", 
-          stueck: 1 
+          stueck: 1,
+          groesse: null,
+          signal: null,
+          rating: null,
+          material: null
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
@@ -633,7 +734,11 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         komponente: "Parse-Fehler", 
         beschreibung: "Konnte kombinierte AI-Antworten nicht verarbeiten.", 
         bemerkung: "Fehler beim Parsen", 
-        stueck: 1 
+        stueck: 1,
+        groesse: null,
+        signal: null,
+        rating: null,
+        material: null
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }
@@ -648,7 +753,8 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
 
     res.json({ 
       response: analysisText,
-      bom: bom 
+      bom: bom,
+      relationships: relationships
     });
   } catch (error) {
     console.error('Error in /api/analyze:', error);

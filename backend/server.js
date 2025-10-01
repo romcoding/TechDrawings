@@ -433,30 +433,68 @@ app.post('/api/analyze', requireAuth, async (req, res) => {
         name: 'Detailed Analysis',
         systemPrompt: `You are an expert in Swiss HVAC and building automation technical drawings. Symbols in these drawings may follow VDI 3814, ISO 14617/16484, SIA standards, and company-specific variations. 
 
-Identify **all** technical components in the provided image including:
-- Valves (control valves, shut-off valves, safety valves, check valves)
-- Pumps (circulation pumps, booster pumps, heat pumps)
+**CRITICAL**: Look for detailed component lists, inventory tables, or BOM (Bill of Materials) sections in the drawing. These often contain complete component specifications with quantities.
+
+Identify **ALL** technical components in the provided image including:
+- Valves (control valves, shut-off valves, safety valves, check valves, globe valves, three-way valves)
+- Pumps (circulation pumps, booster pumps, heat pumps, main pumps)
 - Sensors (temperature, pressure, flow, humidity, CO2 sensors)
 - Actuators (motorized valves, damper actuators)
 - Regulators and controllers (pressure regulators, temperature controllers)
 - Heat exchangers and cooling units
 - Electrical components (transformers, contactors, relays)
-- Measuring instruments and gauges
+- Measuring instruments and gauges (heat meters, flow meters)
 - Piping and ductwork components
+- Safety devices (safety valves, expansion vessels, separators)
+- Storage tanks and vessels
+- Control cabinets and electrical panels
+
+**IMPORTANT**: 
+- If you see multiple identical components (same type, size, manufacturer), list them as separate items with individual quantities
+- Look for component codes like H.A.01, H.P.01, H.V.01, etc.
+- Extract exact quantities from component lists
+- Include sub-components mentioned in component descriptions
 
 For each component, return a JSON object with these fields:
 - anlage: plant/system name (string, use "Hauptanlage" if unknown)
-- artikel: device or article code if visible (string)
+- artikel: device or article code if visible (string, e.g., "H.A.01", "H.P.01")
 - komponente: component type (string)
 - beschreibung: natural language description (string)
 - bemerkung: remarks/notes (string)
-- stueck: quantity (number)
+- stueck: quantity (number) - be precise from component lists
 - groesse: nominal size/DN (string or null)
 - signal: signal range (string or null)
 - rating: flow coefficient/pressure class (string or null)
 - material: material of the device (string or null)
 
 If any attribute is unknown, set it to null. Return only a JSON array.`
+      },
+      {
+        name: 'Component Inventory Analysis',
+        systemPrompt: `Focus specifically on any component lists, inventory tables, or detailed specifications in the drawing. Look for structured tables with component codes, descriptions, and quantities.
+
+Extract every single component mentioned in these lists, including:
+- Individual component codes (H.A.01, H.A.02, H.P.01, H.V.01, etc.)
+- Exact quantities for each component
+- Manufacturer information (Fabrikat)
+- Type/model information (Typ)
+- Technical specifications (Leistung, Volumenstrom, Druckverlust, etc.)
+- Connection details (Anschluss)
+- Operating parameters (Betriebstemp)
+
+For each component, return a JSON object with these fields:
+- anlage: plant/system name (string)
+- artikel: component code (string, e.g., "H.A.01")
+- komponente: component type (string)
+- beschreibung: detailed description including manufacturer and type (string)
+- bemerkung: technical specifications and parameters (string)
+- stueck: exact quantity from the list (number)
+- groesse: size/DN if mentioned (string or null)
+- signal: signal range if mentioned (string or null)
+- rating: flow coefficient/pressure class if mentioned (string or null)
+- material: material if mentioned (string or null)
+
+Return only a JSON array.`
       },
       {
         name: 'Relationship Analysis',
@@ -556,6 +594,8 @@ Return only a JSON array.`
         rawResponse = rawResponse
           .replace(/,\s*}/g, '}')  // Remove trailing commas before }
           .replace(/,\s*]/g, ']')  // Remove trailing commas before ]
+          .replace(/\\"/g, '"')    // Fix escaped quotes
+          .replace(/\\\\/g, '\\')   // Fix double backslashes
           .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2') // Fix unescaped backslashes
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"') // Fix unescaped quotes in strings
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"'); // Fix more unescaped quotes
@@ -599,12 +639,34 @@ Return only a JSON array.`
               }
             }
 
-            // Create a more flexible deduplication key
-            const dedupKey = `${normalized.komponente.toLowerCase()}-${normalized.beschreibung.toLowerCase()}`;
+            // Create a more flexible deduplication key based on component type and key specifications
+            const dedupKey = `${normalized.komponente.toLowerCase()}-${normalized.groesse || 'no-size'}-${normalized.artikel || 'no-artikel'}`;
+            
             if (!seenComponents.has(dedupKey)) {
               seenComponents.add(dedupKey);
               combinedBOM.push(normalized);
               componentCounter++;
+            } else {
+              // If component already exists, try to aggregate quantities for identical components
+              const existingIndex = combinedBOM.findIndex(item => 
+                item.komponente.toLowerCase() === normalized.komponente.toLowerCase() &&
+                item.groesse === normalized.groesse &&
+                item.artikel === normalized.artikel
+              );
+              
+              if (existingIndex !== -1) {
+                // Aggregate quantities for identical components
+                combinedBOM[existingIndex].stueck += normalized.stueck;
+                // Update description if new one is more detailed
+                if (normalized.beschreibung.length > combinedBOM[existingIndex].beschreibung.length) {
+                  combinedBOM[existingIndex].beschreibung = normalized.beschreibung;
+                }
+                // Update bemerkung if new one has more information
+                if (normalized.bemerkung && normalized.bemerkung !== 'Keine Bemerkungen' && 
+                    combinedBOM[existingIndex].bemerkung === 'Keine Bemerkungen') {
+                  combinedBOM[existingIndex].bemerkung = normalized.bemerkung;
+                }
+              }
             }
           });
           console.log(`${result.name} found ${parsed.length} components, added ${parsed.length} to combined list`);
@@ -615,24 +677,33 @@ Return only a JSON array.`
         
         // Try to extract components from malformed JSON using regex
         try {
+          // Try to extract structured component data
           const componentMatches = result.response.match(/"komponente":\s*"([^"]+)"/g) || 
-                                 result.response.match(/"type":\s*"([^"]+)"/g) ||
-                                 result.response.match(/"([^"]+)"/g);
+                                 result.response.match(/"type":\s*"([^"]+)"/g);
+          
+          // Also try to extract article codes like H.A.01, H.P.01, H.V.01
+          const articleMatches = result.response.match(/H\.[A-Z]\.\d+/g) || [];
+          
+          // Extract quantities
+          const quantityMatches = result.response.match(/"stueck":\s*(\d+)/g) || [];
           
           if (componentMatches && componentMatches.length > 0) {
-            componentMatches.slice(0, 10).forEach(match => {
+            componentMatches.slice(0, 20).forEach((match, index) => {
               const componentName = match.replace(/["{}]/g, '').replace(/^(komponente|type):\s*/, '');
               if (componentName && componentName.length > 2) {
-                const key = componentName.toLowerCase();
+                const articleCode = articleMatches[index] || `ART-${String(componentCounter).padStart(3, '0')}`;
+                const quantity = quantityMatches[index] ? parseInt(quantityMatches[index].match(/\d+/)[0]) : 1;
+                
+                const key = `${componentName.toLowerCase()}-${articleCode}`;
                 if (!seenComponents.has(key)) {
                   seenComponents.add(key);
                   combinedBOM.push({
                     anlage: "Hauptanlage",
-                    artikel: `ART-${String(componentCounter).padStart(3, '0')}`,
+                    artikel: articleCode,
                     komponente: componentName,
                     beschreibung: "Komponente aus technischer Zeichnung",
                     bemerkung: "Automatisch erkannt",
-                    stueck: 1,
+                    stueck: quantity,
                     groesse: null,
                     signal: null,
                     rating: null,
@@ -643,6 +714,30 @@ Return only a JSON array.`
               }
             });
             console.log(`${result.name} extracted ${componentMatches.length} components from malformed JSON`);
+          }
+          
+          // Also extract article codes even if component names aren't found
+          if (articleMatches.length > 0 && componentMatches.length === 0) {
+            articleMatches.forEach(articleCode => {
+              const key = `unknown-${articleCode}`;
+              if (!seenComponents.has(key)) {
+                seenComponents.add(key);
+                combinedBOM.push({
+                  anlage: "Hauptanlage",
+                  artikel: articleCode,
+                  komponente: "Unbekannte Komponente",
+                  beschreibung: "Komponente aus technischer Zeichnung",
+                  bemerkung: "Automatisch erkannt",
+                  stueck: 1,
+                  groesse: null,
+                  signal: null,
+                  rating: null,
+                  material: null
+                });
+                componentCounter++;
+              }
+            });
+            console.log(`${result.name} extracted ${articleMatches.length} article codes from malformed JSON`);
           }
         } catch (extractError) {
           console.error(`Failed to extract components from malformed JSON:`, extractError);

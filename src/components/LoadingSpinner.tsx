@@ -101,13 +101,6 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-100 relative">
-      {/* Spinner in top right corner */}
-      {stage !== 'finalizing' && stage !== 'completed' && stage !== 'idle' && (
-        <div className="absolute top-4 right-4">
-          <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
-        </div>
-      )}
-      
       <div className="flex items-center justify-center mb-4">
         <div className="relative">
           {getStageIcon(stage)}

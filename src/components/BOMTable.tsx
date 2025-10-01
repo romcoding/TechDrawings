@@ -11,7 +11,18 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
   const { t } = useLanguage();
   
   const convertToCsv = (data: BomItem[]) => {
-    const headers = [t('main.bomColumns.anlage'), t('main.bomColumns.artikel'), t('main.bomColumns.komponente'), t('main.bomColumns.beschreibung'), t('main.bomColumns.bemerkung'), t('main.bomColumns.stueck')];
+    const headers = [
+      t('main.bomColumns.anlage'), 
+      t('main.bomColumns.artikel'), 
+      t('main.bomColumns.komponente'), 
+      t('main.bomColumns.beschreibung'), 
+      t('main.bomColumns.bemerkung'), 
+      t('main.bomColumns.stueck'),
+      'Größe',
+      'Signal',
+      'Rating',
+      'Material'
+    ];
     const rows = data.map(item => [
       `"${item.anlage.replace(/"/g, '""')}"`,
       `"${item.artikel.replace(/"/g, '""')}"`,
@@ -19,6 +30,10 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
       `"${item.beschreibung.replace(/"/g, '""')}"`,
       `"${item.bemerkung.replace(/"/g, '""')}"`,
       item.stueck.toString(),
+      `"${(item.groesse || '').replace(/"/g, '""')}"`,
+      `"${(item.signal || '').replace(/"/g, '""')}"`,
+      `"${(item.rating || '').replace(/"/g, '""')}"`,
+      `"${(item.material || '').replace(/"/g, '""')}"`,
     ].join(','));
     return [headers.join(','), ...rows].join('\n');
   };
@@ -51,6 +66,10 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.beschreibung')}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.bemerkung')}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.stueck')}</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Größe</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Signal</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Material</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -62,6 +81,10 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.beschreibung}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bemerkung}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">{item.stueck}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.groesse || '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.signal || '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.rating || '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.material || '-'}</td>
               </tr>
             ))}
           </tbody>

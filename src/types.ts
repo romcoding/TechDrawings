@@ -10,6 +10,7 @@ export interface Message {
   image?: string;
   file?: FileData;
   bom?: BomItem[];
+  relationships?: Relationship[];
 }
 
 export interface ChatState {
@@ -24,4 +25,14 @@ export interface BomItem {
   beschreibung: string;   // Description
   bemerkung: string;     // Remark/Note
   stueck: number;        // Count/Pieces
+  groesse?: string | null;    // Nominal size/DN
+  signal?: string | null;     // Signal range
+  rating?: string | null;     // Flow coefficient/pressure class
+  material?: string | null;   // Material
+}
+
+export interface Relationship {
+  source_component: string;
+  target_component: string;
+  relationship_type: string;
 }

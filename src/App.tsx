@@ -291,7 +291,8 @@ function App() {
         const aiResponse: Message = {
           role: 'assistant',
           content: data.response,
-          bom: data.bom || []
+          bom: data.bom || [],
+          relationships: data.relationships || []
         };
 
         // Clear progress interval and reset loading state

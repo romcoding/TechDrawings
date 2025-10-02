@@ -187,7 +187,7 @@ app.get('/health', (req, res) => {
   try {
     res.status(200).json({ 
       status: 'healthy',
-      model: 'gpt-4o',
+      model: 'gpt-5',
       standards: [
         'VDI 3814',
         'ISO 16484', 
@@ -540,7 +540,7 @@ Return only a JSON array.`
         console.log('System prompt length:', query.systemPrompt.length);
         
         const response = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
+          model: 'gpt-5',
           messages: [
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
@@ -885,7 +885,7 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     ];
 
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-5',
       messages: messages,
       max_tokens: 1500,
     });

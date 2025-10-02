@@ -551,9 +551,13 @@ Return only a JSON array.`
         });
 
         console.log(`${query.name} OpenAI response received successfully`);
+        const responseContent = response.choices[0].message.content;
+        console.log(`${query.name} response length:`, responseContent ? responseContent.length : 'null/undefined');
+        console.log(`${query.name} response preview:`, responseContent ? responseContent.substring(0, 100) : 'empty');
+        
         allResponses.push({
           name: query.name,
-          response: response.choices[0].message.content
+          response: responseContent
         });
       } catch (error) {
         console.error(`Error in ${query.name}:`, error);
@@ -583,13 +587,31 @@ Return only a JSON array.`
         let rawResponse = result.response;
         console.log(`${result.name} response:`, rawResponse.substring(0, 200) + "...");
         
+        // Check if response is empty or null
+        if (!rawResponse || rawResponse.trim() === '') {
+          console.warn(`${result.name} returned empty response, skipping...`);
+          continue;
+        }
+        
         // Clean up markdown formatting
         rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+        
+        // Check if response is still empty after cleaning
+        if (!rawResponse || rawResponse.trim() === '') {
+          console.warn(`${result.name} response is empty after cleaning, skipping...`);
+          continue;
+        }
         
         // Extract JSON array - be more flexible with malformed JSON
         const jsonMatch = rawResponse.match(/\[[\s\S]*?\]/);
         if (jsonMatch) {
           rawResponse = jsonMatch[0];
+        }
+        
+        // Check if we have a valid JSON structure
+        if (!rawResponse || rawResponse.trim() === '' || rawResponse.trim() === '[]') {
+          console.warn(`${result.name} no valid JSON array found, skipping...`);
+          continue;
         }
         
         // Try to fix common JSON issues
@@ -601,6 +623,12 @@ Return only a JSON array.`
           .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2') // Fix unescaped backslashes
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"') // Fix unescaped quotes in strings
           .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"'); // Fix more unescaped quotes
+        
+        // Final validation before parsing
+        if (!rawResponse || rawResponse.trim() === '' || rawResponse.trim() === '[]') {
+          console.warn(`${result.name} response is empty after processing, skipping...`);
+          continue;
+        }
         
         const parsed = JSON.parse(rawResponse);
         if (Array.isArray(parsed)) {
@@ -748,6 +776,23 @@ Return only a JSON array.`
     }
 
     console.log(`Combined analysis found ${combinedBOM.length} unique components`);
+
+    // If no components were found, add a fallback component
+    if (combinedBOM.length === 0) {
+      console.warn('No components found in any analysis, adding fallback component');
+      combinedBOM.push({
+        anlage: "Hauptanlage",
+        artikel: "FALLBACK-001",
+        komponente: "Technische Zeichnung",
+        beschreibung: "Automatische Analyse konnte keine spezifischen Komponenten identifizieren. Bitte überprüfen Sie die Zeichnung manuell.",
+        bemerkung: "GPT-5 Analyse - Fallback bei leerer Antwort",
+        stueck: 1,
+        groesse: null,
+        signal: null,
+        rating: null,
+        material: null
+      });
+    }
 
     // Update progress for combining phase
     global.analysisProgress[sessionId] = {

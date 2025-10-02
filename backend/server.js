@@ -544,9 +544,11 @@ Return only a JSON array.`
           messages: [
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
-      ],
-      max_tokens: 1500,
-    });
+          ],
+          max_completion_tokens: 1500,
+          reasoning_effort: 'medium',
+          verbosity: 'medium'
+        });
 
         console.log(`${query.name} OpenAI response received successfully`);
         allResponses.push({
@@ -887,7 +889,9 @@ app.post('/api/chat', requireAuth, async (req, res) => {
     const response = await openai.chat.completions.create({
       model: 'gpt-5',
       messages: messages,
-      max_tokens: 1500,
+      max_completion_tokens: 1500,
+      reasoning_effort: 'medium',
+      verbosity: 'medium'
     });
 
     res.json({ response: response.choices[0].message.content });

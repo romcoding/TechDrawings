@@ -539,18 +539,49 @@ Return only a JSON array.`
         }
         console.log('System prompt length:', query.systemPrompt.length);
         
-        const response = await openai.chat.completions.create({
-          model: 'gpt-5',
-          messages: [
-            { role: 'system', content: query.systemPrompt },
-            { role: 'user', content: analysisContent }
-          ],
-          max_completion_tokens: 1500,
-          reasoning_effort: 'medium',
-          verbosity: 'medium'
-        });
+        // Try GPT-5 first, fallback to GPT-4o if empty response
+        let response;
+        let modelUsed = 'gpt-5';
+        
+        try {
+          response = await openai.chat.completions.create({
+            model: 'gpt-5',
+            messages: [
+              { role: 'system', content: query.systemPrompt },
+              { role: 'user', content: analysisContent }
+            ],
+            max_completion_tokens: 1500,
+            reasoning_effort: 'medium',
+            verbosity: 'medium'
+          });
+          
+          // Check if GPT-5 response is empty
+          if (!response.choices[0].message.content || response.choices[0].message.content.trim() === '') {
+            console.warn(`${query.name}: GPT-5 returned empty response, falling back to GPT-4o`);
+            response = await openai.chat.completions.create({
+              model: 'gpt-4o',
+              messages: [
+                { role: 'system', content: query.systemPrompt },
+                { role: 'user', content: analysisContent }
+              ],
+              max_tokens: 1500
+            });
+            modelUsed = 'gpt-4o';
+          }
+        } catch (gpt5Error) {
+          console.warn(`${query.name}: GPT-5 failed, falling back to GPT-4o:`, gpt5Error.message);
+          response = await openai.chat.completions.create({
+            model: 'gpt-4o',
+            messages: [
+              { role: 'system', content: query.systemPrompt },
+              { role: 'user', content: analysisContent }
+            ],
+            max_tokens: 1500
+          });
+          modelUsed = 'gpt-4o';
+        }
 
-        console.log(`${query.name} OpenAI response received successfully`);
+        console.log(`${query.name} OpenAI response received successfully using ${modelUsed}`);
         const responseContent = response.choices[0].message.content;
         console.log(`${query.name} response length:`, responseContent ? responseContent.length : 'null/undefined');
         console.log(`${query.name} response preview:`, responseContent ? responseContent.substring(0, 100) : 'empty');
@@ -931,13 +962,40 @@ app.post('/api/chat', requireAuth, async (req, res) => {
       { role: 'user', content: message }
     ];
 
-    const response = await openai.chat.completions.create({
-      model: 'gpt-5',
-      messages: messages,
-      max_completion_tokens: 1500,
-      reasoning_effort: 'medium',
-      verbosity: 'medium'
-    });
+    // Try GPT-5 first, fallback to GPT-4o if empty response
+    let response;
+    let modelUsed = 'gpt-5';
+    
+    try {
+      response = await openai.chat.completions.create({
+        model: 'gpt-5',
+        messages: messages,
+        max_completion_tokens: 1500,
+        reasoning_effort: 'medium',
+        verbosity: 'medium'
+      });
+      
+      // Check if GPT-5 response is empty
+      if (!response.choices[0].message.content || response.choices[0].message.content.trim() === '') {
+        console.warn('Chat: GPT-5 returned empty response, falling back to GPT-4o');
+        response = await openai.chat.completions.create({
+          model: 'gpt-4o',
+          messages: messages,
+          max_tokens: 1500
+        });
+        modelUsed = 'gpt-4o';
+      }
+    } catch (gpt5Error) {
+      console.warn('Chat: GPT-5 failed, falling back to GPT-4o:', gpt5Error.message);
+      response = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: messages,
+        max_tokens: 1500
+      });
+      modelUsed = 'gpt-4o';
+    }
+    
+    console.log(`Chat response received using ${modelUsed}`);
 
     res.json({ response: response.choices[0].message.content });
   } catch (error) {

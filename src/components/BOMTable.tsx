@@ -9,32 +9,43 @@ interface BomTableProps {
 
 const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
   const { t } = useLanguage();
-  
+
+  const formatPrice = (value?: number | null, hint?: string | null) => {
+    if (value != null) return value.toFixed(2);
+    if (hint && hint.trim()) return hint;
+    return t('main.priceUnknown');
+  };
+
+  const artikelKomponente = (item: BomItem) => {
+    if (item.artikel && item.komponente) return `${item.artikel} / ${item.komponente}`;
+    return item.artikel || item.komponente || '-';
+  };
+
   const convertToCsv = (data: BomItem[]) => {
     const headers = [
-      t('main.bomColumns.anlage'), 
-      t('main.bomColumns.artikel'), 
-      t('main.bomColumns.komponente'), 
-      t('main.bomColumns.beschreibung'), 
-      t('main.bomColumns.bemerkung'), 
+      t('main.bomColumns.anlage'),
+      t('main.bomColumns.artikelKomponente'),
+      t('main.bomColumns.beschreibung'),
+      t('main.bomColumns.bemerkung'),
       t('main.bomColumns.stueck'),
       t('main.bomColumns.einkPreis'),
       t('main.bomColumns.summeZessionspreis'),
       t('main.bomColumns.verkPreis'),
       t('main.bomColumns.summeVerkPreis')
     ];
-    const rows = data.map(item => [
+
+    const rows = data.map((item) => [
       `"${item.anlage.replace(/"/g, '""')}"`,
-      `"${item.artikel.replace(/"/g, '""')}"`,
-      `"${item.komponente.replace(/"/g, '""')}"`,
+      `"${artikelKomponente(item).replace(/"/g, '""')}"`,
       `"${item.beschreibung.replace(/"/g, '""')}"`,
       `"${item.bemerkung.replace(/"/g, '""')}"`,
       item.stueck.toString(),
-      item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '',
-      item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '',
-      item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '',
-      item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '',
+      `"${formatPrice(item.eink_preis_pro_stk, item.eink_preis_hinweis).replace(/"/g, '""')}"`,
+      `"${formatPrice(item.summe_zessionspreis, item.summe_zessionspreis_hinweis).replace(/"/g, '""')}"`,
+      `"${formatPrice(item.verk_preis_pro_stk, item.verk_preis_hinweis).replace(/"/g, '""')}"`,
+      `"${formatPrice(item.summe_verk_preis, item.summe_verk_preis_hinweis).replace(/"/g, '""')}"`,
     ].join(','));
+
     return [headers.join(','), ...rows].join('\n');
   };
 
@@ -61,8 +72,7 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
           <thead className="bg-gray-50">
             <tr>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.anlage')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.artikel')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.komponente')}</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.artikelKomponente')}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.beschreibung')}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.bemerkung')}</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.stueck')}</th>
@@ -76,15 +86,14 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
             {bom.map((item: BomItem, index: number) => (
               <tr key={index}>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.anlage}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.artikel}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.komponente}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{artikelKomponente(item)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.beschreibung}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bemerkung}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">{item.stueck}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.eink_preis_pro_stk, item.eink_preis_hinweis)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.summe_zessionspreis, item.summe_zessionspreis_hinweis)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.verk_preis_pro_stk, item.verk_preis_hinweis)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.summe_verk_preis, item.summe_verk_preis_hinweis)}</td>
               </tr>
             ))}
           </tbody>

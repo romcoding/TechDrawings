@@ -30,9 +30,16 @@ export interface BomItem {
   rating?: string | null;     // Flow coefficient/pressure class
   material?: string | null;   // Material
   eink_preis_pro_stk?: number | null; // Einkaufspreis pro Stück
+  eink_preis_hinweis?: string | null; // Preis-Hinweis wenn kein exakter Wert
   summe_zessionspreis?: number | null; // Summe Einkaufspreis
+  summe_zessionspreis_hinweis?: string | null; // Hinweis für geschätzte Summe
   verk_preis_pro_stk?: number | null; // Verkaufspreis pro Stück
+  verk_preis_hinweis?: string | null; // Preis-Hinweis wenn kein exakter Wert
   summe_verk_preis?: number | null; // Summe Verkaufspreis
+  summe_verk_preis_hinweis?: string | null; // Hinweis für geschätzte Summe
+  suissetec_symbol?: string | null; // Gemapptes Suissetec-Symbol
+  confidence?: 'high' | 'medium' | 'low' | null; // Mapping confidence
+  confidence_reason?: string | null; // Grund für confidence
 }
 
 export interface Relationship {

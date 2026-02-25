@@ -40,39 +40,6 @@ const parseNumeric = (value) => {
   return null;
 };
 
-
-
-const parseRangeMidpoint = (value) => {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  const text = String(value);
-  const numbers = text.match(/\d+(?:[.,]\d+)?/g);
-  if (!numbers || numbers.length === 0) {
-    return null;
-  }
-
-  const parsed = numbers.map((n) => Number.parseFloat(n.replace(',', '.'))).filter(Number.isFinite);
-  if (parsed.length === 0) {
-    return null;
-  }
-
-  if (parsed.length === 1) {
-    return parsed[0];
-  }
-
-  const [a, b] = parsed;
-  return Number(((a + b) / 2).toFixed(2));
-};
-
-const normalizeConfidence = (value) => {
-  if (!value) return null;
-  const normalized = String(value).trim().toLowerCase();
-  if (['high', 'medium', 'low'].includes(normalized)) return normalized;
-  return null;
-};
-
 const runChatCompletionWithFallback = async ({ messages, maxTokens = 1500 }) => {
   let lastError = null;
 
@@ -567,11 +534,6 @@ For each component, return a JSON object with these fields:
 - material: material of the device (string or null)
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
-- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
-- suissetec_symbol: closest suissetec symbol label (string or null)
-- confidence: mapping confidence: high, medium, or low
-- confidence_reason: short rationale for the confidence (string or null)
 
 If any attribute is unknown, set it to null. Return only a JSON array.`
       },
@@ -601,11 +563,6 @@ For each component, return a JSON object with these fields:
 - material: material if mentioned (string or null)
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
-- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
-- suissetec_symbol: closest suissetec symbol label (string or null)
-- confidence: mapping confidence: high, medium, or low
-- confidence_reason: short rationale for the confidence (string or null)
 
 Return only a JSON array.`
       },
@@ -763,12 +720,7 @@ Return only a JSON array.`
               rating: item.rating || null,
               material: item.material || null,
               eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
-              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
-              eink_preis_hinweis: item.eink_preis_hinweis || null,
-              verk_preis_hinweis: item.verk_preis_hinweis || null,
-              suissetec_symbol: item.suissetec_symbol || null,
-              confidence: normalizeConfidence(item.confidence),
-              confidence_reason: item.confidence_reason || null
+              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk)
             };
 
             // Try to enrich from dictionary
@@ -944,40 +896,21 @@ Return only a JSON array.`
           material: item.material || null,
           eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
           verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
-          eink_preis_hinweis: item.eink_preis_hinweis || null,
-          verk_preis_hinweis: item.verk_preis_hinweis || null,
           summe_zessionspreis: null,
-          summe_verk_preis: null,
-          summe_zessionspreis_hinweis: null,
-          summe_verk_preis_hinweis: null,
-          suissetec_symbol: item.suissetec_symbol || null,
-          confidence: normalizeConfidence(item.confidence),
-          confidence_reason: item.confidence_reason || null
+          summe_verk_preis: null
         }));
 
         bom = bom.map((item) => {
           const einkPreis = parseNumeric(item.eink_preis_pro_stk);
           const verkPreis = parseNumeric(item.verk_preis_pro_stk);
-          const einkPreisEstimate = einkPreis === null ? parseRangeMidpoint(item.eink_preis_hinweis) : null;
-          const verkPreisEstimate = verkPreis === null ? parseRangeMidpoint(item.verk_preis_hinweis) : null;
           const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck) ? item.stueck : 0;
-
-          const summeZession = einkPreis !== null
-            ? Number((einkPreis * stueck).toFixed(2))
-            : (einkPreisEstimate !== null ? Number((einkPreisEstimate * stueck).toFixed(2)) : null);
-
-          const summeVerk = verkPreis !== null
-            ? Number((verkPreis * stueck).toFixed(2))
-            : (verkPreisEstimate !== null ? Number((verkPreisEstimate * stueck).toFixed(2)) : null);
 
           return {
             ...item,
             eink_preis_pro_stk: einkPreis,
             verk_preis_pro_stk: verkPreis,
-            summe_zessionspreis: summeZession,
-            summe_verk_preis: summeVerk,
-            summe_zessionspreis_hinweis: einkPreis === null && summeZession !== null ? `≈${summeZession}` : null,
-            summe_verk_preis_hinweis: verkPreis === null && summeVerk !== null ? `≈${summeVerk}` : null
+            summe_zessionspreis: einkPreis !== null ? Number((einkPreis * stueck).toFixed(2)) : null,
+            summe_verk_preis: verkPreis !== null ? Number((verkPreis * stueck).toFixed(2)) : null
           };
         });
         
@@ -1026,14 +959,7 @@ Return only a JSON array.`
           eink_preis_pro_stk: null,
           verk_preis_pro_stk: null,
           summe_zessionspreis: null,
-          summe_verk_preis: null,
-          eink_preis_hinweis: null,
-          verk_preis_hinweis: null,
-          summe_zessionspreis_hinweis: null,
-          summe_verk_preis_hinweis: null,
-          suissetec_symbol: null,
-          confidence: null,
-          confidence_reason: null
+          summe_verk_preis: null
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
@@ -1053,14 +979,7 @@ Return only a JSON array.`
         eink_preis_pro_stk: null,
         verk_preis_pro_stk: null,
         summe_zessionspreis: null,
-        summe_verk_preis: null,
-        eink_preis_hinweis: null,
-        verk_preis_hinweis: null,
-        summe_zessionspreis_hinweis: null,
-        summe_verk_preis_hinweis: null,
-        suissetec_symbol: null,
-        confidence: null,
-        confidence_reason: null
+        summe_verk_preis: null
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }

@@ -9,6 +9,105 @@ import fs from 'fs';
 let componentCategories = {};
 let componentDictionary = {};
 
+
+const DEFAULT_MODEL_CANDIDATES = ['gpt-5.3', 'gpt-5', 'gpt-4o'];
+const MODEL_CANDIDATES = (
+  process.env.OPENAI_MODEL_CANDIDATES
+    ? process.env.OPENAI_MODEL_CANDIDATES.split(',').map((m) => m.trim()).filter(Boolean)
+    : DEFAULT_MODEL_CANDIDATES
+);
+
+const parseNumeric = (value) => {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  if (typeof value === 'number') {
+    return Number.isFinite(value) ? value : null;
+  }
+
+  if (typeof value === 'string') {
+    const normalized = value
+      .replace(/CHF|EUR|€|\$/gi, '')
+      .replace(/\s+/g, '')
+      .replace(/\.(?=\d{3}(\D|$))/g, '')
+      .replace(',', '.');
+
+    const parsed = Number.parseFloat(normalized);
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  return null;
+};
+
+
+
+const parseRangeMidpoint = (value) => {
+  if (value === null || value === undefined) {
+    return null;
+  }
+
+  const text = String(value);
+  const numbers = text.match(/\d+(?:[.,]\d+)?/g);
+  if (!numbers || numbers.length === 0) {
+    return null;
+  }
+
+  const parsed = numbers.map((n) => Number.parseFloat(n.replace(',', '.'))).filter(Number.isFinite);
+  if (parsed.length === 0) {
+    return null;
+  }
+
+  if (parsed.length === 1) {
+    return parsed[0];
+  }
+
+  const [a, b] = parsed;
+  return Number(((a + b) / 2).toFixed(2));
+};
+
+const normalizeConfidence = (value) => {
+  if (!value) return null;
+  const normalized = String(value).trim().toLowerCase();
+  if (['high', 'medium', 'low'].includes(normalized)) return normalized;
+  return null;
+};
+
+const runChatCompletionWithFallback = async ({ messages, maxTokens = 1500 }) => {
+  let lastError = null;
+
+  for (const model of MODEL_CANDIDATES) {
+    try {
+      const requestPayload = {
+        model,
+        messages
+      };
+
+      if (model.startsWith('gpt-5')) {
+        requestPayload.max_completion_tokens = maxTokens;
+        requestPayload.reasoning_effort = 'medium';
+        requestPayload.verbosity = 'medium';
+      } else {
+        requestPayload.max_tokens = maxTokens;
+      }
+
+      const response = await openai.chat.completions.create(requestPayload);
+      const content = response.choices?.[0]?.message?.content?.trim();
+
+      if (content) {
+        return { response, modelUsed: model };
+      }
+
+      console.warn(`Model ${model} returned empty content, trying next fallback model...`);
+    } catch (error) {
+      lastError = error;
+      console.warn(`Model ${model} failed:`, error.message);
+    }
+  }
+
+  throw lastError || new Error('No model produced a valid response');
+};
+
 // Function to load categorization data from CSV
 const loadCategories = () => {
   try {
@@ -187,7 +286,7 @@ app.get('/health', (req, res) => {
   try {
     res.status(200).json({ 
       status: 'healthy',
-      model: 'gpt-5',
+      model: MODEL_CANDIDATES[0],
       standards: [
         'VDI 3814',
         'ISO 16484', 
@@ -466,6 +565,13 @@ For each component, return a JSON object with these fields:
 - signal: signal range (string or null)
 - rating: flow coefficient/pressure class (string or null)
 - material: material of the device (string or null)
+- eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
+- verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
+- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
+- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
+- suissetec_symbol: closest suissetec symbol label (string or null)
+- confidence: mapping confidence: high, medium, or low
+- confidence_reason: short rationale for the confidence (string or null)
 
 If any attribute is unknown, set it to null. Return only a JSON array.`
       },
@@ -493,6 +599,13 @@ For each component, return a JSON object with these fields:
 - signal: signal range if mentioned (string or null)
 - rating: flow coefficient/pressure class if mentioned (string or null)
 - material: material if mentioned (string or null)
+- eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
+- verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
+- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
+- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
+- suissetec_symbol: closest suissetec symbol label (string or null)
+- confidence: mapping confidence: high, medium, or low
+- confidence_reason: short rationale for the confidence (string or null)
 
 Return only a JSON array.`
       },
@@ -539,47 +652,13 @@ Return only a JSON array.`
         }
         console.log('System prompt length:', query.systemPrompt.length);
         
-        // Try GPT-5 first, fallback to GPT-4o if empty response
-        let response;
-        let modelUsed = 'gpt-5';
-        
-        try {
-          response = await openai.chat.completions.create({
-            model: 'gpt-5',
-            messages: [
-              { role: 'system', content: query.systemPrompt },
-              { role: 'user', content: analysisContent }
-            ],
-            max_completion_tokens: 1500,
-            reasoning_effort: 'medium',
-            verbosity: 'medium'
-          });
-          
-          // Check if GPT-5 response is empty
-          if (!response.choices[0].message.content || response.choices[0].message.content.trim() === '') {
-            console.warn(`${query.name}: GPT-5 returned empty response, falling back to GPT-4o`);
-            response = await openai.chat.completions.create({
-              model: 'gpt-4o',
-              messages: [
-                { role: 'system', content: query.systemPrompt },
-                { role: 'user', content: analysisContent }
-              ],
-              max_tokens: 1500
-            });
-            modelUsed = 'gpt-4o';
-          }
-        } catch (gpt5Error) {
-          console.warn(`${query.name}: GPT-5 failed, falling back to GPT-4o:`, gpt5Error.message);
-          response = await openai.chat.completions.create({
-            model: 'gpt-4o',
-            messages: [
-              { role: 'system', content: query.systemPrompt },
-              { role: 'user', content: analysisContent }
-            ],
-            max_tokens: 1500
-          });
-          modelUsed = 'gpt-4o';
-        }
+        const { response, modelUsed } = await runChatCompletionWithFallback({
+          messages: [
+            { role: 'system', content: query.systemPrompt },
+            { role: 'user', content: analysisContent }
+          ],
+          maxTokens: 1500
+        });
 
         console.log(`${query.name} OpenAI response received successfully using ${modelUsed}`);
         const responseContent = response.choices[0].message.content;
@@ -682,7 +761,14 @@ Return only a JSON array.`
               groesse: item.groesse || item.size || null,
               signal: item.signal || null,
               rating: item.rating || null,
-              material: item.material || null
+              material: item.material || null,
+              eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
+              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
+              eink_preis_hinweis: item.eink_preis_hinweis || null,
+              verk_preis_hinweis: item.verk_preis_hinweis || null,
+              suissetec_symbol: item.suissetec_symbol || null,
+              confidence: normalizeConfidence(item.confidence),
+              confidence_reason: item.confidence_reason || null
             };
 
             // Try to enrich from dictionary
@@ -821,7 +907,11 @@ Return only a JSON array.`
         groesse: null,
         signal: null,
         rating: null,
-        material: null
+        material: null,
+        eink_preis_pro_stk: null,
+        verk_preis_pro_stk: null,
+        summe_zessionspreis: null,
+        summe_verk_preis: null
       });
     }
 
@@ -851,8 +941,45 @@ Return only a JSON array.`
           groesse: item.groesse || null,
           signal: item.signal || null,
           rating: item.rating || null,
-          material: item.material || null
+          material: item.material || null,
+          eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
+          verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
+          eink_preis_hinweis: item.eink_preis_hinweis || null,
+          verk_preis_hinweis: item.verk_preis_hinweis || null,
+          summe_zessionspreis: null,
+          summe_verk_preis: null,
+          summe_zessionspreis_hinweis: null,
+          summe_verk_preis_hinweis: null,
+          suissetec_symbol: item.suissetec_symbol || null,
+          confidence: normalizeConfidence(item.confidence),
+          confidence_reason: item.confidence_reason || null
         }));
+
+        bom = bom.map((item) => {
+          const einkPreis = parseNumeric(item.eink_preis_pro_stk);
+          const verkPreis = parseNumeric(item.verk_preis_pro_stk);
+          const einkPreisEstimate = einkPreis === null ? parseRangeMidpoint(item.eink_preis_hinweis) : null;
+          const verkPreisEstimate = verkPreis === null ? parseRangeMidpoint(item.verk_preis_hinweis) : null;
+          const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck) ? item.stueck : 0;
+
+          const summeZession = einkPreis !== null
+            ? Number((einkPreis * stueck).toFixed(2))
+            : (einkPreisEstimate !== null ? Number((einkPreisEstimate * stueck).toFixed(2)) : null);
+
+          const summeVerk = verkPreis !== null
+            ? Number((verkPreis * stueck).toFixed(2))
+            : (verkPreisEstimate !== null ? Number((verkPreisEstimate * stueck).toFixed(2)) : null);
+
+          return {
+            ...item,
+            eink_preis_pro_stk: einkPreis,
+            verk_preis_pro_stk: verkPreis,
+            summe_zessionspreis: summeZession,
+            summe_verk_preis: summeVerk,
+            summe_zessionspreis_hinweis: einkPreis === null && summeZession !== null ? `≈${summeZession}` : null,
+            summe_verk_preis_hinweis: verkPreis === null && summeVerk !== null ? `≈${summeVerk}` : null
+          };
+        });
         
         // Generate analysis text
         analysisText = `Schweizer HVAC Gebäudeautomation erfolgreich analysiert!\n\n`;
@@ -895,7 +1022,18 @@ Return only a JSON array.`
           groesse: null,
           signal: null,
           rating: null,
-          material: null
+          material: null,
+          eink_preis_pro_stk: null,
+          verk_preis_pro_stk: null,
+          summe_zessionspreis: null,
+          summe_verk_preis: null,
+          eink_preis_hinweis: null,
+          verk_preis_hinweis: null,
+          summe_zessionspreis_hinweis: null,
+          summe_verk_preis_hinweis: null,
+          suissetec_symbol: null,
+          confidence: null,
+          confidence_reason: null
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
@@ -911,7 +1049,18 @@ Return only a JSON array.`
         groesse: null,
         signal: null,
         rating: null,
-        material: null
+        material: null,
+        eink_preis_pro_stk: null,
+        verk_preis_pro_stk: null,
+        summe_zessionspreis: null,
+        summe_verk_preis: null,
+        eink_preis_hinweis: null,
+        verk_preis_hinweis: null,
+        summe_zessionspreis_hinweis: null,
+        summe_verk_preis_hinweis: null,
+        suissetec_symbol: null,
+        confidence: null,
+        confidence_reason: null
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }
@@ -962,38 +1111,10 @@ app.post('/api/chat', requireAuth, async (req, res) => {
       { role: 'user', content: message }
     ];
 
-    // Try GPT-5 first, fallback to GPT-4o if empty response
-    let response;
-    let modelUsed = 'gpt-5';
-    
-    try {
-      response = await openai.chat.completions.create({
-        model: 'gpt-5',
-        messages: messages,
-        max_completion_tokens: 1500,
-        reasoning_effort: 'medium',
-        verbosity: 'medium'
-      });
-      
-      // Check if GPT-5 response is empty
-      if (!response.choices[0].message.content || response.choices[0].message.content.trim() === '') {
-        console.warn('Chat: GPT-5 returned empty response, falling back to GPT-4o');
-        response = await openai.chat.completions.create({
-          model: 'gpt-4o',
-          messages: messages,
-          max_tokens: 1500
-        });
-        modelUsed = 'gpt-4o';
-      }
-    } catch (gpt5Error) {
-      console.warn('Chat: GPT-5 failed, falling back to GPT-4o:', gpt5Error.message);
-      response = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        messages: messages,
-        max_tokens: 1500
-      });
-      modelUsed = 'gpt-4o';
-    }
+    const { response, modelUsed } = await runChatCompletionWithFallback({
+      messages,
+      maxTokens: 1500
+    });
     
     console.log(`Chat response received using ${modelUsed}`);
 

@@ -29,7 +29,8 @@ npm start
 
 | Variable | Description | Required | Default |
 |----------|-------------|----------|---------|
-| `OPENAI_API_KEY` | OpenAI API key for GPT-4 | Yes | - |
+| `OPENAI_API_KEY` | OpenAI API key for GPT models | Yes | - |
+| `OPENAI_MODEL_CANDIDATES` | Comma-separated fallback order (e.g. `gpt-5.3,gpt-5,gpt-4o`) | No | `gpt-5.3,gpt-5,gpt-4o` |
 | `APP_USERNAME` | Login username | No | admin |
 | `APP_PASSWORD` | Login password | No | admin |
 | `SESSION_SECRET` | Session encryption key | Yes | - |
@@ -81,3 +82,10 @@ The server provides detailed logging for:
 - API errors
 - Server startup information
 # Render Backend Status Check
+
+
+## 🤖 Model Selection
+
+The backend uses a configurable fallback model order for both `/api/analyze` and `/api/chat`.
+It tries each model in `OPENAI_MODEL_CANDIDATES` until a non-empty response is returned.
+

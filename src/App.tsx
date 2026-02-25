@@ -24,8 +24,18 @@ const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical
 
 Upload a technical drawing and I'll provide a professional engineering analysis!`;
 
-// Define the API URL. In a production environment, this should be set via environment variables.
-const API_URL = 'https://techdrawings-1.onrender.com';
+const API_URL = import.meta.env.VITE_API_URL || 'https://techdrawings-1.onrender.com';
+
+const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeoutMs = 10000) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timeout);
+  }
+};
 
 function App() {
   const { language, setLanguage, t } = useLanguage();
@@ -50,23 +60,24 @@ function App() {
   }, []);
 
   const checkServerStatus = async () => {
+    setServerStatus('checking');
     try {
       console.log('Checking server status...');
       
       // Try multiple endpoints to determine server status
-      const endpoints = ['/health', '/ping', '/test'];
+      const endpoints = ['/health', '/ping'];
       let serverOnline = false;
       
       for (const endpoint of endpoints) {
         try {
           console.log(`Trying endpoint: ${endpoint}`);
-          const response = await fetch(`${API_URL}${endpoint}`, {
+          const response = await fetchWithTimeout(`${API_URL}${endpoint}`, {
             method: 'GET',
             credentials: 'include',
             headers: {
               'Content-Type': 'application/json',
             },
-          });
+          }, 8000);
           
           console.log(`${endpoint} response:`, response.status, response.statusText);
           

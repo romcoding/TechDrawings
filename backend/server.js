@@ -535,7 +535,7 @@ For each component, return a JSON object with these fields:
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
 
-If any attribute is unknown, set it to null. Return only a JSON array.`
+If any attribute is unknown, set it to null. Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
       },
       {
         name: 'Component Inventory Analysis',
@@ -564,7 +564,7 @@ For each component, return a JSON object with these fields:
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
 
-Return only a JSON array.`
+Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
       },
       {
         name: 'Relationship Analysis',
@@ -581,7 +581,7 @@ Focus on identifying:
 - Mechanical connections (mounting, coupling)
 - Measurement connections (sensor readings)
 
-Return only a JSON array.`
+Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
       }
     ];
 
@@ -651,54 +651,16 @@ Return only a JSON array.`
 
     for (const result of allResponses) {
       try {
-        let rawResponse = result.response;
+        const rawResponse = result.response;
         console.log(`${result.name} response:`, rawResponse.substring(0, 200) + "...");
-        
-        // Check if response is empty or null
+
         if (!rawResponse || rawResponse.trim() === '') {
           console.warn(`${result.name} returned empty response, skipping...`);
           continue;
         }
-        
-        // Clean up markdown formatting
-        rawResponse = rawResponse.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
-        
-        // Check if response is still empty after cleaning
-        if (!rawResponse || rawResponse.trim() === '') {
-          console.warn(`${result.name} response is empty after cleaning, skipping...`);
-          continue;
-        }
-        
-        // Extract JSON array - be more flexible with malformed JSON
-        const jsonMatch = rawResponse.match(/\[[\s\S]*?\]/);
-        if (jsonMatch) {
-          rawResponse = jsonMatch[0];
-        }
-        
-        // Check if we have a valid JSON structure
-        if (!rawResponse || rawResponse.trim() === '' || rawResponse.trim() === '[]') {
-          console.warn(`${result.name} no valid JSON array found, skipping...`);
-          continue;
-        }
-        
-        // Try to fix common JSON issues
-        rawResponse = rawResponse
-          .replace(/,\s*}/g, '}')  // Remove trailing commas before }
-          .replace(/,\s*]/g, ']')  // Remove trailing commas before ]
-          .replace(/\\"/g, '"')    // Fix escaped quotes
-          .replace(/\\\\/g, '\\')   // Fix double backslashes
-          .replace(/([^\\])\\([^"\\\/bfnrt])/g, '$1\\\\$2') // Fix unescaped backslashes
-          .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"') // Fix unescaped quotes in strings
-          .replace(/"([^"]*)"([^"]*)"([^"]*)"/g, '"$1\\"$2\\"$3"'); // Fix more unescaped quotes
-        
-        // Final validation before parsing
-        if (!rawResponse || rawResponse.trim() === '' || rawResponse.trim() === '[]') {
-          console.warn(`${result.name} response is empty after processing, skipping...`);
-          continue;
-        }
-        
-        const parsed = JSON.parse(rawResponse);
-        if (Array.isArray(parsed)) {
+
+        const parsed = extractJsonArrayFromText(rawResponse);
+        if (Array.isArray(parsed) && parsed.length > 0) {
           // Check if this is a relationship array (objects with source_component)
           if (parsed[0] && parsed[0].source_component) {
             relationships.push(...parsed);
@@ -769,10 +731,12 @@ Return only a JSON array.`
             }
           });
           console.log(`${result.name} found ${parsed.length} components, added ${parsed.length} to combined list`);
+        } else {
+          console.warn(`${result.name} no valid JSON array found, skipping...`);
         }
       } catch (parseError) {
         console.error(`Failed to parse ${result.name} response:`, parseError);
-        console.error(`Raw response was:`, result.response.substring(0, 500));
+        console.error(`Raw response was:`, (result.response || "").substring(0, 500));
         
         // Try to extract components from malformed JSON using regex
         try {

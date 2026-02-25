@@ -586,6 +586,34 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
     ];
 
     // Execute multiple analysis queries
+    // Defensive local parser so deployments with partially merged helper functions
+    // do not fail with ReferenceError and fall back to dummy-only BOM.
+    const safeExtractJsonArray = (rawText) => {
+      if (typeof extractJsonArrayFromText === 'function') {
+        return extractJsonArrayFromText(rawText);
+      }
+
+      if (!rawText || typeof rawText !== 'string') return null;
+      const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+      const start = cleaned.indexOf('[');
+      const end = cleaned.lastIndexOf(']');
+      if (start === -1 || end === -1 || end <= start) return null;
+
+      const slice = cleaned.slice(start, end + 1);
+      try {
+        const parsed = JSON.parse(slice);
+        return Array.isArray(parsed) ? parsed : null;
+      } catch (_e) {
+        try {
+          const unescaped = slice.replace(/\\n/g, ' ').replace(/\\t/g, ' ').replace(/\\"/g, '"');
+          const parsed = JSON.parse(unescaped);
+          return Array.isArray(parsed) ? parsed : null;
+        } catch (_e2) {
+          return null;
+        }
+      }
+    };
+
     const allResponses = [];
     for (let i = 0; i < analysisQueries.length; i++) {
       const query = analysisQueries[i];

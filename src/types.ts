@@ -29,6 +29,10 @@ export interface BomItem {
   signal?: string | null;     // Signal range
   rating?: string | null;     // Flow coefficient/pressure class
   material?: string | null;   // Material
+  eink_preis_pro_stk?: number | null; // Einkaufspreis pro Stück
+  summe_zessionspreis?: number | null; // Summe Einkaufspreis
+  verk_preis_pro_stk?: number | null; // Verkaufspreis pro Stück
+  summe_verk_preis?: number | null; // Summe Verkaufspreis
 }
 
 export interface Relationship {

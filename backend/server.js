@@ -769,6 +769,7 @@ Return only a JSON array.`
               suissetec_symbol: item.suissetec_symbol || null,
               confidence: normalizeConfidence(item.confidence),
               confidence_reason: item.confidence_reason || null
+              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk)
             };
 
             // Try to enrich from dictionary
@@ -953,6 +954,8 @@ Return only a JSON array.`
           suissetec_symbol: item.suissetec_symbol || null,
           confidence: normalizeConfidence(item.confidence),
           confidence_reason: item.confidence_reason || null
+          summe_zessionspreis: null,
+          summe_verk_preis: null
         }));
 
         bom = bom.map((item) => {
@@ -970,6 +973,8 @@ Return only a JSON array.`
             ? Number((verkPreis * stueck).toFixed(2))
             : (verkPreisEstimate !== null ? Number((verkPreisEstimate * stueck).toFixed(2)) : null);
 
+          const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck) ? item.stueck : 0;
+
           return {
             ...item,
             eink_preis_pro_stk: einkPreis,
@@ -978,6 +983,8 @@ Return only a JSON array.`
             summe_verk_preis: summeVerk,
             summe_zessionspreis_hinweis: einkPreis === null && summeZession !== null ? `≈${summeZession}` : null,
             summe_verk_preis_hinweis: verkPreis === null && summeVerk !== null ? `≈${summeVerk}` : null
+            summe_zessionspreis: einkPreis !== null ? Number((einkPreis * stueck).toFixed(2)) : null,
+            summe_verk_preis: verkPreis !== null ? Number((verkPreis * stueck).toFixed(2)) : null
           };
         });
         
@@ -1034,6 +1041,7 @@ Return only a JSON array.`
           suissetec_symbol: null,
           confidence: null,
           confidence_reason: null
+          summe_verk_preis: null
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
@@ -1061,6 +1069,7 @@ Return only a JSON array.`
         suissetec_symbol: null,
         confidence: null,
         confidence_reason: null
+        summe_verk_preis: null
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }

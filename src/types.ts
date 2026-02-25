@@ -40,6 +40,9 @@ export interface BomItem {
   suissetec_symbol?: string | null; // Gemapptes Suissetec-Symbol
   confidence?: 'high' | 'medium' | 'low' | null; // Mapping confidence
   confidence_reason?: string | null; // Grund für confidence
+  summe_zessionspreis?: number | null; // Summe Einkaufspreis
+  verk_preis_pro_stk?: number | null; // Verkaufspreis pro Stück
+  summe_verk_preis?: number | null; // Summe Verkaufspreis
 }
 
 export interface Relationship {

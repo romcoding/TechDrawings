@@ -40,108 +40,6 @@ const parseNumeric = (value) => {
   return null;
 };
 
-
-
-const parseRangeMidpoint = (value) => {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  const text = String(value);
-  const numbers = text.match(/\d+(?:[.,]\d+)?/g);
-  if (!numbers || numbers.length === 0) {
-    return null;
-  }
-
-  const parsed = numbers.map((n) => Number.parseFloat(n.replace(',', '.'))).filter(Number.isFinite);
-  if (parsed.length === 0) {
-    return null;
-  }
-
-  if (parsed.length === 1) {
-    return parsed[0];
-  }
-
-  const [a, b] = parsed;
-  return Number(((a + b) / 2).toFixed(2));
-};
-
-const normalizeConfidence = (value) => {
-  if (!value) return null;
-  const normalized = String(value).trim().toLowerCase();
-  if (['high', 'medium', 'low'].includes(normalized)) return normalized;
-  return null;
-};
-
-
-const tryParseJsonArray = (candidate) => {
-  if (!candidate || typeof candidate !== 'string') return null;
-
-  try {
-    const parsed = JSON.parse(candidate);
-    if (Array.isArray(parsed)) return parsed;
-
-    if (typeof parsed === 'string') {
-      const nested = JSON.parse(parsed);
-      if (Array.isArray(nested)) return nested;
-    }
-  } catch (_e) {
-    // Continue with fallbacks
-  }
-
-  return null;
-};
-
-const extractJsonArrayFromText = (rawText) => {
-  if (!rawText || typeof rawText !== 'string') return null;
-
-  let cleaned = rawText
-    .replace(/```json\s*/gi, '')
-    .replace(/```\s*/g, '')
-    .trim();
-
-  // First attempt: parse as-is
-  let parsed = tryParseJsonArray(cleaned);
-  if (parsed) return parsed;
-
-  // Extract widest array content
-  const start = cleaned.indexOf('[');
-  const end = cleaned.lastIndexOf(']');
-  if (start !== -1 && end !== -1 && end > start) {
-    const arraySlice = cleaned.slice(start, end + 1);
-
-    parsed = tryParseJsonArray(arraySlice);
-    if (parsed) return parsed;
-
-    // Common escaped JSON payload from some model outputs
-    const unescaped = arraySlice
-      .replace(/\\n/g, ' ')
-      .replace(/\\t/g, ' ')
-      .replace(/\\"/g, '"')
-      .replace(/,\s*}/g, '}')
-      .replace(/,\s*]/g, ']');
-
-    parsed = tryParseJsonArray(unescaped);
-    if (parsed) return parsed;
-  }
-
-  return null;
-};
-
-const inferSuissetecSymbol = (componentName) => {
-  if (!componentName) return null;
-  const key = String(componentName).toLowerCase();
-  const dictionaryKeys = Object.keys(componentCategories);
-
-  for (const known of dictionaryKeys) {
-    if (key.includes(known) || known.includes(key)) {
-      return componentCategories[known];
-    }
-  }
-
-  return null;
-};
-
 const runChatCompletionWithFallback = async ({ messages, maxTokens = 1500 }) => {
   let lastError = null;
 
@@ -636,11 +534,6 @@ For each component, return a JSON object with these fields:
 - material: material of the device (string or null)
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
-- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
-- suissetec_symbol: closest suissetec symbol label (string or null)
-- confidence: mapping confidence: high, medium, or low
-- confidence_reason: short rationale for the confidence (string or null)
 
 If any attribute is unknown, set it to null. Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
       },
@@ -670,11 +563,6 @@ For each component, return a JSON object with these fields:
 - material: material if mentioned (string or null)
 - eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
 - verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-- eink_preis_hinweis: free-text price hint/range if exact purchase price is not visible (string or null)
-- verk_preis_hinweis: free-text price hint/range if exact sales price is not visible (string or null)
-- suissetec_symbol: closest suissetec symbol label (string or null)
-- confidence: mapping confidence: high, medium, or low
-- confidence_reason: short rationale for the confidence (string or null)
 
 Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
       },
@@ -726,7 +614,7 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
             { role: 'system', content: query.systemPrompt },
             { role: 'user', content: analysisContent }
           ],
-          maxTokens: 6000
+          maxTokens: 1500
         });
 
         console.log(`${query.name} OpenAI response received successfully using ${modelUsed}`);
@@ -794,12 +682,7 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
               rating: item.rating || null,
               material: item.material || null,
               eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
-              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
-              eink_preis_hinweis: item.eink_preis_hinweis || null,
-              verk_preis_hinweis: item.verk_preis_hinweis || null,
-              suissetec_symbol: item.suissetec_symbol || inferSuissetecSymbol(item.komponente || item.type) || null,
-              confidence: normalizeConfidence(item.confidence),
-              confidence_reason: item.confidence_reason || null
+              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk)
             };
 
             // Try to enrich from dictionary
@@ -977,40 +860,21 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
           material: item.material || null,
           eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
           verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
-          eink_preis_hinweis: item.eink_preis_hinweis || null,
-          verk_preis_hinweis: item.verk_preis_hinweis || null,
           summe_zessionspreis: null,
-          summe_verk_preis: null,
-          summe_zessionspreis_hinweis: null,
-          summe_verk_preis_hinweis: null,
-          suissetec_symbol: item.suissetec_symbol || null,
-          confidence: normalizeConfidence(item.confidence),
-          confidence_reason: item.confidence_reason || null
+          summe_verk_preis: null
         }));
 
         bom = bom.map((item) => {
           const einkPreis = parseNumeric(item.eink_preis_pro_stk);
           const verkPreis = parseNumeric(item.verk_preis_pro_stk);
-          const einkPreisEstimate = einkPreis === null ? parseRangeMidpoint(item.eink_preis_hinweis) : null;
-          const verkPreisEstimate = verkPreis === null ? parseRangeMidpoint(item.verk_preis_hinweis) : null;
           const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck) ? item.stueck : 0;
-
-          const summeZession = einkPreis !== null
-            ? Number((einkPreis * stueck).toFixed(2))
-            : (einkPreisEstimate !== null ? Number((einkPreisEstimate * stueck).toFixed(2)) : null);
-
-          const summeVerk = verkPreis !== null
-            ? Number((verkPreis * stueck).toFixed(2))
-            : (verkPreisEstimate !== null ? Number((verkPreisEstimate * stueck).toFixed(2)) : null);
 
           return {
             ...item,
             eink_preis_pro_stk: einkPreis,
             verk_preis_pro_stk: verkPreis,
-            summe_zessionspreis: summeZession,
-            summe_verk_preis: summeVerk,
-            summe_zessionspreis_hinweis: einkPreis === null && summeZession !== null ? `≈${summeZession}` : null,
-            summe_verk_preis_hinweis: verkPreis === null && summeVerk !== null ? `≈${summeVerk}` : null
+            summe_zessionspreis: einkPreis !== null ? Number((einkPreis * stueck).toFixed(2)) : null,
+            summe_verk_preis: verkPreis !== null ? Number((verkPreis * stueck).toFixed(2)) : null
           };
         });
         
@@ -1059,14 +923,7 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
           eink_preis_pro_stk: null,
           verk_preis_pro_stk: null,
           summe_zessionspreis: null,
-          summe_verk_preis: null,
-          eink_preis_hinweis: null,
-          verk_preis_hinweis: null,
-          summe_zessionspreis_hinweis: null,
-          summe_verk_preis_hinweis: null,
-          suissetec_symbol: null,
-          confidence: null,
-          confidence_reason: null
+          summe_verk_preis: null
         }];
         analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
       }
@@ -1086,14 +943,7 @@ Return only a JSON array. Do not add prose, explanations, or markdown fences. Do
         eink_preis_pro_stk: null,
         verk_preis_pro_stk: null,
         summe_zessionspreis: null,
-        summe_verk_preis: null,
-        eink_preis_hinweis: null,
-        verk_preis_hinweis: null,
-        summe_zessionspreis_hinweis: null,
-        summe_verk_preis_hinweis: null,
-        suissetec_symbol: null,
-        confidence: null,
-        confidence_reason: null
+        summe_verk_preis: null
       }];
       analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
     }

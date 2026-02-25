@@ -68,11 +68,29 @@ The server is configured to accept requests from:
 
 ## 🚀 Deployment on Render
 
-1. Connect your GitHub repository
-2. Set build command: `npm install`
-3. Set start command: `npm start`
-4. Configure environment variables in Render dashboard
-5. Deploy!
+### Option A: Use `render.yaml` (recommended)
+1. Push this repository with `render.yaml` at repo root.
+2. In Render, create service from **Blueprint**.
+3. Render will automatically use:
+   - `rootDir: backend`
+   - `buildCommand: npm ci`
+   - `startCommand: npm start`
+   - health check `/health`
+
+### Option B: Manual service setup
+If you create a Web Service manually, set:
+- **Root Directory**: `backend`
+- **Build Command**: `npm ci`
+- **Start Command**: `npm start`
+- **Environment**: Node
+
+### Required environment variables
+- `OPENAI_API_KEY`
+- `SESSION_SECRET`
+- (optional) `APP_USERNAME`, `APP_PASSWORD`, `OPENAI_MODEL_CANDIDATES`
+
+### Important
+If Render is still deploying an older broken commit (e.g. syntax error around line 772), trigger **Manual Deploy → Deploy latest commit** after confirming your branch includes the fix.
 
 ## 📝 Logs
 

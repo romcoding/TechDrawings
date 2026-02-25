@@ -44,6 +44,10 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
       `"${formatPrice(item.summe_zessionspreis, item.summe_zessionspreis_hinweis).replace(/"/g, '""')}"`,
       `"${formatPrice(item.verk_preis_pro_stk, item.verk_preis_hinweis).replace(/"/g, '""')}"`,
       `"${formatPrice(item.summe_verk_preis, item.summe_verk_preis_hinweis).replace(/"/g, '""')}"`,
+      item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '',
+      item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '',
+      item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '',
+      item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '',
     ].join(','));
 
     return [headers.join(','), ...rows].join('\n');
@@ -94,6 +98,10 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.summe_zessionspreis, item.summe_zessionspreis_hinweis)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.verk_preis_pro_stk, item.verk_preis_hinweis)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatPrice(item.summe_verk_preis, item.summe_verk_preis_hinweis)}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '-'}</td>
               </tr>
             ))}
           </tbody>

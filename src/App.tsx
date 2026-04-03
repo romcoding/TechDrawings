@@ -6,24 +6,6 @@ import LoadingSpinner from './components/LoadingSpinner';
 import { ChatState, Message } from './types';
 import { useLanguage } from './contexts/LanguageContext';
 
-const INITIAL_MESSAGE = `I am an AI assistant specialized in analyzing technical drawings and documents using GPT-4o with expert engineering knowledge. I can provide comprehensive analysis of technical drawings according to international standards (VDI 3814, ISO 16484, ISO 14617, IEC 60617, DIN EN 81346).
-
-🔧 **What I can analyze:**
-• HVAC systems, building automation, and industrial control systems
-• Valves, pumps, sensors, actuators, and control equipment
-• Electrical systems, wiring, and instrumentation
-• Piping systems, fittings, and mechanical components
-• Safety systems and emergency equipment
-
-📊 **Analysis includes:**
-• Detailed Bill of Materials (BOM) with quantities
-• Component specifications, ratings, and materials
-• Signal types and communication protocols
-• System locations and technical standards
-• Downloadable CSV report for procurement
-
-Upload a technical drawing and I'll provide a professional engineering analysis!`;
-
 const API_URL = import.meta.env.VITE_API_URL || 'https://techdrawings-1.onrender.com';
 
 const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeoutMs = 10000) => {
@@ -35,6 +17,29 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeoutM
   } finally {
     clearTimeout(timeout);
   }
+};
+
+
+const normalizeBom = (bom: unknown) => {
+  if (!Array.isArray(bom)) return [];
+
+  return bom.map((item) => {
+    const row = item as Record<string, unknown>;
+    return {
+      Anlage: String(row['Anlage'] ?? row['anlage'] ?? ''),
+      'Artikel / Komponente': String(
+        row['Artikel / Komponente'] ??
+          (row['artikel'] && row['komponente'] ? `${row['artikel']} ${row['komponente']}` : row['artikel'] ?? row['komponente'] ?? '')
+      ),
+      Beschreibung: String(row['Beschreibung'] ?? row['beschreibung'] ?? ''),
+      Bemerkung: String(row['Bemerkung'] ?? row['bemerkung'] ?? ''),
+      Stück: Number(row['Stück'] ?? row['stueck'] ?? 1),
+      'Eink. Preis / Stk.': (row['Eink. Preis / Stk.'] ?? row['eink_preis_pro_stk'] ?? null) as number | null,
+      'Summe Zessionspreis': (row['Summe Zessionspreis'] ?? row['summe_zessionspreis'] ?? null) as number | null,
+      'Verk. Preis / Stk.': (row['Verk. Preis / Stk.'] ?? row['verk_preis_pro_stk'] ?? null) as number | null,
+      'Summe Verk. Preis': (row['Summe Verk. Preis'] ?? row['summe_verk_preis'] ?? null) as number | null
+    };
+  });
 };
 
 function App() {
@@ -130,7 +135,7 @@ function App() {
         setLoginError(data.message || 'Login failed');
       }
     } catch (error) {
-      setLoginError('Connection error. Please try again.');
+      setLoginError(t('login.connectionError'));
     }
   };
 
@@ -191,7 +196,7 @@ function App() {
         ...prev,
         messages: [...prev.messages, {
           role: 'assistant',
-          content: 'Sorry, I encountered an error while processing your message. Please ensure the server is running and try again.'
+          content: t('main.chatError')
         }],
         isLoading: false
       }));
@@ -207,7 +212,7 @@ function App() {
         ...prev,
         messages: [...prev.messages, {
           role: 'assistant',
-          content: 'Please log in first before uploading files.'
+          content: t('login.pleaseLogin')
         }],
       }));
       return;
@@ -223,7 +228,7 @@ function App() {
           ...prev,
           messages: [...prev.messages, {
             role: 'assistant',
-            content: 'Server appears to be offline. Please check your connection and try again. If the problem persists, the server may be experiencing issues.'
+            content: t('login.serverOfflineMessage')
           }],
         }));
         return;
@@ -236,9 +241,7 @@ function App() {
       const fileType = file.type;
       const newMessage: Message = {
         role: 'user',
-        content: `Please analyze this ${fileType === 'application/pdf' ? 'PDF' : 
-                  fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'Word document' : 
-                  'technical drawing'} using AI.`,
+        content: `Bitte analysiere diese ${fileType === 'application/pdf' ? 'PDF' : fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ? 'Word-Datei' : 'technische Zeichnung'} mit GPT-5.4 Vision.`,
         file: {
           data: base64Data,
           type: fileType,
@@ -289,7 +292,7 @@ function App() {
               type: fileType,
               name: file.name
             },
-            message: `Please analyze this ${file.type.includes('image') ? 'technical drawing' : 'document'} using GPT-5.`
+            message: `Bitte analysiere diese ${file.type.includes('image') ? 'technische Zeichnung' : 'Datei'} mit GPT-5.4 Vision.`
           }),
           credentials: 'include'
         });
@@ -302,7 +305,7 @@ function App() {
         const aiResponse: Message = {
           role: 'assistant',
           content: data.response,
-          bom: data.bom || [],
+          bom: normalizeBom(data.bom),
           relationships: data.relationships || []
         };
 
@@ -334,7 +337,7 @@ function App() {
           ...prev,
           messages: [...prev.messages, {
             role: 'assistant',
-            content: 'Sorry, I encountered an error while analyzing the file. Please ensure the server is running and try again.'
+            content: t('main.errorMessage')
           }],
           isLoading: false
         }));
@@ -472,7 +475,7 @@ function App() {
               <button
                 onClick={checkServerStatus}
                 className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-sm"
-                title="Refresh server status"
+                title={t('main.refreshServerStatus')}
               >
                 {t('main.refresh')}
               </button>

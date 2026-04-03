@@ -7,44 +7,38 @@ interface BomTableProps {
   bom: BomItem[];
 }
 
+const BOM_COLUMNS: Array<keyof BomItem> = [
+  'Anlage',
+  'Artikel / Komponente',
+  'Beschreibung',
+  'Bemerkung',
+  'Stück',
+  'Eink. Preis / Stk.',
+  'Summe Zessionspreis',
+  'Verk. Preis / Stk.',
+  'Summe Verk. Preis'
+];
+
 const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
   const { t } = useLanguage();
 
-  const formatPrice = (value?: number | null, hint?: string | null) => {
-    if (value != null) return value.toFixed(2);
-    if (hint && hint.trim()) return hint;
-    return t('main.priceUnknown');
-  };
-
-  const artikelKomponente = (item: BomItem) => {
-    if (item.artikel && item.komponente) return `${item.artikel} / ${item.komponente}`;
-    return item.artikel || item.komponente || '-';
-  };
-
   const convertToCsv = (data: BomItem[]) => {
-    const headers = [
-      t('main.bomColumns.anlage'),
-      t('main.bomColumns.artikelKomponente'),
-      t('main.bomColumns.beschreibung'),
-      t('main.bomColumns.bemerkung'),
-      t('main.bomColumns.stueck'),
-      t('main.bomColumns.einkPreis'),
-      t('main.bomColumns.summeZessionspreis'),
-      t('main.bomColumns.verkPreis'),
-      t('main.bomColumns.summeVerkPreis')
-    ];
+    const headers = BOM_COLUMNS;
 
-    const rows = data.map((item) => [
-      `"${item.anlage.replace(/"/g, '""')}"`,
-      `"${artikelKomponente(item).replace(/"/g, '""')}"`,
-      `"${item.beschreibung.replace(/"/g, '""')}"`,
-      `"${item.bemerkung.replace(/"/g, '""')}"`,
-      item.stueck.toString(),
-      item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '',
-      item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '',
-      item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '',
-      item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '',
-    ].join(','));
+    const rows = data.map((item) =>
+      headers
+        .map((column) => {
+          const value = item[column];
+          if (value === null || value === undefined) {
+            return '';
+          }
+          if (typeof value === 'number') {
+            return `${value}`;
+          }
+          return `"${String(value).replace(/"/g, '""')}"`;
+        })
+        .join(',')
+    );
 
     return [headers.join(','), ...rows].join('\n');
   };
@@ -54,7 +48,7 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', 'bill_of_materials.csv');
+    link.setAttribute('download', 'stueckliste.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -65,35 +59,34 @@ const BomTable: React.FC<BomTableProps> = ({ bom }: BomTableProps) => {
   }
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md">
+    <div className="bg-white p-4 rounded-lg shadow-md border border-gray-200">
       <h3 className="text-lg font-semibold mb-4">{t('main.bomTitle')}</h3>
       <div className="overflow-x-auto mb-4">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 text-sm">
           <thead className="bg-gray-50">
             <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.anlage')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.artikelKomponente')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.beschreibung')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.bemerkung')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.stueck')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.einkPreis')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.summeZessionspreis')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.verkPreis')}</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{t('main.bomColumns.summeVerkPreis')}</th>
+              {BOM_COLUMNS.map((column) => (
+                <th
+                  key={column}
+                  scope="col"
+                  className="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider"
+                >
+                  {column}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-100">
             {bom.map((item: BomItem, index: number) => (
               <tr key={index}>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.anlage}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{artikelKomponente(item)}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.beschreibung}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.bemerkung}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-medium">{item.stueck}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.eink_preis_pro_stk != null ? item.eink_preis_pro_stk.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_zessionspreis != null ? item.summe_zessionspreis.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.verk_preis_pro_stk != null ? item.verk_preis_pro_stk.toFixed(2) : '-'}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.summe_verk_preis != null ? item.summe_verk_preis.toFixed(2) : '-'}</td>
+                {BOM_COLUMNS.map((column) => {
+                  const value = item[column];
+                  return (
+                    <td key={`${index}-${column}`} className="px-4 py-3 align-top text-gray-700 whitespace-nowrap">
+                      {value === null ? '-' : String(value)}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>

@@ -1,6 +1,6 @@
 # Technical Drawing Analyzer - Frontend
 
-A modern React frontend for analyzing technical drawings and documents using **GPT-4o Vision API**. This tool provides comprehensive component identification, Bill of Materials (BOM) generation, and detailed technical analysis for engineering drawings, schematics, and technical documents.
+A modern React frontend for analyzing technical drawings and documents using **GPT-5.4 Vision API (oder neuer)**. This tool provides comprehensive component identification, Bill of Materials (BOM) generation, and detailed technical analysis for engineering drawings, schematics, and technical documents.
 
 ## 🏗️ Architecture
 
@@ -8,12 +8,12 @@ This repository contains the **frontend only**. The application uses a microserv
 
 - **Frontend (This Repo)**: React + TypeScript + Vite, deployed on Vercel
 - **Backend**: Node.js + Express API, deployed on Render
-- **AI Service**: OpenAI GPT-4o Vision API
+- **AI Service**: OpenAI GPT-5.4 Vision API (oder neuer)
 
 ## 🌟 What Makes This Special
 
 - **Modern Frontend**: React 18 + TypeScript + Vite for optimal performance
-- **GPT-4o Powered Analysis**: Utilizes the latest GPT-4o Vision API for superior technical drawing interpretation
+- **GPT-5.4 Vision Integration**: Nutzt das aktuelle Vision-Modell via `/api/analyze` für technische Zeichnungsanalyse
 - **Beautiful UI/UX**: Responsive design with drag-and-drop file upload
 - **Production Ready**: Optimized for Vercel deployment
 - **Secure**: Environment-based configuration and secure API communication
@@ -45,7 +45,7 @@ This repository contains the **frontend only**. The application uses a microserv
 
 ### Backend (Separate Repository)
 - **Node.js** with Express
-- **OpenAI GPT-4o Vision API** for document analysis
+- **OpenAI GPT-5.4 Vision API (oder neuer)** für Dokumentanalyse mit strukturierten JSON-Antworten
 - **Express-Session** for authentication
 - **CORS** for secure cross-origin requests
 
@@ -160,6 +160,59 @@ The system identifies and categorizes:
 - **Electrical Components**: Wiring, switches, and power systems
 - **HVAC Equipment**: Heating, ventilation, and air conditioning
 - **Safety Systems**: Emergency and protection equipment
+
+
+## 🧾 Deutsches BOM-Format & Export
+
+Die UI rendert Analyseergebnisse als deutsche Excel-ähnliche Stückliste mit folgenden Spalten:
+
+- Anlage
+- Artikel / Komponente
+- Beschreibung
+- Bemerkung
+- Stück
+- Eink. Preis / Stk.
+- Summe Zessionspreis
+- Verk. Preis / Stk.
+- Summe Verk. Preis
+
+Zusätzlich steht ein Button **„CSV/Excel herunterladen“** bereit, der die aktuelle Stückliste als CSV exportiert.
+
+### Beispiel (BOM-Ansicht)
+
+![Beispiel BOM Tabelle](docs/images/bom-beispiel.svg)
+
+## 🔌 Backend-Integration (separates Repo)
+
+Diese Frontend-Anwendung erwartet, dass der Backend-Endpunkt `/api/analyze` ein JSON im folgenden Format liefert:
+
+```json
+{
+  "response": "Deutsche Zusammenfassung",
+  "bom": [
+    {
+      "Anlage": "Heizungsgruppe 1",
+      "Artikel / Komponente": "Absperrventil DN50",
+      "Beschreibung": "DIN EN 558, Messing, PN16",
+      "Bemerkung": "Wartungsintervall 12 Monate",
+      "Stück": 2,
+      "Eink. Preis / Stk.": null,
+      "Summe Zessionspreis": null,
+      "Verk. Preis / Stk.": null,
+      "Summe Verk. Preis": null
+    }
+  ],
+  "relationships": [
+    { "parent": "Heizungsgruppe 1", "child": "Absperrventil DN50" }
+  ]
+}
+```
+
+Empfohlene Backend-Umsetzung:
+- Vision-Service-Modul (z. B. `visionService.ts`) mit `analyzeDrawing(base64Data, fileType)`.
+- Aufruf von `openai.chat.completions.create` mit `model: "gpt-5.4-vision"` (oder neuer).
+- JSON-/Function-Calling-Schema erzwingt die oben gezeigte BOM-Struktur.
+- Umgebungsvariablen über dotenv laden: `OPENAI_API_KEY`, optional `OPENAI_ORGANIZATION`.
 
 ## 🚨 Troubleshooting
 

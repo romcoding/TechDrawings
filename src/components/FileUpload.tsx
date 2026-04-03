@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Upload, FileText, Image, File, X } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface FileUploadProps {
   onFileSelect: (file: File) => void;
@@ -9,28 +10,31 @@ interface FileUploadProps {
 export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isDragActive, setIsDragActive] = useState(false);
+  const { t } = useLanguage();
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    if (acceptedFiles.length > 0) {
-      const file = acceptedFiles[0];
-      const allowedTypes = [
-        'image/png',
-        'image/jpeg',
-        'application/pdf',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'application/msword'
-      ];
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length > 0) {
+        const file = acceptedFiles[0];
+        const allowedTypes = [
+          'image/png',
+          'image/jpeg',
+          'application/pdf',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/msword'
+        ];
 
-      if (allowedTypes.includes(file.type)) {
-        setSelectedFile(file);
-        onFileSelect(file);
-      } else {
-        // Optionally, provide user feedback about unsupported file type
-        console.error('Unsupported file type:', file.type);
-        alert('Invalid file format. Please upload images (PNG, JPG, JPEG) or PDF, DOC, DOCX files.');
+        if (allowedTypes.includes(file.type)) {
+          setSelectedFile(file);
+          onFileSelect(file);
+        } else {
+          console.error('Nicht unterstützter Dateityp:', file.type);
+          alert(t('upload.invalidFormat'));
+        }
       }
-    }
-  }, [onFileSelect]);
+    },
+    [onFileSelect, t]
+  );
 
   const { getRootProps, getInputProps, isDragReject } = useDropzone({
     onDrop,
@@ -73,29 +77,20 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
           {...getRootProps()}
           className={`
             relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-200
-            ${isDragActive 
-              ? 'border-blue-500 bg-blue-50 scale-[1.02]' 
-              : isDragReject 
-                ? 'border-red-500 bg-red-50' 
-                : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'
-            }
+            ${isDragActive ? 'border-blue-500 bg-blue-50 scale-[1.02]' : isDragReject ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-blue-400 hover:bg-blue-50'}
           `}
         >
           <input {...getInputProps()} />
-          
+
           <div className="space-y-4">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full">
               <Upload className="w-8 h-8 text-white" />
             </div>
-            
+
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                {isDragActive ? 'Drop your file here' : 'Upload Technical Drawing'}
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Drag & drop your file here, or click to browse
-              </p>
-              
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">{isDragActive ? t('upload.dropNow') : t('upload.title')}</h3>
+              <p className="text-gray-600 mb-4">{t('upload.subtitle')}</p>
+
               <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
                 <span className="flex items-center gap-1">
                   <Image className="w-4 h-4" />
@@ -112,13 +107,13 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
               </div>
             </div>
           </div>
-          
+
           {isDragReject && (
             <div className="absolute inset-0 bg-red-50 border-2 border-red-500 rounded-xl flex items-center justify-center">
               <div className="text-center">
                 <X className="w-12 h-12 text-red-500 mx-auto mb-2" />
-                <p className="text-red-600 font-medium">File type not supported</p>
-                <p className="text-red-500 text-sm">Please use PNG, JPG, PDF, or DOC files</p>
+                <p className="text-red-600 font-medium">{t('upload.notSupportedTitle')}</p>
+                <p className="text-red-500 text-sm">{t('upload.notSupportedHint')}</p>
               </div>
             </div>
           )}
@@ -126,16 +121,10 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
       ) : (
         <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="flex-shrink-0">
-              {getFileIcon(selectedFile.type)}
-            </div>
+            <div className="flex-shrink-0">{getFileIcon(selectedFile.type)}</div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-900 truncate">
-                {selectedFile.name}
-              </p>
-              <p className="text-sm text-gray-500">
-                {formatFileSize(selectedFile.size)}
-              </p>
+              <p className="text-sm font-medium text-gray-900 truncate">{selectedFile.name}</p>
+              <p className="text-sm text-gray-500">{formatFileSize(selectedFile.size)}</p>
             </div>
             <button
               onClick={removeFile}
@@ -146,11 +135,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect }) => {
           </div>
         </div>
       )}
-      
+
       <div className="text-center">
-        <p className="text-xs text-gray-500">
-          Maximale Datei Grösse: 20MB • Unterstützte Formate: PNG, JPG, PDF, DOC, DOCX
-        </p>
+        <p className="text-xs text-gray-500">{t('upload.footer')}</p>
       </div>
     </div>
   );

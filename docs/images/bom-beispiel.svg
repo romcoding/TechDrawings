@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="420" viewBox="0 0 1400 420">
+  <rect width="1400" height="420" fill="#ffffff"/>
+  <text x="20" y="32" font-size="24" font-family="Arial" fill="#111827">Beispielausgabe: Deutsche Stückliste (BOM)</text>
+  <g transform="translate(20,60)" font-family="Arial" font-size="12">
+    <rect x="0" y="0" width="1360" height="46" fill="#f3f4f6" stroke="#d1d5db"/>
+    <rect x="0" y="46" width="1360" height="46" fill="#ffffff" stroke="#d1d5db"/>
+    <line x1="130" y1="0" x2="130" y2="92" stroke="#d1d5db"/>
+    <line x1="350" y1="0" x2="350" y2="92" stroke="#d1d5db"/>
+    <line x1="630" y1="0" x2="630" y2="92" stroke="#d1d5db"/>
+    <line x1="850" y1="0" x2="850" y2="92" stroke="#d1d5db"/>
+    <line x1="920" y1="0" x2="920" y2="92" stroke="#d1d5db"/>
+    <line x1="1045" y1="0" x2="1045" y2="92" stroke="#d1d5db"/>
+    <line x1="1175" y1="0" x2="1175" y2="92" stroke="#d1d5db"/>
+    <line x1="1290" y1="0" x2="1290" y2="92" stroke="#d1d5db"/>
+
+    <text x="8" y="28">Anlage</text>
+    <text x="138" y="28">Artikel / Komponente</text>
+    <text x="358" y="28">Beschreibung</text>
+    <text x="638" y="28">Bemerkung</text>
+    <text x="858" y="28">Stück</text>
+    <text x="928" y="28">Eink. Preis / Stk.</text>
+    <text x="1053" y="28">Summe Zessionspreis</text>
+    <text x="1183" y="28">Verk. Preis / Stk.</text>
+    <text x="1298" y="28">Summe Verk. Preis</text>
+
+    <text x="8" y="74">Heizungsgruppe 1</text>
+    <text x="138" y="74">Absperrventil DN50</text>
+    <text x="358" y="74">DIN EN 558, Messing, PN16</text>
+    <text x="638" y="74">Wartungsintervall 12 Monate</text>
+    <text x="858" y="74">2</text>
+  </g>
+</svg>

@@ -214,12 +214,40 @@ docker-compose logs -f
 3. Follow single server deployment steps
 4. Use Application Gateway for SSL termination
 
+
+## 🤖 GPT-5.4 Vision Backend-Konfiguration
+
+Das Frontend ruft `/api/analyze` auf und erwartet eine strukturierte Antwort mit `response`, `bom` und `relationships`.
+
+### Pflichtvariablen (Backend)
+```bash
+OPENAI_API_KEY=sk-...
+```
+
+### Optionale Variablen (Backend)
+```bash
+OPENAI_ORGANIZATION=org_...
+OPENAI_PROJECT=proj_...
+```
+
+### Frontend Variable
+```bash
+VITE_API_URL=https://dein-backend.example.com
+```
+
+### Hinweise zur Analyze-Route
+- Verwende ein eigenes Vision-Service-Modul (z. B. `visionService.ts`).
+- Sende Base64-Dateiinhalt plus `fileType` an `openai.chat.completions.create` mit `model: "gpt-5.4-vision"` (oder neuer).
+- Erzwinge die Antwortstruktur via JSON-/Function-Calling.
+- Preise (`Eink. Preis / Stk.`, `Summe Zessionspreis`, `Verk. Preis / Stk.`, `Summe Verk. Preis`) initial auf `null` setzen.
+
 ## 🔧 Configuration
 
 ### Environment Variables
 ```bash
 # Required
 OPENAI_API_KEY=your_openai_api_key_here
+OPENAI_ORGANIZATION=your_openai_org_id_optional
 
 # Security (change these!)
 FLASK_SECRET_KEY=your_secure_secret_key_here

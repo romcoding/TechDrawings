@@ -35,53 +35,45 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
           </div>
         </div>
       )}
-      
+
       <div className={`max-w-[80%] ${isUser ? 'order-first' : ''}`}>
-        <div className={`
+        <div
+          className={`
           rounded-2xl px-4 py-3 shadow-sm
-          ${isUser 
-            ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white' 
-            : 'bg-white border border-gray-200 text-gray-900'
-          }
-        `}>
+          ${isUser ? 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white' : 'bg-white border border-gray-200 text-gray-900'}
+        `}
+        >
           {hasFile && (
-            <div className={`
+            <div
+              className={`
               mb-3 p-3 rounded-lg border
-              ${isUser 
-                ? 'bg-white/20 border-white/30 text-white' 
-                : 'bg-gray-50 border-gray-200 text-gray-700'
-              }
-            `}>
+              ${isUser ? 'bg-white/20 border-white/30 text-white' : 'bg-gray-50 border-gray-200 text-gray-700'}
+            `}
+            >
               <div className="flex items-center gap-2 mb-2">
                 {getFileIcon(hasFile.type)}
                 <span className="font-medium text-sm">{hasFile.name}</span>
               </div>
               <div className="text-xs opacity-80">
-                Type: {hasFile.type} • Size: {formatFileSize(hasFile.data.length * 0.75)}
+                Typ: {hasFile.type} • Größe: {formatFileSize(hasFile.data.length * 0.75)}
               </div>
             </div>
           )}
-          
-          <div className="whitespace-pre-wrap text-sm leading-relaxed">
-            {message.content}
-          </div>
-          
-          {/* Display BOM Table if BOM data is available */}
+
+          <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
+
           {message.bom && message.bom.length > 0 && (
             <div className="mt-4">
               <BomTable bom={message.bom} />
             </div>
           )}
         </div>
-        
-        <div className={`
-          mt-2 text-xs opacity-70
-          ${isUser ? 'text-right' : 'text-left'}
-        `}>
-          {isUser ? 'You' : 'GPT-5 AI'} • {new Date().toLocaleTimeString()}
+
+        <div className={`mt-2 text-xs opacity-70 ${isUser ? 'text-right' : 'text-left'}`}>
+          {isUser ? 'Sie' : 'GPT-5.4 Vision'} • {new Date().toLocaleTimeString('de-DE')}
         </div>
       </div>
-      
+
       {isUser && (
         <div className="flex-shrink-0">
           <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">

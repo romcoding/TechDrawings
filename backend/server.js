@@ -4,1021 +4,541 @@ import dotenv from 'dotenv';
 import OpenAI from 'openai';
 import * as pdfjs from 'pdfjs-dist/legacy/build/pdf.mjs';
 import session from 'express-session';
-import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-let componentCategories = {};
-let componentDictionary = {};
+import { HVAC_STANDARDS, componentsSystemPromptFragment } from './hvacCatalog.js';
+import {
+  parseCsvToEntries,
+  loadDefaultDatabase,
+  setSessionDatabase,
+  clearSessionDatabase,
+  getSessionDatabase,
+  getEffectiveDatabase
+} from './companyDatabase.js';
+import { enrichComponentsWithMatches } from './matchingService.js';
 
+dotenv.config();
 
-const DEFAULT_MODEL_CANDIDATES = ['gpt-5.3', 'gpt-5', 'gpt-4o'];
-const MODEL_CANDIDATES = (
-  process.env.OPENAI_MODEL_CANDIDATES
-    ? process.env.OPENAI_MODEL_CANDIDATES.split(',').map((m) => m.trim()).filter(Boolean)
-    : DEFAULT_MODEL_CANDIDATES
-);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// ---------------------------------------------------------------------------
+// Model selection
+// ---------------------------------------------------------------------------
+// We default to the newest OpenAI chat completion models that expose vision
+// capabilities (GPT-5.4 and siblings).  The caller can override the candidate
+// list via OPENAI_MODEL_CANDIDATES.  The first candidate that returns usable
+// content is used; on failure we transparently fall back to the next one.
+const DEFAULT_MODEL_CANDIDATES = [
+  'gpt-5.4-vision',
+  'gpt-5.4',
+  'gpt-5.3',
+  'gpt-5',
+  'gpt-4.1',
+  'gpt-4o'
+];
+const MODEL_CANDIDATES = process.env.OPENAI_MODEL_CANDIDATES
+  ? process.env.OPENAI_MODEL_CANDIDATES.split(',').map((m) => m.trim()).filter(Boolean)
+  : DEFAULT_MODEL_CANDIDATES;
+
+// Load the default reference database (List of Items + canonical HVAC catalog).
+loadDefaultDatabase(path.resolve(__dirname, '..', 'List of Items.csv'));
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
 const parseNumeric = (value) => {
-  if (value === null || value === undefined || value === '') {
-    return null;
-  }
-
-  if (typeof value === 'number') {
-    return Number.isFinite(value) ? value : null;
-  }
-
-  if (typeof value === 'string') {
-    const normalized = value
-      .replace(/CHF|EUR|€|\$/gi, '')
-      .replace(/\s+/g, '')
-      .replace(/\.(?=\d{3}(\D|$))/g, '')
-      .replace(',', '.');
-
-    const parsed = Number.parseFloat(normalized);
-    return Number.isFinite(parsed) ? parsed : null;
-  }
-
-  return null;
+  if (value === null || value === undefined || value === '') return null;
+  if (typeof value === 'number') return Number.isFinite(value) ? value : null;
+  if (typeof value !== 'string') return null;
+  const normalized = value
+    .replace(/CHF|EUR|€|\$/gi, '')
+    .replace(/\s+/g, '')
+    .replace(/\.(?=\d{3}(\D|$))/g, '')
+    .replace(',', '.');
+  const parsed = Number.parseFloat(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
 };
 
-const runChatCompletionWithFallback = async ({ messages, maxTokens = 1500 }) => {
+const extractJsonFromText = (rawText) => {
+  if (!rawText || typeof rawText !== 'string') return null;
+  const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  const firstBrace = cleaned.indexOf('{');
+  const lastBrace = cleaned.lastIndexOf('}');
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) return null;
+  const slice = cleaned.slice(firstBrace, lastBrace + 1);
+  try {
+    return JSON.parse(slice);
+  } catch (_) {
+    try {
+      return JSON.parse(slice.replace(/\\n/g, ' ').replace(/\\t/g, ' '));
+    } catch (_inner) {
+      return null;
+    }
+  }
+};
+
+const runChatCompletionWithFallback = async ({ messages, maxTokens = 4000, responseFormat }) => {
   let lastError = null;
 
   for (const model of MODEL_CANDIDATES) {
     try {
-      const requestPayload = {
-        model,
-        messages
-      };
+      const payload = { model, messages };
 
-      if (model.startsWith('gpt-5')) {
-        requestPayload.max_completion_tokens = maxTokens;
-        requestPayload.reasoning_effort = 'medium';
-        requestPayload.verbosity = 'medium';
+      if (/^gpt-5/i.test(model)) {
+        payload.max_completion_tokens = maxTokens;
+        payload.reasoning_effort = 'medium';
+        payload.verbosity = 'medium';
       } else {
-        requestPayload.max_tokens = maxTokens;
+        payload.max_tokens = maxTokens;
       }
 
-      const response = await openai.chat.completions.create(requestPayload);
-      const content = response.choices?.[0]?.message?.content?.trim();
+      if (responseFormat) {
+        payload.response_format = responseFormat;
+      }
 
+      const response = await openai.chat.completions.create(payload);
+      const content = response.choices?.[0]?.message?.content?.trim();
       if (content) {
         return { response, modelUsed: model };
       }
-
-      console.warn(`Model ${model} returned empty content, trying next fallback model...`);
+      console.warn(`Model ${model} returned empty content, trying next fallback...`);
     } catch (error) {
       lastError = error;
-      console.warn(`Model ${model} failed:`, error.message);
+      console.warn(`Model ${model} failed: ${error?.message || error}`);
     }
   }
 
   throw lastError || new Error('No model produced a valid response');
 };
 
-// Function to load categorization data from CSV
-const loadCategories = () => {
-  try {
-    const csvContent = fs.readFileSync('./Elemente_Kategorisierung.csv', 'utf8');
-    const lines = csvContent.split('\n');
-    const headers = lines[0].split(',');
-    
-    componentCategories = {};
-    
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (line) {
-        const values = line.split(',');
-        if (values.length >= 2) {
-          const komponente = values[0].trim();
-          const kategorie = values[1].trim();
-          if (komponente && kategorie) {
-            componentCategories[komponente.toLowerCase()] = kategorie;
-          }
-        }
-      }
-    }
-    
-    console.log(`✅ Loaded ${Object.keys(componentCategories).length} component categories from CSV.`);
-  } catch (error) {
-    console.error('❌ Failed to load component categories from CSV:', error);
-  }
-};
-
-// Function to load Swiss HVAC component dictionary from List of Items.csv
-const loadComponentDictionary = () => {
-  try {
-    const raw = fs.readFileSync('../List of Items.csv', 'utf8');
-    const lines = raw.split('\n');
-    
-    componentDictionary = {};
-    
-    for (let i = 1; i < lines.length; i++) { // Skip header
-      const line = lines[i].trim();
-      if (line) {
-        const [code, description] = line.split(';').map(s => s.trim());
-        if (code && description) {
-          // Extract nominal size (e.g. DN20)
-          let size = null;
-          const dn = description.match(/DN\s*([0-9]+)/i);
-          if (dn) size = `DN${dn[1]}`;
-          
-          // Extract signal range (e.g. 0…10 V or 4…20 mA)
-          let signal = null;
-          const sig = description.match(/(\d+\s*(?:\.\.\.|–|-)\s*\d+\s*[AV])/i);
-          if (sig) signal = sig[0];
-          
-          // Extract rating/flow coefficient (e.g. kvs)
-          let rating = null;
-          const kv = description.match(/\b(kvs|Kv|kvs)[=:]\s*([0-9,.]+)/i);
-          if (kv) rating = `${kv[1]}=${kv[2]}`;
-          
-          // Extract material (bronze, Edelstahl, etc.)
-          let material = null;
-          const mat = description.match(/\b(bronze|messing|edelstahl|stainless|stahl|plastik)/i);
-          if (mat) material = mat[0];
-          
-          componentDictionary[code.toLowerCase()] = {
-            description,
-            size,
-            signal,
-            rating,
-            material
-          };
-        }
-      }
-    }
-    
-    console.log(`✅ Loaded ${Object.keys(componentDictionary).length} items from List of Items`);
-  } catch (err) {
-    console.error('❌ Failed to load List of Items:', err);
-  }
-};
-
-// Load categories and dictionary on startup
-loadCategories();
-loadComponentDictionary();
-
-dotenv.config();
-
-// Function to extract text from PDF
 async function extractPdfText(pdfBuffer) {
-  try {
-    console.log('Extracting text from PDF using pdfjs-dist...');
-    const pdfUint8Array = new Uint8Array(pdfBuffer);
-    const pdfDocument = await pdfjs.getDocument({ data: pdfUint8Array }).promise;
-    let fullText = '';
-    
-    for (let i = 1; i <= pdfDocument.numPages; i++) {
-      const page = await pdfDocument.getPage(i);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items.map(item => item.str).join(' ');
-      fullText += pageText + '\n';
-    }
-    
-    console.log(`PDF text extraction successful. Extracted ${fullText.length} characters.`);
-    return fullText.trim();
-  } catch (error) {
-    console.error('PDF text extraction error:', error);
-    throw error;
+  const pdfDocument = await pdfjs.getDocument({ data: new Uint8Array(pdfBuffer) }).promise;
+  let fullText = '';
+  for (let i = 1; i <= pdfDocument.numPages; i++) {
+    const page = await pdfDocument.getPage(i);
+    const textContent = await page.getTextContent();
+    fullText += textContent.items.map((item) => item.str).join(' ') + '\n';
   }
+  return fullText.trim();
 }
 
+// ---------------------------------------------------------------------------
+// App setup
+// ---------------------------------------------------------------------------
 const app = express();
 
-// CORS configuration for frontend
-app.use(cors({
-  origin: [
-    'https://tech-drawings.vercel.app',
-    'http://localhost:3000', 
-    'http://localhost:5173'
-  ],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
-  optionsSuccessStatus: 200
-}));
+app.use(
+  cors({
+    origin: [
+      'https://tech-drawings.vercel.app',
+      'http://localhost:3000',
+      'http://localhost:5173'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie', 'X-Requested-With'],
+    optionsSuccessStatus: 200
+  })
+);
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '25mb' }));
 
-// Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
-  resave: false,
-  saveUninitialized: false,
-  proxy: true,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // Set to true in production for HTTPS, false for local HTTP
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'none' // Required for cross-origin requests
-  }
-}));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
+    resave: false,
+    saveUninitialized: false,
+    proxy: true,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: 'none'
+    }
+  })
+);
 
-// Initialize OpenAI with error handling
-let openai;
+let openai = null;
 try {
   if (!process.env.OPENAI_API_KEY) {
     console.warn('⚠️  OPENAI_API_KEY not set - AI features will be disabled');
-    openai = null;
   } else {
-    openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-    });
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     console.log('✅ OpenAI client initialized');
   }
 } catch (error) {
   console.error('❌ OpenAI initialization failed:', error.message);
-  openai = null;
 }
 
-// Authentication middleware
 const requireAuth = (req, res, next) => {
-  console.log('RequireAuth check - Session ID:', req.sessionID);
-  console.log('RequireAuth check - Session:', req.session);
-  console.log('RequireAuth check - Headers:', req.headers);
-  
-  if (req.session && req.session.loggedIn) {
-    console.log('Authentication successful');
-    return next();
-  } else {
-    console.log('Authentication failed - no valid session');
-    return res.status(401).json({ error: 'Authentication required' });
-  }
+  if (req.session && req.session.loggedIn) return next();
+  return res.status(401).json({ error: 'Authentication required' });
 };
 
-// Health check endpoint
+// ---------------------------------------------------------------------------
+// Health / ping / auth
+// ---------------------------------------------------------------------------
 app.get('/health', (req, res) => {
-  console.log('Health check requested from:', req.headers['user-agent']);
-  
+  res.status(200).json({
+    status: 'healthy',
+    model: MODEL_CANDIDATES[0],
+    model_candidates: MODEL_CANDIDATES,
+    standards: HVAC_STANDARDS.map((s) => s.code),
+    timestamp: new Date().toISOString(),
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+app.get('/ping', (req, res) => {
+  res.status(200).json({ status: 'awake', timestamp: new Date().toISOString() });
+});
+
+app.post('/api/login', (req, res) => {
   try {
-    res.status(200).json({ 
-      status: 'healthy',
-      model: MODEL_CANDIDATES[0],
-      standards: [
-        'VDI 3814',
-        'ISO 16484', 
-        'ISO 14617',
-        'IEC 60617',
-        'DIN EN 81346'
-      ],
-      timestamp: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development',
-      vercel: process.env.VERCEL === '1' ? 'Yes' : 'No'
-    });
+    const { username, password } = req.body || {};
+    const validUsername = process.env.APP_USERNAME || 'admin';
+    const validPassword = process.env.APP_PASSWORD || 'admin';
+    if (username === validUsername && password === validPassword) {
+      req.session.loggedIn = true;
+      req.session.username = username;
+      res.json({ success: true, message: 'Login successful', username });
+    } else {
+      res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
   } catch (error) {
-    console.error('Health check error:', error);
-    res.status(500).json({ 
-      status: 'error',
-      message: error.message 
-    });
+    console.error('Login error:', error);
+    res.status(500).json({ success: false, message: 'Login failed' });
   }
 });
 
-// Progress tracking endpoint
+app.post('/api/logout', (req, res) => {
+  const sessionId = req.sessionID;
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ success: false, message: 'Logout failed' });
+    clearSessionDatabase(sessionId);
+    res.json({ success: true, message: 'Logout successful' });
+  });
+});
+
+app.get('/api/auth-status', (req, res) => {
+  const authenticated = Boolean(req.session && req.session.loggedIn);
+  const username = (req.session && req.session.username) || null;
+  res.json({ authenticated, username });
+});
+
 app.get('/api/progress', requireAuth, (req, res) => {
   const sessionId = req.sessionID || 'default';
-  const progress = global.analysisProgress?.[sessionId] || {
+  const progress = (global.analysisProgress && global.analysisProgress[sessionId]) || {
     stage: 'idle',
     progress: 0,
     message: 'No analysis in progress',
     timestamp: Date.now()
   };
-  
   res.json(progress);
 });
 
-// Wake-up ping endpoint for Render spin-up
-app.get('/ping', (req, res) => {
-  console.log('Ping requested from:', req.headers['user-agent']);
-  res.status(200).json({ 
-    status: 'awake',
-    timestamp: new Date().toISOString(),
-    message: 'Backend is awake and ready'
-  });
-});
-
-// Login endpoint
-app.post('/api/login', (req, res) => {
+// ---------------------------------------------------------------------------
+// Company database endpoints
+// ---------------------------------------------------------------------------
+app.post('/api/company-database', requireAuth, (req, res) => {
   try {
-    const { username, password } = req.body;
-    
-    console.log('Login attempt:', { username, password: '***' });
-    console.log('Session before login:', req.session);
-    
-    const validUsername = process.env.APP_USERNAME || 'admin';
-    const validPassword = process.env.APP_PASSWORD || 'admin';
-    
-    if (username === validUsername && password === validPassword) {
-      req.session.loggedIn = true;
-      req.session.username = username;
-      
-      console.log('Login successful, session after login:', req.session);
-      console.log('Session ID:', req.sessionID);
-      
-      res.json({ 
-        success: true, 
-        message: 'Login successful',
-        username: username
-      });
-    } else {
-      console.log('Invalid credentials');
-      res.status(401).json({ 
-        success: false, 
-        message: 'Invalid credentials' 
+    const { csv, filename } = req.body || {};
+    if (!csv || typeof csv !== 'string') {
+      return res.status(400).json({ error: 'csv field (string) required' });
+    }
+    const entries = parseCsvToEntries(csv);
+    if (entries.length === 0) {
+      return res.status(400).json({
+        error: 'Could not parse any component entries from the provided CSV.',
+        hint: 'Erwartet werden Spalten wie "Code/Artikel" und "Beschreibung" mit , ; oder Tab als Trennzeichen.'
       });
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ 
-      success: false, 
-      message: 'Login failed' 
+
+    setSessionDatabase(req.sessionID, entries, { filename: filename || 'upload.csv' });
+    res.json({
+      success: true,
+      count: entries.length,
+      filename: filename || 'upload.csv',
+      preview: entries.slice(0, 5).map((entry) => ({
+        code: entry.code,
+        description: entry.description
+      }))
     });
+  } catch (error) {
+    console.error('Company DB upload error:', error);
+    res.status(500).json({ error: 'Failed to parse company database', details: error.message });
   }
 });
 
-// Logout endpoint
-app.post('/api/logout', (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Logout failed' 
-      });
-    }
-    res.json({ 
-      success: true, 
-      message: 'Logout successful' 
-    });
+app.get('/api/company-database', requireAuth, (req, res) => {
+  const session = getSessionDatabase(req.sessionID);
+  if (!session) {
+    return res.json({ uploaded: false, count: 0 });
+  }
+  res.json({
+    uploaded: true,
+    count: session.entries.length,
+    meta: session.meta,
+    preview: session.entries.slice(0, 10).map((entry) => ({
+      code: entry.code,
+      description: entry.description
+    }))
   });
 });
 
-// Check authentication status
-app.get('/api/auth-status', (req, res) => {
-  console.log('Auth status check - Session ID:', req.sessionID);
-  console.log('Auth status check - Session:', req.session);
-  console.log('Auth status check - Headers:', req.headers);
-  
-  const authenticated = req.session && req.session.loggedIn || false;
-  const username = req.session && req.session.username || null;
-  
-  res.json({ 
-    authenticated,
-    username
-  });
+app.delete('/api/company-database', requireAuth, (req, res) => {
+  clearSessionDatabase(req.sessionID);
+  res.json({ success: true });
 });
 
-// File analysis endpoint
+// ---------------------------------------------------------------------------
+// Analysis endpoint
+// ---------------------------------------------------------------------------
+const ANALYSIS_SYSTEM_PROMPT = () => `Du bist ein Fachingenieur für HLK, Gebäudeautomation und Elektrotechnik. Deine Aufgabe ist es, technische Zeichnungen (Prinzip-/Funktionsschemata, HLK-Pläne, Elektro-Pläne, Anlagenschemen) präzise zu analysieren und eine Stückliste (BOM) zu erzeugen.
+
+${componentsSystemPromptFragment()}
+
+ANWEISUNGEN:
+1. Identifiziere JEDE einzelne HLK-/GA-Komponente auf der Zeichnung (Ventile, Pumpen, Fühler, Aktoren, Wärmeerzeuger, Wärmetauscher, Ventilatoren, Filter, Klappen, Zähler, Automationsstationen usw.).
+2. Extrahiere zusätzlich sämtliche in Legenden oder Bauteillisten aufgeführten Komponenten — auch solche, die nicht im Schema gezeichnet sind.
+3. Für jede Komponente liefere die folgenden Felder (fehlende Angaben als null):
+   - anlage (Anlagen-/Systembezeichnung, z. B. "Heizgruppe 1", "Lüftung L1")
+   - artikel (Artikel- oder Kennzeichen, z. B. "H.V.01", "5WG1510-1AB03")
+   - komponente (kanonischer Komponentenname gemäß obiger Liste, z. B. "Mischventil 3-Wege")
+   - beschreibung (ausführliche technische Beschreibung)
+   - bemerkung (zusätzliche Hinweise, z. B. Einbauort, Regelfunktion)
+   - stueck (Anzahl als Zahl)
+   - groesse (Nennweite, z. B. "DN25")
+   - signal (Signalbereich, z. B. "0…10 V", "4…20 mA", "3-Punkt")
+   - rating (kvs-Wert, Druckstufe o. Ä.)
+   - material (Werkstoff)
+   - norm (eine oder mehrere anwendbare Normen, z. B. "VDI 3814", "DIN EN 60534")
+4. Liefere außerdem eine Liste der erkannten Verbindungen (relationships) zwischen Komponenten.
+5. ERFINDE KEINE Komponenten. Wenn eine Information fehlt, gib null zurück.
+6. Die Antwort MUSS strikt dem folgenden JSON-Schema entsprechen:
+
+{
+  "summary": "Kurzer deutscher Analysebericht",
+  "components": [ { "anlage": "...", "artikel": "...", "komponente": "...", "beschreibung": "...", "bemerkung": "...", "stueck": 1, "groesse": null, "signal": null, "rating": null, "material": null, "norm": [] } ],
+  "relationships": [ { "source_component": "...", "target_component": "...", "relationship_type": "feeds|controls|monitors|regulates" } ]
+}
+
+Gib ausschließlich valides JSON (ohne Markdown-Fences, ohne erklärenden Text) zurück.`;
+
 app.post('/api/analyze', requireAuth, async (req, res) => {
-  try {
-    console.log('File analysis request received');
-    console.log('Request body keys:', Object.keys(req.body));
-    
-    const { file, message } = req.body;
+  const sessionId = req.sessionID || 'default';
+  global.analysisProgress = global.analysisProgress || {};
+  global.analysisProgress[sessionId] = {
+    stage: 'starting',
+    progress: 0,
+    message: 'Starting analysis...',
+    timestamp: Date.now()
+  };
 
+  try {
+    const { file, message } = req.body || {};
     if (!file || !file.data) {
-      console.log('No file data provided');
       return res.status(400).json({ error: 'No file data provided' });
     }
-
-    console.log('File data present:', !!file.data);
-    console.log('Message:', message);
-
     if (!openai) {
-      console.log('OpenAI not available');
-      return res.status(503).json({ 
-        error: 'AI service unavailable - OpenAI API key not configured' 
+      return res.status(503).json({
+        error: 'AI service unavailable - OpenAI API key not configured'
       });
     }
 
-    console.log('Starting OpenAI analysis...');
-
-    // Check if it's a PDF file
     const fileType = file.type || 'unknown';
-    const fileName = file.name || 'unknown';
-    const fileSize = file.size || 'undefined';
-    
-    console.log('File type:', fileType);
-    console.log('File name:', fileName);
-    console.log('File size:', fileSize);
-    console.log('File data prefix:', file.data.substring(0, 50));
+    const isPDF = fileType === 'application/pdf' || String(file.data).startsWith('data:application/pdf');
 
-    const isImage = fileType.startsWith('image/');
-    const isPDF = fileType === 'application/pdf' || file.data.startsWith('data:application/pdf');
-    
-    console.log('File type checks:', { isImage, isPDF, fileType });
+    let userContent;
 
-    let analysisContent = [];
-    
     if (isPDF) {
-      console.log('PDF file detected - extracting text content for analysis');
+      global.analysisProgress[sessionId] = {
+        stage: 'extracting',
+        progress: 15,
+        message: 'Extracting PDF text...',
+        timestamp: Date.now()
+      };
       try {
-        // Extract base64 data from data URL
         const base64Data = file.data.split(',')[1];
         const pdfBuffer = Buffer.from(base64Data, 'base64');
-        
-        // Extract text from PDF
         const pdfText = await extractPdfText(pdfBuffer);
-        console.log('PDF text extraction successful, text length:', pdfText.length);
-        
-        // Use text-based analysis for PDFs
-        analysisContent = [
-          { 
-            type: 'text', 
-            text: `${message || 'Please analyze this PDF document.'}\n\nPDF Content:\n${pdfText}` 
+        userContent = [
+          {
+            type: 'text',
+            text: `${message || 'Bitte analysiere dieses PDF und erzeuge eine vollständige HLK-Stückliste.'}
+
+PDF INHALT:
+${pdfText}`
           }
         ];
       } catch (pdfError) {
-        console.error('PDF text extraction failed:', pdfError.message);
-        // Fallback to image-based analysis if text extraction fails
-        console.log('Falling back to image-based analysis for PDF');
-        analysisContent = [
-          { type: 'text', text: message || 'Please analyze this PDF document (image-based analysis).' },
-          {
-            type: 'image_url',
-            image_url: {
-              url: file.data,
-            }
-          }
+        console.warn('PDF text extraction failed, falling back to image mode:', pdfError.message);
+        userContent = [
+          { type: 'text', text: message || 'Bitte analysiere diese PDF-Zeichnung.' },
+          { type: 'image_url', image_url: { url: file.data } }
         ];
       }
     } else {
-      // For images and other files, use image-based analysis
-      console.log('Using image-based analysis');
-      
-      // Validate and format image data for OpenAI Vision API
-      if (!file.data.startsWith('data:')) {
-        console.error('Invalid image data format - missing data: prefix');
+      if (!String(file.data).startsWith('data:')) {
         return res.status(400).json({ error: 'Invalid image data format' });
       }
-      
-      // Extract the base64 data and validate it
-      const [header, base64Data] = file.data.split(',');
-      if (!base64Data) {
-        console.error('Invalid image data - no base64 content');
-        return res.status(400).json({ error: 'Invalid image data - no base64 content' });
-      }
-      
-      // Validate base64 data
-      try {
-        Buffer.from(base64Data, 'base64');
-      } catch (error) {
-        console.error('Invalid base64 data:', error.message);
-        return res.status(400).json({ error: 'Invalid base64 image data' });
-      }
-      
-      console.log('Image data validated successfully');
-      console.log('Image header:', header);
-      console.log('Base64 data length:', base64Data.length);
-      
-      analysisContent = [
-        { type: 'text', text: message || 'Please analyze this technical drawing and create a comprehensive Bill of Materials (BOM).' },
+      userContent = [
         {
-          type: 'image_url',
-          image_url: {
-            url: file.data,
-          }
-        }
+          type: 'text',
+          text:
+            message ||
+            'Bitte analysiere diese technische Zeichnung und erzeuge eine vollständige HLK-Stückliste inkl. aller Komponenten, Normen und Verbindungen.'
+        },
+        { type: 'image_url', image_url: { url: file.data } }
       ];
     }
 
-    console.log('Sending multiple analysis requests to OpenAI...');
-    
-    // Store progress for this analysis session
-    const sessionId = req.sessionID || 'default';
-    global.analysisProgress = global.analysisProgress || {};
     global.analysisProgress[sessionId] = {
-      stage: 'starting',
-      progress: 0,
-      message: 'Starting analysis...',
+      stage: 'analyzing',
+      progress: 40,
+      message: 'Calling GPT Vision...',
       timestamp: Date.now()
     };
-    
-    // Swiss HVAC-focused analysis queries with norm awareness
-    const analysisQueries = [
-      {
-        name: 'Detailed Analysis',
-        systemPrompt: `You are an expert in Swiss HVAC and building automation technical drawings. Symbols in these drawings may follow VDI 3814, ISO 14617/16484, SIA standards, and company-specific variations. 
 
-**CRITICAL**: Look for detailed component lists, inventory tables, or BOM (Bill of Materials) sections in the drawing. These often contain complete component specifications with quantities.
+    const { response, modelUsed } = await runChatCompletionWithFallback({
+      messages: [
+        { role: 'system', content: ANALYSIS_SYSTEM_PROMPT() },
+        { role: 'user', content: userContent }
+      ],
+      maxTokens: 4000,
+      responseFormat: { type: 'json_object' }
+    });
 
-Identify **ALL** technical components in the provided image including:
-- Valves (control valves, shut-off valves, safety valves, check valves, globe valves, three-way valves)
-- Pumps (circulation pumps, booster pumps, heat pumps, main pumps)
-- Sensors (temperature, pressure, flow, humidity, CO2 sensors)
-- Actuators (motorized valves, damper actuators)
-- Regulators and controllers (pressure regulators, temperature controllers)
-- Heat exchangers and cooling units
-- Electrical components (transformers, contactors, relays)
-- Measuring instruments and gauges (heat meters, flow meters)
-- Piping and ductwork components
-- Safety devices (safety valves, expansion vessels, separators)
-- Storage tanks and vessels
-- Control cabinets and electrical panels
-
-**IMPORTANT**: 
-- If you see multiple identical components (same type, size, manufacturer), list them as separate items with individual quantities
-- Look for component codes like H.A.01, H.P.01, H.V.01, etc.
-- Extract exact quantities from component lists
-- Include sub-components mentioned in component descriptions
-
-For each component, return a JSON object with these fields:
-- anlage: plant/system name (string, use "Hauptanlage" if unknown)
-- artikel: device or article code if visible (string, e.g., "H.A.01", "H.P.01")
-- komponente: component type (string)
-- beschreibung: natural language description (string)
-- bemerkung: remarks/notes (string)
-- stueck: quantity (number) - be precise from component lists
-- groesse: nominal size/DN (string or null)
-- signal: signal range (string or null)
-- rating: flow coefficient/pressure class (string or null)
-- material: material of the device (string or null)
-- eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
-- verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-
-If any attribute is unknown, set it to null. Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
-      },
-      {
-        name: 'Component Inventory Analysis',
-        systemPrompt: `Focus specifically on any component lists, inventory tables, or detailed specifications in the drawing. Look for structured tables with component codes, descriptions, and quantities.
-
-Extract every single component mentioned in these lists, including:
-- Individual component codes (H.A.01, H.A.02, H.P.01, H.V.01, etc.)
-- Exact quantities for each component
-- Manufacturer information (Fabrikat)
-- Type/model information (Typ)
-- Technical specifications (Leistung, Volumenstrom, Druckverlust, etc.)
-- Connection details (Anschluss)
-- Operating parameters (Betriebstemp)
-
-For each component, return a JSON object with these fields:
-- anlage: plant/system name (string)
-- artikel: component code (string, e.g., "H.A.01")
-- komponente: component type (string)
-- beschreibung: detailed description including manufacturer and type (string)
-- bemerkung: technical specifications and parameters (string)
-- stueck: exact quantity from the list (number)
-- groesse: size/DN if mentioned (string or null)
-- signal: signal range if mentioned (string or null)
-- rating: flow coefficient/pressure class if mentioned (string or null)
-- material: material if mentioned (string or null)
-- eink_preis_pro_stk: purchase price per piece as number (if visible, otherwise null)
-- verk_preis_pro_stk: sales price per piece as number (if visible, otherwise null)
-
-Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
-      },
-      {
-        name: 'Relationship Analysis',
-        systemPrompt: `Analyze the same Swiss HVAC building automation drawing and identify how components are connected. Symbols may follow VDI 3814, ISO 14617/16484, SIA standards, and company-specific variations.
-
-For each connection, return an object with:
-- source_component: name or code of the upstream component
-- target_component: name or code of the downstream component
-- relationship_type: description of the connection (e.g. "feeds", "controlled_by", "monitors", "regulates")
-
-Focus on identifying:
-- Fluid flow connections (pipes, ducts)
-- Control signal connections (electrical, pneumatic)
-- Mechanical connections (mounting, coupling)
-- Measurement connections (sensor readings)
-
-Return only a JSON array. Do not add prose, explanations, or markdown fences. Do not summarize: include every component instance found in legends/tables, even if 30-100 items.`
-      }
-    ];
-
-    // Execute multiple analysis queries
-    // Defensive local parser so deployments with partially merged helper functions
-    // do not fail with ReferenceError and fall back to dummy-only BOM.
-    const safeExtractJsonArray = (rawText) => {
-      if (typeof extractJsonArrayFromText === 'function') {
-        return extractJsonArrayFromText(rawText);
-      }
-
-      if (!rawText || typeof rawText !== 'string') return null;
-      const cleaned = rawText.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-      const start = cleaned.indexOf('[');
-      const end = cleaned.lastIndexOf(']');
-      if (start === -1 || end === -1 || end <= start) return null;
-
-      const slice = cleaned.slice(start, end + 1);
-      try {
-        const parsed = JSON.parse(slice);
-        return Array.isArray(parsed) ? parsed : null;
-      } catch (_e) {
-        try {
-          const unescaped = slice.replace(/\\n/g, ' ').replace(/\\t/g, ' ').replace(/\\"/g, '"');
-          const parsed = JSON.parse(unescaped);
-          return Array.isArray(parsed) ? parsed : null;
-        } catch (_e2) {
-          return null;
-        }
-      }
-    };
-
-    const allResponses = [];
-    for (let i = 0; i < analysisQueries.length; i++) {
-      const query = analysisQueries[i];
-      try {
-        console.log(`Executing ${query.name}...`);
-        
-        // Update progress
-        global.analysisProgress[sessionId] = {
-          stage: query.name.toLowerCase().replace(/\s+/g, '_'),
-          progress: Math.round((i / analysisQueries.length) * 80) + 10, // 10-90%
-          message: `Executing ${query.name}...`,
-          timestamp: Date.now()
-        };
-        
-        console.log(`Sending request to OpenAI for ${query.name}...`);
-        console.log('Analysis content type:', analysisContent[0].type);
-        console.log('Analysis content length:', analysisContent[0].text?.length || 'N/A');
-        if (analysisContent[1] && analysisContent[1].type === 'image_url') {
-          console.log('Image URL prefix:', analysisContent[1].image_url.url.substring(0, 50) + '...');
-          console.log('Image URL length:', analysisContent[1].image_url.url.length);
-        }
-        console.log('System prompt length:', query.systemPrompt.length);
-        
-        const { response, modelUsed } = await runChatCompletionWithFallback({
-          messages: [
-            { role: 'system', content: query.systemPrompt },
-            { role: 'user', content: analysisContent }
-          ],
-          maxTokens: 1500
-        });
-
-        console.log(`${query.name} OpenAI response received successfully using ${modelUsed}`);
-        const responseContent = response.choices[0].message.content;
-        console.log(`${query.name} response length:`, responseContent ? responseContent.length : 'null/undefined');
-        console.log(`${query.name} response preview:`, responseContent ? responseContent.substring(0, 100) : 'empty');
-        
-        allResponses.push({
-          name: query.name,
-          response: responseContent
-        });
-      } catch (error) {
-        console.error(`Error in ${query.name}:`, error);
-        console.error(`Error details:`, {
-          message: error.message,
-          status: error.status,
-          code: error.code,
-          type: error.type
-        });
-        
-        // Add a fallback response for failed queries
-        allResponses.push({
-          name: query.name,
-          response: `[]` // Empty JSON array as fallback
-        });
-      }
+    const rawContent = response.choices?.[0]?.message?.content || '';
+    let parsed = null;
+    try {
+      parsed = JSON.parse(rawContent);
+    } catch (_) {
+      parsed = extractJsonFromText(rawContent);
     }
 
-    // Combine and deduplicate results
-    let combinedBOM = [];
-    let relationships = [];
-    const seenComponents = new Set();
-    let componentCounter = 1;
-
-    for (const result of allResponses) {
-      try {
-        const rawResponse = result.response;
-        console.log(`${result.name} response:`, rawResponse.substring(0, 200) + "...");
-
-        if (!rawResponse || rawResponse.trim() === '') {
-          console.warn(`${result.name} returned empty response, skipping...`);
-          continue;
-        }
-
-        const parsed = extractJsonArrayFromText(rawResponse);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Check if this is a relationship array (objects with source_component)
-          if (parsed[0] && parsed[0].source_component) {
-            relationships.push(...parsed);
-            console.log(`${result.name} found ${parsed.length} relationships`);
-            continue;
-          }
-          
-          // Process component arrays
-          parsed.forEach(item => {
-            let normalized = {
-              anlage: item.anlage || 'Hauptanlage',
-              artikel: item.artikel || `ART-${String(componentCounter).padStart(3,'0')}`,
-              komponente: item.komponente || item.type || 'Unbekannte Komponente',
-              beschreibung: item.beschreibung || 'Keine Beschreibung verfügbar',
-              bemerkung: item.bemerkung || 'Keine Bemerkungen',
-              stueck: typeof item.stueck === 'number' ? item.stueck : 1,
-              groesse: item.groesse || item.size || null,
-              signal: item.signal || null,
-              rating: item.rating || null,
-              material: item.material || null,
-              eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
-              verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk)
-            };
-
-            // Try to enrich from dictionary
-            const key = normalized.artikel.toLowerCase();
-            const dictEntry = componentDictionary[key];
-            if (dictEntry) {
-              normalized.groesse = normalized.groesse || dictEntry.size;
-              normalized.signal = normalized.signal || dictEntry.signal;
-              normalized.rating = normalized.rating || dictEntry.rating;
-              normalized.material = normalized.material || dictEntry.material;
-              if (
-                (!normalized.beschreibung || normalized.beschreibung === 'Keine Beschreibung verfügbar')
-              ) {
-                normalized.beschreibung = dictEntry.description;
-              }
-            }
-
-            // Create a more flexible deduplication key based on component type and key specifications
-            const dedupKey = `${normalized.komponente.toLowerCase()}-${normalized.groesse || 'no-size'}-${normalized.artikel || 'no-artikel'}`;
-            
-            if (!seenComponents.has(dedupKey)) {
-              seenComponents.add(dedupKey);
-              combinedBOM.push(normalized);
-              componentCounter++;
-            } else {
-              // If component already exists, try to aggregate quantities for identical components
-              const existingIndex = combinedBOM.findIndex(item => 
-                item.komponente.toLowerCase() === normalized.komponente.toLowerCase() &&
-                item.groesse === normalized.groesse &&
-                item.artikel === normalized.artikel
-              );
-              
-              if (existingIndex !== -1) {
-                // Aggregate quantities for identical components
-                combinedBOM[existingIndex].stueck += normalized.stueck;
-                // Update description if new one is more detailed
-                if (normalized.beschreibung.length > combinedBOM[existingIndex].beschreibung.length) {
-                  combinedBOM[existingIndex].beschreibung = normalized.beschreibung;
-                }
-                // Update bemerkung if new one has more information
-                if (normalized.bemerkung && normalized.bemerkung !== 'Keine Bemerkungen' && 
-                    combinedBOM[existingIndex].bemerkung === 'Keine Bemerkungen') {
-                  combinedBOM[existingIndex].bemerkung = normalized.bemerkung;
-                }
-              }
-            }
-          });
-          console.log(`${result.name} found ${parsed.length} components, added ${parsed.length} to combined list`);
-        } else {
-          console.warn(`${result.name} no valid JSON array found, skipping...`);
-        }
-      } catch (parseError) {
-        console.error(`Failed to parse ${result.name} response:`, parseError);
-        console.error(`Raw response was:`, (result.response || "").substring(0, 500));
-        
-        // Try to extract components from malformed JSON using regex
-        try {
-          // Try to extract structured component data
-          const componentMatches = result.response.match(/"komponente":\s*"([^"]+)"/g) || 
-                                 result.response.match(/"type":\s*"([^"]+)"/g);
-          
-          // Also try to extract article codes like H.A.01, H.P.01, H.V.01
-          const articleMatches = result.response.match(/H\.[A-Z]\.\d+/g) || [];
-          
-          // Extract quantities
-          const quantityMatches = result.response.match(/"stueck":\s*(\d+)/g) || [];
-          
-          if (componentMatches && componentMatches.length > 0) {
-            componentMatches.slice(0, 20).forEach((match, index) => {
-              const componentName = match.replace(/["{}]/g, '').replace(/^(komponente|type):\s*/, '');
-              if (componentName && componentName.length > 2) {
-                const articleCode = articleMatches[index] || `ART-${String(componentCounter).padStart(3, '0')}`;
-                const quantity = quantityMatches[index] ? parseInt(quantityMatches[index].match(/\d+/)[0]) : 1;
-                
-                const key = `${componentName.toLowerCase()}-${articleCode}`;
-                if (!seenComponents.has(key)) {
-                  seenComponents.add(key);
-                  combinedBOM.push({
-                    anlage: "Hauptanlage",
-                    artikel: articleCode,
-                    komponente: componentName,
-                    beschreibung: "Komponente aus technischer Zeichnung",
-                    bemerkung: "Automatisch erkannt",
-                    stueck: quantity,
-                    groesse: null,
-                    signal: null,
-                    rating: null,
-                    material: null
-                  });
-                  componentCounter++;
-                }
-              }
-            });
-            console.log(`${result.name} extracted ${componentMatches.length} components from malformed JSON`);
-          }
-          
-          // Also extract article codes even if component names aren't found
-          if (articleMatches.length > 0 && componentMatches.length === 0) {
-            articleMatches.forEach(articleCode => {
-              const key = `unknown-${articleCode}`;
-              if (!seenComponents.has(key)) {
-                seenComponents.add(key);
-                combinedBOM.push({
-                  anlage: "Hauptanlage",
-                  artikel: articleCode,
-                  komponente: "Unbekannte Komponente",
-                  beschreibung: "Komponente aus technischer Zeichnung",
-                  bemerkung: "Automatisch erkannt",
-                  stueck: 1,
-                  groesse: null,
-                  signal: null,
-                  rating: null,
-                  material: null
-                });
-                componentCounter++;
-              }
-            });
-            console.log(`${result.name} extracted ${articleMatches.length} article codes from malformed JSON`);
-          }
-        } catch (extractError) {
-          console.error(`Failed to extract components from malformed JSON:`, extractError);
-        }
-      }
-    }
-
-    console.log(`Combined analysis found ${combinedBOM.length} unique components`);
-
-    // If no components were found, add a fallback component
-    if (combinedBOM.length === 0) {
-      console.warn('No components found in any analysis, adding fallback component');
-      combinedBOM.push({
-        anlage: "Hauptanlage",
-        artikel: "FALLBACK-001",
-        komponente: "Technische Zeichnung",
-        beschreibung: "Automatische Analyse konnte keine spezifischen Komponenten identifizieren. Bitte überprüfen Sie die Zeichnung manuell.",
-        bemerkung: "GPT-5 Analyse - Fallback bei leerer Antwort",
-        stueck: 1,
-        groesse: null,
-        signal: null,
-        rating: null,
-        material: null,
-        eink_preis_pro_stk: null,
-        verk_preis_pro_stk: null,
-        summe_zessionspreis: null,
-        summe_verk_preis: null
+    if (!parsed || typeof parsed !== 'object') {
+      console.error('Could not parse model response as JSON. Raw:', rawContent.slice(0, 500));
+      return res.status(502).json({
+        error: 'Model response could not be parsed as JSON',
+        modelUsed
       });
     }
 
-    // Update progress for combining phase
+    const rawComponents = Array.isArray(parsed.components) ? parsed.components : [];
+    const relationships = Array.isArray(parsed.relationships) ? parsed.relationships : [];
+
+    // ------------------------------------------------------------------
+    // Enrich with company database + canonical HVAC catalog via fuzzy match
+    // ------------------------------------------------------------------
     global.analysisProgress[sessionId] = {
-      stage: 'combining',
-      progress: 90,
-      message: `Combining results... Found ${combinedBOM.length} components`,
+      stage: 'matching',
+      progress: 75,
+      message: 'Matching components with company database...',
       timestamp: Date.now()
     };
 
-    console.log("Multiple AI analysis completed successfully");
-    
-    let bom = [];
-    let analysisText = "";
-    
-    try {
-      if (combinedBOM.length > 0) {
-        // Process the combined German BOM format with new fields
-        bom = combinedBOM.map((item, index) => ({
-          anlage: item.anlage || "Hauptanlage",
-          artikel: item.artikel || `ART-${String(index + 1).padStart(3, '0')}`,
-          komponente: item.komponente || "Unbekannte Komponente",
-          beschreibung: item.beschreibung || "Keine Beschreibung verfügbar",
-          bemerkung: item.bemerkung || "Keine Bemerkungen",
-          stueck: typeof item.stueck === "number" ? item.stueck : 1,
-          groesse: item.groesse || null,
-          signal: item.signal || null,
-          rating: item.rating || null,
-          material: item.material || null,
-          eink_preis_pro_stk: parseNumeric(item.eink_preis_pro_stk),
-          verk_preis_pro_stk: parseNumeric(item.verk_preis_pro_stk),
-          summe_zessionspreis: null,
-          summe_verk_preis: null
-        }));
+    const { entries: databaseEntries, sessionCount, defaultCount } = getEffectiveDatabase(sessionId);
+    const matched = enrichComponentsWithMatches(rawComponents, databaseEntries, {
+      threshold: 0.4,
+      topN: 3
+    });
 
-        bom = bom.map((item) => {
-          const einkPreis = parseNumeric(item.eink_preis_pro_stk);
-          const verkPreis = parseNumeric(item.verk_preis_pro_stk);
-          const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck) ? item.stueck : 0;
+    const normalizedBom = matched.map((item, index) => {
+      const stueck = typeof item.stueck === 'number' && Number.isFinite(item.stueck)
+        ? item.stueck
+        : parseNumeric(item.stueck) ?? 1;
+      const einkPreis = parseNumeric(item.eink_preis_pro_stk);
+      const verkPreis = parseNumeric(item.verk_preis_pro_stk);
+      const matchCode = item.match?.code || null;
 
-          return {
-            ...item,
-            eink_preis_pro_stk: einkPreis,
-            verk_preis_pro_stk: verkPreis,
-            summe_zessionspreis: einkPreis !== null ? Number((einkPreis * stueck).toFixed(2)) : null,
-            summe_verk_preis: verkPreis !== null ? Number((verkPreis * stueck).toFixed(2)) : null
-          };
-        });
-        
-        // Generate analysis text
-        analysisText = `Schweizer HVAC Gebäudeautomation erfolgreich analysiert!\n\n`;
-        analysisText += `Gefundene Komponenten: ${bom.length}\n`;
-        analysisText += `Gefundene Verbindungen: ${relationships.length}\n\n`;
-        analysisText += `Stückliste:\n`;
-        bom.forEach((item, index) => {
-          analysisText += `${index + 1}. ${item.komponente} (${item.stueck}x) - ${item.beschreibung}`;
-          if (item.groesse) analysisText += ` [${item.groesse}]`;
-          if (item.signal) analysisText += ` [${item.signal}]`;
-          if (item.material) analysisText += ` [${item.material}]`;
-          analysisText += `\n`;
-        });
-        
-        if (relationships.length > 0) {
-          analysisText += `\nVerbindungen:\n`;
-          relationships.forEach((rel, index) => {
-            analysisText += `${index + 1}. ${rel.source_component} → ${rel.target_component} (${rel.relationship_type})\n`;
-          });
-        }
-        
-        console.log(`Combined German BOM parsed successfully. Found ${bom.length} components and ${relationships.length} relationships.`);
-        
-        // Update progress for finalizing
-        global.analysisProgress[sessionId] = {
-          stage: 'finalizing',
-          progress: 95,
-          message: `Creating BOM... Found ${bom.length} components and ${relationships.length} relationships`,
-          timestamp: Date.now()
-        };
-      } else {
-        console.warn("No components found in combined analysis");
-        bom = [{ 
-          anlage: "Fehler", 
-          artikel: "ERR-001", 
-          komponente: "Analysefehler", 
-          beschreibung: "Keine Komponenten in der kombinierten Analyse gefunden.", 
-          bemerkung: "Fehler bei der Analyse", 
-          stueck: 1,
-          groesse: null,
-          signal: null,
-          rating: null,
-          material: null,
-          eink_preis_pro_stk: null,
-          verk_preis_pro_stk: null,
-          summe_zessionspreis: null,
-          summe_verk_preis: null
-        }];
-        analysisText = "Fehler bei der Analyse der technischen Zeichnung.";
-      }
-    } catch (parseError) {
-      console.error("Failed to process combined BOM:", parseError);
-      bom = [{ 
-        anlage: "Fehler", 
-        artikel: "ERR-001", 
-        komponente: "Parse-Fehler", 
-        beschreibung: "Konnte kombinierte AI-Antworten nicht verarbeiten.", 
-        bemerkung: "Fehler beim Parsen", 
-        stueck: 1,
-        groesse: null,
-        signal: null,
-        rating: null,
-        material: null,
-        eink_preis_pro_stk: null,
-        verk_preis_pro_stk: null,
-        summe_zessionspreis: null,
-        summe_verk_preis: null
-      }];
-      analysisText = "Fehler beim Parsen der kombinierten AI-Antworten.";
-    }
+      return {
+        anlage: item.anlage || 'Hauptanlage',
+        artikel: item.artikel || matchCode || `ART-${String(index + 1).padStart(3, '0')}`,
+        komponente: item.komponente || 'Unbekannte Komponente',
+        beschreibung: item.beschreibung || 'Keine Beschreibung verfügbar',
+        bemerkung: item.bemerkung || '',
+        stueck,
+        groesse: item.groesse || null,
+        signal: item.signal || null,
+        rating: item.rating || null,
+        material: item.material || null,
+        norm: Array.isArray(item.norm) ? item.norm : item.norm ? [item.norm] : [],
+        match_code: matchCode,
+        match_description: item.match?.description || null,
+        match_score: item.match?.score ?? null,
+        match_source: item.match?.source || null,
+        match_candidates: item.match_candidates || [],
+        eink_preis_pro_stk: einkPreis,
+        verk_preis_pro_stk: verkPreis,
+        summe_zessionspreis: einkPreis !== null ? Number((einkPreis * stueck).toFixed(2)) : null,
+        summe_verk_preis: verkPreis !== null ? Number((verkPreis * stueck).toFixed(2)) : null
+      };
+    });
 
-    // Final progress update
+    // ------------------------------------------------------------------
+    // Build human-readable summary
+    // ------------------------------------------------------------------
+    const summaryLines = [];
+    summaryLines.push(`HLK / Gebäudeautomation Zeichnung analysiert (Modell: ${modelUsed}).`);
+    summaryLines.push(`Erkannte Komponenten: ${normalizedBom.length}`);
+    summaryLines.push(`Erkannte Verbindungen: ${relationships.length}`);
+    summaryLines.push(
+      `Referenzdatenbank: ${sessionCount} firmen-spezifische Einträge + ${defaultCount} Katalog-Einträge.`
+    );
+    if (parsed.summary) summaryLines.push('', parsed.summary);
+
     global.analysisProgress[sessionId] = {
       stage: 'completed',
       progress: 100,
-      message: `Analysis complete! Found ${bom.length} components`,
+      message: `Analysis complete! Found ${normalizedBom.length} components`,
       timestamp: Date.now()
     };
 
-    res.json({ 
-      response: analysisText,
-      bom: bom,
-      relationships: relationships
+    res.json({
+      response: summaryLines.join('\n'),
+      bom: normalizedBom,
+      relationships,
+      model_used: modelUsed,
+      database: {
+        sessionEntries: sessionCount,
+        defaultEntries: defaultCount
+      }
     });
   } catch (error) {
     console.error('Error in /api/analyze:', error);
-    res.status(500).json({ 
-      error: 'Failed to analyze file',
-      details: error.message 
-    });
+    global.analysisProgress[sessionId] = {
+      stage: 'error',
+      progress: 0,
+      message: error.message,
+      timestamp: Date.now()
+    };
+    res.status(500).json({ error: 'Failed to analyze file', details: error.message });
   }
 });
 
-// Chat endpoint
+// ---------------------------------------------------------------------------
+// Chat endpoint (unchanged public contract)
+// ---------------------------------------------------------------------------
 app.post('/api/chat', requireAuth, async (req, res) => {
   try {
-    const { message, context } = req.body;
-
-    if (!message) {
-      return res.status(400).json({ error: 'No message provided' });
-    }
-
+    const { message, context } = req.body || {};
+    if (!message) return res.status(400).json({ error: 'No message provided' });
     if (!openai) {
-      return res.status(503).json({ 
-        error: 'AI service unavailable - OpenAI API key not configured' 
+      return res.status(503).json({
+        error: 'AI service unavailable - OpenAI API key not configured'
       });
     }
 
     const messages = [
       {
         role: 'system',
-        content: 'You are an expert in technical drawings and documents. Help users understand technical components and answer their questions about specifications, systems, and technical details.'
+        content:
+          'Du bist ein Fachingenieur für HLK, Gebäudeautomation und Elektrotechnik. Antworte präzise und fachlich korrekt auf Deutsch, verweise wo sinnvoll auf VDI 3814, ISO 16484, ISO 14617, IEC 60617, DIN EN 81346.'
       },
-      ...context,
+      ...(Array.isArray(context) ? context : []),
       { role: 'user', content: message }
     ];
 
@@ -1026,20 +546,20 @@ app.post('/api/chat', requireAuth, async (req, res) => {
       messages,
       maxTokens: 1500
     });
-    
-    console.log(`Chat response received using ${modelUsed}`);
 
-    res.json({ response: response.choices[0].message.content });
+    res.json({
+      response: response.choices[0].message.content,
+      model_used: modelUsed
+    });
   } catch (error) {
     console.error('Error in /api/chat:', error);
-    res.status(500).json({ 
-      error: 'Failed to process message',
-      details: error.message 
-    });
+    res.status(500).json({ error: 'Failed to process message', details: error.message });
   }
 });
 
-// Handle preflight requests
+// ---------------------------------------------------------------------------
+// Preflight / startup
+// ---------------------------------------------------------------------------
 app.options('*', (req, res) => {
   res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -1048,22 +568,16 @@ app.options('*', (req, res) => {
   res.sendStatus(200);
 });
 
-// Start server
 const PORT = process.env.PORT || 3000;
 
 console.log('🚀 Starting Technical Drawing Analyzer Backend...');
-console.log('📋 Environment Variables:');
-console.log(`  - NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
-console.log(`  - PORT: ${PORT}`);
-console.log(`  - APP_USERNAME: ${process.env.APP_USERNAME || 'admin'}`);
-console.log(`  - SESSION_SECRET: ${process.env.SESSION_SECRET ? '✅ Set' : '❌ Missing'}`);
-console.log(`  - OPENAI_API_KEY: ${process.env.OPENAI_API_KEY ? '✅ Set' : '❌ Missing'}`);
+console.log(`  NODE_ENV:        ${process.env.NODE_ENV || 'development'}`);
+console.log(`  PORT:            ${PORT}`);
+console.log(`  APP_USERNAME:    ${process.env.APP_USERNAME || 'admin'}`);
+console.log(`  SESSION_SECRET:  ${process.env.SESSION_SECRET ? 'set' : 'missing'}`);
+console.log(`  OPENAI_API_KEY:  ${process.env.OPENAI_API_KEY ? 'set' : 'missing'}`);
+console.log(`  MODEL_CANDIDATES: ${MODEL_CANDIDATES.join(', ')}`);
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`✅ Backend server running on port ${PORT}`);
-  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔗 CORS enabled for: https://tech-drawings.vercel.app`);
-  console.log(`🔑 Authentication: ${process.env.APP_USERNAME || 'admin'}`);
-  console.log(`🤖 AI Service: ${openai ? '✅ Available' : '❌ Disabled'}`);
-  console.log('🎉 Server startup complete!');
+  console.log(`✅ Backend running on port ${PORT}`);
 });

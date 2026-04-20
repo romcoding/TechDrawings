@@ -54,7 +54,18 @@ const translations: Record<Language, Record<string, string>> = {
     'loading.hvac': 'HLK-Komponenten werden erkannt...',
     'loading.combining': 'Ergebnisse werden kombiniert...',
     'loading.finalizing': 'Stückliste wird erstellt...',
-    'loading.progress': 'Fortschritt'
+    'loading.matching': 'Komponenten werden mit der Datenbank abgeglichen...',
+    'loading.progress': 'Fortschritt',
+    'db.title': 'Firmen-Komponentendatenbank',
+    'db.description': 'Laden Sie Ihre firmen-spezifische Artikelliste (CSV) hoch. Erkannte Komponenten werden automatisch auf die nächstgelegene Übereinstimmung abgebildet.',
+    'db.cta': 'CSV-Datei hierher ziehen oder klicken zum Auswählen',
+    'db.uploading': 'CSV wird hochgeladen...',
+    'db.entries': 'Einträge',
+    'db.remove': 'Entfernen',
+    'db.uploadFailed': 'Upload fehlgeschlagen.',
+    'db.deleteFailed': 'Löschen fehlgeschlagen.',
+    'db.onlyCsv': 'Bitte eine CSV-Datei hochladen.',
+    'bom.noMatch': 'kein Treffer'
   },
   en: {
     'app.title': 'Technical Drawing Analyzer',
@@ -100,7 +111,18 @@ const translations: Record<Language, Record<string, string>> = {
     'loading.hvac': 'Detecting HVAC components...',
     'loading.combining': 'Combining results...',
     'loading.finalizing': 'Creating BOM...',
-    'loading.progress': 'Progress'
+    'loading.matching': 'Matching components with your database...',
+    'loading.progress': 'Progress',
+    'db.title': 'Company component database',
+    'db.description': 'Upload your company-specific parts list (CSV). Detected components will be mapped to the nearest match automatically.',
+    'db.cta': 'Drop a CSV file here or click to browse',
+    'db.uploading': 'Uploading CSV...',
+    'db.entries': 'entries',
+    'db.remove': 'Remove',
+    'db.uploadFailed': 'Upload failed.',
+    'db.deleteFailed': 'Deletion failed.',
+    'db.onlyCsv': 'Please upload a CSV file.',
+    'bom.noMatch': 'no match'
   }
 };
 

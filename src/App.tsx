@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Brain, AlertCircle, CheckCircle, Loader2, Globe } from 'lucide-react';
 import { ChatMessage } from './components/ChatMessage';
 import { FileUpload } from './components/FileUpload';
+import CompanyDatabaseUpload from './components/CompanyDatabaseUpload';
 import LoadingSpinner from './components/LoadingSpinner';
-import { ChatState, Message } from './types';
+import { BomItem, BomMatchCandidate, ChatState, Message } from './types';
 import { useLanguage } from './contexts/LanguageContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://techdrawings-1.onrender.com';
@@ -20,24 +21,62 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeoutM
 };
 
 
-const normalizeBom = (bom: unknown) => {
+const asString = (value: unknown, fallback = ''): string => {
+  if (value === null || value === undefined) return fallback;
+  if (Array.isArray(value)) return value.join(', ');
+  return String(value);
+};
+
+const asNumberOrNull = (value: unknown): number | null => {
+  if (value === null || value === undefined || value === '') return null;
+  const num = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(num) ? num : null;
+};
+
+const normalizeBom = (bom: unknown): BomItem[] => {
   if (!Array.isArray(bom)) return [];
 
   return bom.map((item) => {
     const row = item as Record<string, unknown>;
+    const artikel = asString(row['artikel']);
+    const komponente = asString(row['komponente']);
+    const combined = artikel && komponente ? `${artikel} – ${komponente}` : artikel || komponente;
+
+    const candidatesRaw = row['match_candidates'];
+    const candidates: BomMatchCandidate[] = Array.isArray(candidatesRaw)
+      ? candidatesRaw.map((c) => {
+          const candidate = c as Record<string, unknown>;
+          return {
+            code: asString(candidate['code']),
+            description: asString(candidate['description']),
+            score: Number(candidate['score'] ?? 0)
+          };
+        })
+      : [];
+
     return {
-      Anlage: String(row['Anlage'] ?? row['anlage'] ?? ''),
-      'Artikel / Komponente': String(
-        row['Artikel / Komponente'] ??
-          (row['artikel'] && row['komponente'] ? `${row['artikel']} ${row['komponente']}` : row['artikel'] ?? row['komponente'] ?? '')
-      ),
-      Beschreibung: String(row['Beschreibung'] ?? row['beschreibung'] ?? ''),
-      Bemerkung: String(row['Bemerkung'] ?? row['bemerkung'] ?? ''),
+      Anlage: asString(row['Anlage'] ?? row['anlage'], 'Hauptanlage'),
+      'Artikel / Komponente':
+        asString(row['Artikel / Komponente']) || combined || 'Unbekannte Komponente',
+      Beschreibung: asString(row['Beschreibung'] ?? row['beschreibung']),
+      Bemerkung: asString(row['Bemerkung'] ?? row['bemerkung']),
       Stück: Number(row['Stück'] ?? row['stueck'] ?? 1),
-      'Eink. Preis / Stk.': (row['Eink. Preis / Stk.'] ?? row['eink_preis_pro_stk'] ?? null) as number | null,
-      'Summe Zessionspreis': (row['Summe Zessionspreis'] ?? row['summe_zessionspreis'] ?? null) as number | null,
-      'Verk. Preis / Stk.': (row['Verk. Preis / Stk.'] ?? row['verk_preis_pro_stk'] ?? null) as number | null,
-      'Summe Verk. Preis': (row['Summe Verk. Preis'] ?? row['summe_verk_preis'] ?? null) as number | null
+      Größe: (row['Größe'] ?? row['groesse'] ?? null) as string | null,
+      Signal: (row['Signal'] ?? row['signal'] ?? null) as string | null,
+      Rating: (row['Rating'] ?? row['rating'] ?? null) as string | null,
+      Material: (row['Material'] ?? row['material'] ?? null) as string | null,
+      Norm: Array.isArray(row['norm'])
+        ? (row['norm'] as string[]).join(', ')
+        : asString(row['norm']),
+      'Match Code': (row['match_code'] ?? null) as string | null,
+      'Match Score': asNumberOrNull(row['match_score']),
+      'Match Kandidaten': candidates,
+      'Eink. Preis / Stk.': asNumberOrNull(row['Eink. Preis / Stk.'] ?? row['eink_preis_pro_stk']),
+      'Summe Zessionspreis': asNumberOrNull(
+        row['Summe Zessionspreis'] ?? row['summe_zessionspreis']
+      ),
+      'Verk. Preis / Stk.': asNumberOrNull(row['Verk. Preis / Stk.'] ?? row['verk_preis_pro_stk']),
+      'Summe Verk. Preis': asNumberOrNull(row['Summe Verk. Preis'] ?? row['summe_verk_preis'])
     };
   });
 };
@@ -56,7 +95,19 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loginCredentials, setLoginCredentials] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
-  const [loadingStage, setLoadingStage] = useState<'uploading' | 'extracting' | 'analyzing' | 'primary' | 'valves' | 'electrical' | 'hvac' | 'combining' | 'finalizing' | null>(null);
+  const [loadingStage, setLoadingStage] = useState<
+    | 'uploading'
+    | 'extracting'
+    | 'analyzing'
+    | 'matching'
+    | 'primary'
+    | 'valves'
+    | 'electrical'
+    | 'hvac'
+    | 'combining'
+    | 'finalizing'
+    | null
+  >(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -509,9 +560,10 @@ function App() {
           </div>
 
           <div className="border-t border-gray-100 p-6 space-y-4 bg-gray-50">
+            <CompanyDatabaseUpload apiUrl={API_URL} />
             <FileUpload onFileSelect={handleFileSelect} />
-            
-            
+
+
             <form onSubmit={handleSubmit} className="flex gap-3">
               <input
                 type="text"

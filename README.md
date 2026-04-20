@@ -1,6 +1,28 @@
-# Technical Drawing Analyzer - Frontend
+# Technical Drawing Analyzer — HVAC Component Identification
 
-A modern React frontend for analyzing technical drawings and documents using **GPT-5.4 Vision API (oder neuer)**. This tool provides comprehensive component identification, Bill of Materials (BOM) generation, and detailed technical analysis for engineering drawings, schematics, and technical documents.
+A React + Node.js application that analyzes HVAC / building-automation technical
+drawings with the **newest OpenAI GPT vision model available** (defaults to
+`gpt-5.4-vision` with automatic fallback to `gpt-5.4`, `gpt-5.3`, `gpt-5`,
+`gpt-4.1`, `gpt-4o`). The tool extracts every technical component from a
+drawing, maps it to the nearest entry in a built-in HVAC reference catalog
+**and** in the user's own company component database, and returns a complete
+Bill-of-Materials (BOM) ready for procurement.
+
+## 🔄 End-to-end workflow
+
+1. **Upload a drawing** (PNG / JPG / PDF / DOCX) via the web UI.
+2. **GPT Vision** analyzes the drawing using a strict HVAC-focused prompt based
+   on VDI 3814, ISO 16484, ISO 14617, IEC 60617, DIN EN 81346, SIA 108/382/384,
+   DIN EN 12792 and DIN EN 1861.
+3. The backend **matches** every detected component against:
+   - a built-in canonical HVAC catalog (43+ component classes with norms), and
+   - the company-specific component database (`List of Items.csv` by default,
+     or any CSV uploaded by the user through the UI).
+4. A fuzzy nearest-match algorithm (Levenshtein + token-overlap with German
+   compound-word and abbreviation expansion) selects the best candidate and
+   shows the top 3 alternatives plus a confidence score for each row.
+5. The BOM is rendered as a sortable German Excel-style table and can be
+   exported as CSV.
 
 ## 🏗️ Architecture
 
@@ -162,6 +184,34 @@ The system identifies and categorizes:
 - **Safety Systems**: Emergency and protection equipment
 
 
+## 🏢 Company component database
+
+Each company can plug in its own component catalog without touching the code:
+
+1. Log into the web UI.
+2. Open the **„Firmen-Komponentendatenbank“** panel above the drawing upload.
+3. Drag & drop a CSV file — the server auto-detects the delimiter (`,`, `;`,
+   tab or `|`) and maps the following column aliases (case-insensitive):
+
+   | Field           | Accepted column headers                                                        |
+   |-----------------|--------------------------------------------------------------------------------|
+   | code / article  | `code`, `artikel`, `artikelnummer`, `bezeichnung`, `material`, `teilenummer`   |
+   | description     | `description`, `beschreibung`, `komponente`                                    |
+   | nominal size    | `groesse`, `größe`, `size`, `dn`, `nennweite`                                  |
+   | signal range    | `signal`, `signalbereich`                                                      |
+   | kvs / rating    | `kvs`, `kv`, `rating`, `druckstufe`, `pn`                                      |
+   | material        | `material`, `werkstoff`                                                        |
+   | manufacturer    | `hersteller`, `fabrikat`, `manufacturer`, `brand`                              |
+   | purchase price  | `eink. preis`, `eink preis / stk`, `einkaufspreis`, `purchase price`           |
+   | sales price     | `verk. preis`, `verk preis / stk`, `verkaufspreis`, `sales price`              |
+
+4. The uploaded database is stored per session. The BOM returned for every
+   subsequent drawing will include for every row:
+   - `Match Code` — the nearest matching entry from the company DB or HVAC
+     catalog,
+   - `Match Score` — confidence (0…1),
+   - `Match Kandidaten` — top-3 alternatives (visible in the exported CSV).
+
 ## 🧾 Deutsches BOM-Format & Export
 
 Die UI rendert Analyseergebnisse als deutsche Excel-ähnliche Stückliste mit folgenden Spalten:
@@ -171,48 +221,84 @@ Die UI rendert Analyseergebnisse als deutsche Excel-ähnliche Stückliste mit fo
 - Beschreibung
 - Bemerkung
 - Stück
+- Größe / Signal / Material / Norm
+- Match Code / Match Score / Match Kandidaten
 - Eink. Preis / Stk.
 - Summe Zessionspreis
 - Verk. Preis / Stk.
 - Summe Verk. Preis
 
-Zusätzlich steht ein Button **„CSV/Excel herunterladen“** bereit, der die aktuelle Stückliste als CSV exportiert.
+Zusätzlich steht ein Button **„CSV/Excel herunterladen“** bereit, der die aktuelle Stückliste inkl. aller Match-Informationen als CSV exportiert.
 
 ### Beispiel (BOM-Ansicht)
 
 ![Beispiel BOM Tabelle](docs/images/bom-beispiel.svg)
 
-## 🔌 Backend-Integration (separates Repo)
+## 🔌 Backend-API
 
-Diese Frontend-Anwendung erwartet, dass der Backend-Endpunkt `/api/analyze` ein JSON im folgenden Format liefert:
+Der Backend-Dienst (`backend/server.js`) stellt folgende relevante Endpunkte
+bereit (alle authentifiziert, `credentials: include`):
+
+| Methode | Pfad                       | Zweck                                                          |
+|---------|----------------------------|----------------------------------------------------------------|
+| POST    | `/api/login`               | Login                                                          |
+| POST    | `/api/logout`              | Logout (räumt session-spezifische Firmen-DB ab)                |
+| POST    | `/api/analyze`             | Zeichnung analysieren, BOM inkl. Matches zurückgeben           |
+| GET     | `/api/progress`            | Fortschritt der laufenden Analyse                              |
+| POST    | `/api/company-database`    | Firmen-CSV hochladen (`{ csv, filename }`)                     |
+| GET     | `/api/company-database`    | Status der aktuell geladenen Firmendatenbank                   |
+| DELETE  | `/api/company-database`    | Firmendatenbank der Session entfernen                          |
+| GET     | `/health`                  | Health-Check inkl. eingesetzter Modellkandidaten               |
+
+Antwortschema von `/api/analyze`:
 
 ```json
 {
-  "response": "Deutsche Zusammenfassung",
+  "response": "HLK-Zeichnung analysiert (Modell: gpt-5.4-vision). Erkannte Komponenten: 23 …",
+  "model_used": "gpt-5.4-vision",
   "bom": [
     {
-      "Anlage": "Heizungsgruppe 1",
-      "Artikel / Komponente": "Absperrventil DN50",
-      "Beschreibung": "DIN EN 558, Messing, PN16",
-      "Bemerkung": "Wartungsintervall 12 Monate",
-      "Stück": 2,
-      "Eink. Preis / Stk.": null,
-      "Summe Zessionspreis": null,
-      "Verk. Preis / Stk.": null,
-      "Summe Verk. Preis": null
+      "anlage": "Heizgruppe 1",
+      "artikel": "H.V.01",
+      "komponente": "Mischventil 3-Wege",
+      "beschreibung": "3-Wege Mischer DN25 kvs 6.3",
+      "bemerkung": "Stellantrieb 0…10 V",
+      "stueck": 2,
+      "groesse": "DN25",
+      "signal": "0…10 V",
+      "rating": "kvs=6.3",
+      "material": "Messing",
+      "norm": ["DIN EN 60534", "VDI 3814"],
+      "match_code": "V-01",
+      "match_description": "Mischventil 3-Wege DN25 kvs 6.3",
+      "match_score": 0.87,
+      "match_candidates": [
+        { "code": "V-01", "description": "Mischventil 3-Wege DN25 kvs 6.3", "score": 0.87 }
+      ],
+      "eink_preis_pro_stk": 189.50,
+      "summe_zessionspreis": 379.00,
+      "verk_preis_pro_stk": null,
+      "summe_verk_preis": null
     }
   ],
   "relationships": [
-    { "parent": "Heizungsgruppe 1", "child": "Absperrventil DN50" }
+    { "source_component": "H.P.01", "target_component": "H.V.01", "relationship_type": "feeds" }
   ]
 }
 ```
 
-Empfohlene Backend-Umsetzung:
-- Vision-Service-Modul (z. B. `visionService.ts`) mit `analyzeDrawing(base64Data, fileType)`.
-- Aufruf von `openai.chat.completions.create` mit `model: "gpt-5.4-vision"` (oder neuer).
-- JSON-/Function-Calling-Schema erzwingt die oben gezeigte BOM-Struktur.
-- Umgebungsvariablen über dotenv laden: `OPENAI_API_KEY`, optional `OPENAI_ORGANIZATION`.
+### Modellkandidaten
+
+Die Backend-Reihenfolge der ausprobierten GPT-Modelle steuert die Umgebungs-
+variable `OPENAI_MODEL_CANDIDATES` (kommaseparierte Liste). Default ist
+
+```
+gpt-5.4-vision, gpt-5.4, gpt-5.3, gpt-5, gpt-4.1, gpt-4o
+```
+
+Das Backend versucht die Modelle der Reihe nach und nutzt automatisch das erste
+Modell, das eine gültige Antwort liefert. So steht das Tool immer auf dem
+neuesten verfügbaren Chat-GPT-Modell, ohne Code-Änderung.
 
 ## 🚨 Troubleshooting
 

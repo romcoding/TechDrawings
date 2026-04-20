@@ -3,7 +3,23 @@ import { Loader2, FileText, Brain, Cog, CheckCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface LoadingSpinnerProps {
-  stage: 'uploading' | 'extracting' | 'analyzing' | 'primary' | 'valves' | 'electrical' | 'hvac' | 'combining' | 'finalizing' | 'primary_analysis' | 'valve_and_pump_focus' | 'electrical_and_control_focus' | 'hvac_and_mechanical_focus' | 'completed' | 'idle';
+  stage:
+    | 'uploading'
+    | 'extracting'
+    | 'analyzing'
+    | 'matching'
+    | 'primary'
+    | 'valves'
+    | 'electrical'
+    | 'hvac'
+    | 'combining'
+    | 'finalizing'
+    | 'primary_analysis'
+    | 'valve_and_pump_focus'
+    | 'electrical_and_control_focus'
+    | 'hvac_and_mechanical_focus'
+    | 'completed'
+    | 'idle';
   progress?: number;
 }
 
@@ -26,6 +42,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
       case 'electrical_and_control_focus':
       case 'hvac_and_mechanical_focus':
         return <Brain className="w-6 h-6 text-purple-500" />;
+      case 'matching':
+        return <Cog className="w-6 h-6 text-indigo-500" />;
       case 'combining':
         return <Cog className="w-6 h-6 text-green-500" />;
       case 'finalizing':
@@ -58,6 +76,8 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ stage, progress = 0 }) 
       case 'hvac':
       case 'hvac_and_mechanical_focus':
         return t('loading.hvac');
+      case 'matching':
+        return t('loading.matching');
       case 'combining':
         return t('loading.combining');
       case 'finalizing':
